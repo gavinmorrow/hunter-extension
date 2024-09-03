@@ -3,32 +3,35 @@
 
 console.log("Logging in automatically...");
 
-// don't use await, so that it works if started part way through the login process
+const hunterLogin = async () => {
+  const nextBtnSelector = "input[type='submit']#nextBtn";
+  const usernameEntered = () =>
+    document.getElementById("Username")?.value != "";
 
-{
-  // hunter login page
-  const nextButton = "input[type='submit']#nextBtn";
-  const usernameEntered = () => document.getElementById("Username").value != "";
-  waitForElem(nextButton)
-    .then(clickWhen(usernameEntered))
-    .catch((_) => console.error("Failed to find hunter login button"));
-}
+  const nextBtn = await waitForElem(nextBtnSelector);
+  await waitFor(usernameEntered);
+  nextBtn?.click();
+};
 
-{
+const googleEmail = async () => {
   // google login page
   // find first hunter email
   const hunterEmail = "[data-identifier$='@hunterschools.org']";
-  waitForElem(hunterEmail)
-    .then(clickElem)
-    .catch((_) => console.error("Failed to find google email."));
 
-  // wait for password
+  const emailBtn = await waitForElem(hunterEmail);
+  emailBtn?.click();
+};
+
+const googlePassword = async () => {
+  // google password page
   // this works best w/ password autofill
   const passwordNextBtn = () =>
     Array.from(document.querySelectorAll("button span")).filter((e) => {
       return e.textContent === "Next";
     })[0];
-  waitFor(passwordNextBtn)
-    .then(clickElem)
-    .catch((_) => console.error("Could not find password next button."));
-}
+
+  const nextBtn = await waitFor(passwordNextBtn);
+  nextBtn?.click();
+};
+
+Promise.allSettled([hunterLogin(), googleEmail(), googlePassword()]);
