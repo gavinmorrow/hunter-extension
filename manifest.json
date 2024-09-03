@@ -10,15 +10,15 @@
     },
     {
       "matches": ["https://hunterschools.myschoolapp.com/lms-assignment/*"],
-      "js": ["fix-month-wrap.js"]
+      "js": ["common.js", "fix-month-wrap.js"]
     },
     {
       "matches": [
-        "https://hunterschools.myschoolapp.com/app",
+        "https://hunterschools.myschoolapp.com/app*",
         "https://accounts.google.com/o/oauth2/*",
         "https://accounts.google.com/v3/signin/challenge/pwd?*"
       ],
-      "js": ["login-automatically.js"]
+      "js": ["common.js", "login-automatically.js"]
     }
   ]
 }
