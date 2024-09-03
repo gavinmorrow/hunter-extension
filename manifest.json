@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "extension-test",
+  "version": "0.1.0",
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["common.js"]
+    },
+    {
+      "matches": ["https://hunterschools.myschoolapp.com/lms-assignment/*"],
+      "js": ["fix-month-wrap.js"]
+    }
+  ]
+}
