@@ -57,4 +57,6 @@ const googlePassword = requireLoggingIn(async () => {
   nextBtn.click();
 });
 
-Promise.allSettled([hunterLogin(), googleEmail(), googlePassword()]);
+Promise.allSettled(
+  [hunterLogin, googleEmail, googlePassword].map((fn) => promiseError(fn)()),
+);
