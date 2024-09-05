@@ -3,6 +3,13 @@
   "name": "extension-test",
   "version": "0.1.0",
 
+  "host_permissions": ["https://hunterschools.myschoolapp.com/*"],
+
+  "background": {
+    "scripts": ["state.background.js"],
+    "type": "module"
+  },
+
   "content_scripts": [
     {
       "matches": ["https://hunterschools.myschoolapp.com/lms-assignment/*"],
