@@ -13,14 +13,14 @@ browser.runtime.onMessage.addListener(
     if (!msg.type.startsWith("state.")) return;
 
     const tabId = sender.tab.id;
-    const tabState = state[tabId];
+    const tabState = state[tabId] ?? {};
 
     switch (msg.type) {
       case "state.get":
         sendRes(tabState);
         break;
       case "state.set":
-        tabState = { ...tabState, ...msg.data };
+        state[tabId] = { ...tabState, ...msg.data };
         sendRes(tabState);
         break;
       case "state.delete":

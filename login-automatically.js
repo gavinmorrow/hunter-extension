@@ -9,20 +9,42 @@ const hunterLogin = async () => {
     document.getElementById("Username")?.value != "";
 
   const nextBtn = await waitForElem(nextBtnSelector);
+  if (nextBtn == null) return;
+
   await waitFor(usernameEntered);
-  nextBtn?.click();
+  nextBtn.click();
+  await browser.runtime.sendMessage({
+    type: "state.set",
+    data: { isLoggingIn: true },
+  });
 };
 
-const googleEmail = async () => {
+/**
+ * Wrap a function, to make it run only when the user is logging in.
+ * @param {() => Promise<any>} fn The function to run.
+ * @returns {() => Promise<any>} A function that will check if the user is currently logging in before calling the provided function.
+ */
+const requireLoggingIn = (fn) => async () => {
+  const { isLoggingIn } = await browser.runtime.sendMessage({
+    type: "state.get",
+  });
+  if (!isLoggingIn) {
+    console.log("Not currently logging in, skipping autologin.");
+    return;
+  }
+  return fn();
+};
+
+const googleEmail = requireLoggingIn(async () => {
   // google login page
   // find first hunter email
   const hunterEmail = "[data-identifier$='@hunterschools.org']";
 
   const emailBtn = await waitForElem(hunterEmail);
   emailBtn?.click();
-};
+});
 
-const googlePassword = async () => {
+const googlePassword = requireLoggingIn(async () => {
   // google password page
   // this works best w/ password autofill
   const passwordNextBtn = () =>
@@ -31,7 +53,8 @@ const googlePassword = async () => {
     })[0];
 
   const nextBtn = await waitFor(passwordNextBtn);
-  nextBtn?.click();
-};
+  if (nextBtn == null) return;
+  nextBtn.click();
+});
 
 Promise.allSettled([hunterLogin(), googleEmail(), googlePassword()]);

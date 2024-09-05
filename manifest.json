@@ -3,7 +3,11 @@
   "name": "extension-test",
   "version": "0.1.0",
 
-  "host_permissions": ["https://hunterschools.myschoolapp.com/*"],
+  "host_permissions": [
+    "https://hunterschools.myschoolapp.com/*",
+    "https://accounts.google.com/o/oauth2/*",
+    "https://accounts.google.com/v3/signin/challenge/pwd?*"
+  ],
 
   "background": {
     "scripts": ["state.background.js"],
