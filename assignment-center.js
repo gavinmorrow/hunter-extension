@@ -8,6 +8,7 @@ const STATUS_COLORS = {
   Completed: "green",
 };
 
+// FIXME: doesn't work since the other one switches away from calendar.
 /**
  * FIXES: At the top of the calendar, if the month is too long, it wraps onto
  * the next line. However, the containing div doesn't grow to fit.

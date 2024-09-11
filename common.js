@@ -61,7 +61,8 @@ const promiseError = (fn) => async () => {
   try {
     return await fn();
   } catch (err) {
-    console.error(`Error in promise: ${err}`);
+    console.error(`Error in promise: ${err}\nstack: ${err.stack}`);
+    alert(`Error in promise: ${err}\nstack: ${err.stack}`);
     throw err;
   }
 };

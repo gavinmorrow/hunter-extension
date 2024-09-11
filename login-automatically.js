@@ -12,11 +12,11 @@ const hunterLogin = async () => {
   if (nextBtn == null) return;
 
   await waitFor(usernameEntered);
-  nextBtn.click();
   await browser.runtime.sendMessage({
     type: "state.set",
     data: { isLoggingIn: true },
   });
+  nextBtn.click();
 };
 
 /**
@@ -25,9 +25,12 @@ const hunterLogin = async () => {
  * @returns {() => Promise<any>} A function that will check if the user is currently logging in before calling the provided function.
  */
 const requireLoggingIn = (fn) => async () => {
-  const { isLoggingIn } = await browser.runtime.sendMessage({
-    type: "state.get",
-  });
+  const isLoggingIn =
+    (
+      await browser.runtime.sendMessage({
+        type: "state.get",
+      })
+    ).isLoggingIn ?? false;
   if (!isLoggingIn) {
     console.log("Not currently logging in, skipping autologin.");
     return;
@@ -41,7 +44,9 @@ const googleEmail = requireLoggingIn(async () => {
   const hunterEmail = "[data-identifier$='@hunterschools.org']";
 
   const emailBtn = await waitForElem(hunterEmail);
-  emailBtn?.click();
+  console.log("Found emailBtn!", emailBtn);
+  // repeat until the page unloads (sometimes google's js doesn't load fast enough)
+  setInterval(() => emailBtn?.click(), 100);
 });
 
 const googlePassword = requireLoggingIn(async () => {

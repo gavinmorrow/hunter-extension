@@ -9,15 +9,18 @@
     "https://accounts.google.com/v3/signin/challenge/pwd?*"
   ],
 
+  "permissions": ["storage"],
+
   "background": {
     "scripts": ["state.background.js"],
+    "service_worker": "service-worker.js",
     "type": "module"
   },
 
   "content_scripts": [
     {
       "matches": ["https://hunterschools.myschoolapp.com/lms-assignment/*"],
-      "js": ["common.js", "assignment-center.js"]
+      "js": ["browser-polyfill.min.js", "common.js", "assignment-center.js"]
     },
     {
       "matches": [
@@ -25,7 +28,7 @@
         "https://accounts.google.com/o/oauth2/*",
         "https://accounts.google.com/v3/signin/challenge/pwd?*"
       ],
-      "js": ["common.js", "login-automatically.js"]
+      "js": ["browser-polyfill.min.js", "common.js", "login-automatically.js"]
     }
   ]
 }
