@@ -32,14 +32,15 @@ browser.runtime.onMessage.addListener(
     if (!msg.type.startsWith("state.")) return;
 
     const tabId = sender.tab.id;
-    const currTabState = async () => await tabState(tabId);
+    const getCurrTabState = async () => await tabState(tabId);
 
     switch (msg.type) {
       case "state.get":
-        return currTabState();
+        return getCurrTabState();
       case "state.set":
+        const currTabState = await getCurrTabState();
         await tabState(tabId, { ...currTabState, ...msg.data });
-        return currTabState();
+        return getCurrTabState();
       case "state.delete":
         await tabState(tabId, null);
         return;
