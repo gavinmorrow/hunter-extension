@@ -3,7 +3,15 @@
 
 console.log("Logging in automatically...");
 
+const alreadyLoggedIn = async () =>
+  document.querySelector("#site-logo") != null;
+
+const setAlreadyLoggedIn = async () =>
+  tabState({ alreadyLoggedIn: await alreadyLoggedIn() });
+
 const hunterLogin = async () => {
+  console.log("Trying to login w/ Hunter...");
+
   const nextBtnSelector = "input[type='submit']#nextBtn";
   const usernameEntered = () =>
     document.getElementById("Username")?.value != "";
@@ -25,13 +33,13 @@ const hunterLogin = async () => {
  * @returns {() => Promise<any>} A function that will check if the user is currently logging in before calling the provided function.
  */
 const requireLoggingIn = (fn) => async () => {
-  const isLoggingIn =
-    (
-      await browser.runtime.sendMessage({
-        type: "state.get",
-      })
-    ).isLoggingIn ?? false;
-  if (!isLoggingIn) {
+  console.log("Checking if logged in......");
+
+  const state = await tabState();
+  const isLoggingIn = state.isLoggingIn ?? false;
+  const alreadyLoggedIn = state.alreadyLoggedIn ?? false;
+
+  if (!isLoggingIn || alreadyLoggedIn) {
     console.log("Not currently logging in, skipping autologin.");
     return;
   }
@@ -39,6 +47,8 @@ const requireLoggingIn = (fn) => async () => {
 };
 
 const googleEmail = requireLoggingIn(async () => {
+  console.log("Trying to find Google email...");
+
   // google login page
   // find first hunter email
   const hunterEmail = "[data-identifier$='@hunterschools.org']";
@@ -50,6 +60,8 @@ const googleEmail = requireLoggingIn(async () => {
 });
 
 const googlePassword = requireLoggingIn(async () => {
+  console.log("Trying to enter Google password...");
+
   // google password page
   // this works best w/ password autofill
   const passwordNextBtn = () =>
@@ -62,6 +74,10 @@ const googlePassword = requireLoggingIn(async () => {
   nextBtn.click();
 });
 
-Promise.allSettled(
-  [hunterLogin, googleEmail, googlePassword].map((fn) => promiseError(fn)()),
-);
+(async () => {
+  await setAlreadyLoggedIn();
+  // use any b/c only one is expected to be possible at any time
+  await Promise.any(
+    [hunterLogin, googleEmail, googlePassword].map((fn) => promiseError(fn)()),
+  );
+})();

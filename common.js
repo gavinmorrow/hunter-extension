@@ -53,6 +53,28 @@ const waitForElems = async (
 };
 
 /**
+ * Set or get tab state.
+ * @param {(any|null)?} data If provided, the value to set. If null, delete the state.
+ */
+const tabState = async (data) => {
+  switch (data) {
+    case undefined:
+      return await browser.runtime.sendMessage({
+        type: "state.get",
+      });
+    case null:
+      await browser.runtime.sendMessage({
+        type: "state.delete",
+      });
+    default:
+      await browser.runtime.sendMessage({
+        type: "state.set",
+        data,
+      });
+  }
+};
+
+/**
  * Wrap a function, to ensure all errors are logged.
  * @param {() => Promise<any>} fn The function to wrap.
  * @returns {() => Promise<Promise<any>} A function that will log any thrown errors in the provided function. This will rethrow errors.
