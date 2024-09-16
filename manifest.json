@@ -6,7 +6,8 @@
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
     "https://accounts.google.com/o/oauth2/*",
-    "https://accounts.google.com/v3/signin/challenge/pwd?*"
+    "https://accounts.google.com/v3/signin/challenge/pwd?*",
+    "https://accounts.google.com/signin/oauth/*"
   ],
 
   "permissions": ["storage"],
@@ -26,7 +27,8 @@
       "matches": [
         "https://hunterschools.myschoolapp.com/app*",
         "https://accounts.google.com/o/oauth2/*",
-        "https://accounts.google.com/v3/signin/challenge/pwd?*"
+        "https://accounts.google.com/v3/signin/challenge/pwd?*",
+        "https://accounts.google.com/signin/oauth/*"
       ],
       "js": ["browser-polyfill.min.js", "common.js", "login-automatically.js"]
     }

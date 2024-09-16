@@ -63,11 +63,11 @@ const tabState = async (data) => {
         type: "state.get",
       });
     case null:
-      await browser.runtime.sendMessage({
+      return await browser.runtime.sendMessage({
         type: "state.delete",
       });
     default:
-      await browser.runtime.sendMessage({
+      return await browser.runtime.sendMessage({
         type: "state.set",
         data,
       });

@@ -21,7 +21,8 @@ const tabState = async (tabId, newValue) => {
     case null:
       return await browser.storage.session.remove(tabName);
     default:
-      return await browser.storage.session.set({ [tabName]: newValue });
+      await browser.storage.session.set({ [tabName]: newValue });
+      return tabState(tabId);
   }
 };
 

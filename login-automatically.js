@@ -3,11 +3,7 @@
 
 console.log("Logging in automatically...");
 
-const alreadyLoggedIn = async () =>
-  document.querySelector("#site-logo") != null;
-
-const setAlreadyLoggedIn = async () =>
-  tabState({ alreadyLoggedIn: await alreadyLoggedIn() });
+const alreadyLoggedIn = async () => waitForElem("#site-logo");
 
 const hunterLogin = async () => {
   console.log("Trying to login w/ Hunter...");
@@ -74,10 +70,13 @@ const googlePassword = requireLoggingIn(async () => {
   nextBtn.click();
 });
 
-(async () => {
-  await setAlreadyLoggedIn();
-  // use any b/c only one is expected to be possible at any time
-  await Promise.any(
-    [hunterLogin, googleEmail, googlePassword].map((fn) => promiseError(fn)()),
-  );
+promiseError(async () => {
+  const loginPromise = Promise.any([
+    hunterLogin(),
+    googleEmail(),
+    googlePassword(),
+  ]);
+  await Promise.any([alreadyLoggedIn(), loginPromise]);
+
+  console.log("Finished logging in.");
 })();
