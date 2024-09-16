@@ -1,13 +1,5 @@
 console.log("Modifying assignment center...");
 
-// TODO: choose better colors, bc ew
-// TODO: make configurable
-const STATUS_COLORS = {
-  "To do": "blue",
-  "In progress": "yellow",
-  Completed: "green",
-};
-
 // FIXME: doesn't work since the other one switches away from calendar.
 /**
  * FIXES: At the top of the calendar, if the month is too long, it wraps onto
@@ -22,10 +14,24 @@ const fixCalendarHeaderOverflow = featureFlag(
   },
 );
 
+const statusColorFor = async (status) => {
+  const {
+    assignmentCenter: { statusColors },
+  } = await settings();
+  switch (status) {
+    case "To do":
+      return statusColors.todo;
+    case "In progress":
+      return statusColors.inProgress;
+    case "Completed":
+      return statusColors.completed;
+  }
+};
+
 // FIXME: doesn't refresh when html changes
 // maybe use observer for that?
 const colorByStatus = featureFlag(
-  (s) => s.assignmentCenter.statusColors,
+  (s) => s.assignmentCenter.fullStatusColors,
   async () => {
     const listViewBtn = await waitForElem(
       "[aria-label='Assignment center view'] [icon='list'] input",
@@ -50,7 +56,7 @@ const colorByStatus = featureFlag(
     console.log(assignments.map((e) => e.status));
 
     for (const { elem, status } of assignments) {
-      elem.style.backgroundColor = STATUS_COLORS[status];
+      elem.style.backgroundColor = await statusColorFor(status);
     }
   },
 );

@@ -90,7 +90,11 @@ const tabState = async (data) => {
  *
  * @property {Object} assignmentCenter
  * @property {boolean} assignmentCenter.fixCalendarHeaderOverflow
- * @property {boolean} assignmentCenter.statusColors
+ * @property {boolean} assignmentCenter.fullStatusColors
+ * @property {Object} assignmentCenter.statusColors
+ * @property {String} assignmentCenter.statusColors.todo
+ * @property {String} assignmentCenter.statusColors.inProgress
+ * @property {String} assignmentCenter.statusColors.completed
  */
 
 /**
