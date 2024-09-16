@@ -13,7 +13,7 @@
   "permissions": ["storage"],
 
   "background": {
-    "scripts": ["state.background.js"],
+    "scripts": ["background.js"],
     "service_worker": "service-worker.js",
     "type": "module"
   },

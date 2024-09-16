@@ -5,23 +5,26 @@ console.log("Logging in automatically...");
 
 const alreadyLoggedIn = async () => waitForElem("#site-logo");
 
-const hunterLogin = async () => {
-  console.log("Trying to login w/ Hunter...");
+const hunterLogin = featureFlag(
+  (s) => s.loginAutomatically.hunter,
+  async () => {
+    console.log("Trying to login w/ Hunter...");
 
-  const nextBtnSelector = "input[type='submit']#nextBtn";
-  const usernameEntered = () =>
-    document.getElementById("Username")?.value != "";
+    const nextBtnSelector = "input[type='submit']#nextBtn";
+    const usernameEntered = () =>
+      document.getElementById("Username")?.value != "";
 
-  const nextBtn = await waitForElem(nextBtnSelector);
-  if (nextBtn == null) return;
+    const nextBtn = await waitForElem(nextBtnSelector);
+    if (nextBtn == null) return;
 
-  await waitFor(usernameEntered);
-  await browser.runtime.sendMessage({
-    type: "state.set",
-    data: { isLoggingIn: true },
-  });
-  nextBtn.click();
-};
+    await waitFor(usernameEntered);
+    await browser.runtime.sendMessage({
+      type: "state.set",
+      data: { isLoggingIn: true },
+    });
+    nextBtn.click();
+  },
+);
 
 /**
  * Wrap a function, to make it run only when the user is logging in.
@@ -42,33 +45,39 @@ const requireLoggingIn = (fn) => async () => {
   return fn();
 };
 
-const googleEmail = requireLoggingIn(async () => {
-  console.log("Trying to find Google email...");
+const googleEmail = featureFlag(
+  (s) => s.loginAutomatically.google.email,
+  requireLoggingIn(async () => {
+    console.log("Trying to find Google email...");
 
-  // google login page
-  // find first hunter email
-  const hunterEmail = "[data-identifier$='@hunterschools.org']";
+    // google login page
+    // find first hunter email
+    const hunterEmail = "[data-identifier$='@hunterschools.org']";
 
-  const emailBtn = await waitForElem(hunterEmail);
-  console.log("Found emailBtn!", emailBtn);
-  // repeat until the page unloads (sometimes google's js doesn't load fast enough)
-  setInterval(() => emailBtn?.click(), 100);
-});
+    const emailBtn = await waitForElem(hunterEmail);
+    console.log("Found emailBtn!", emailBtn);
+    // repeat until the page unloads (sometimes google's js doesn't load fast enough)
+    setInterval(() => emailBtn?.click(), 100);
+  }),
+);
 
-const googlePassword = requireLoggingIn(async () => {
-  console.log("Trying to enter Google password...");
+const googlePassword = featureFlag(
+  (s) => s.loginAutomatically.google.password,
+  requireLoggingIn(async () => {
+    console.log("Trying to enter Google password...");
 
-  // google password page
-  // this works best w/ password autofill
-  const passwordNextBtn = () =>
-    Array.from(document.querySelectorAll("button span")).filter((e) => {
-      return e.textContent === "Next";
-    })[0];
+    // google password page
+    // this works best w/ password autofill
+    const passwordNextBtn = () =>
+      Array.from(document.querySelectorAll("button span")).filter((e) => {
+        return e.textContent === "Next";
+      })[0];
 
-  const nextBtn = await waitFor(passwordNextBtn);
-  if (nextBtn == null) return;
-  nextBtn.click();
-});
+    const nextBtn = await waitFor(passwordNextBtn);
+    if (nextBtn == null) return;
+    nextBtn.click();
+  }),
+);
 
 promiseError(async () => {
   const loginPromise = Promise.any([

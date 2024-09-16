@@ -1,5 +1,10 @@
 const DEFAULT_TIMEOUT = 10000;
 
+const dbg = (a) => {
+  console.log(a);
+  return a;
+};
+
 /**
  * Waits for a function to return a truthy value.
  * @template T The type of the value to wait for.
@@ -59,19 +64,68 @@ const waitForElems = async (
 const tabState = async (data) => {
   switch (data) {
     case undefined:
-      return await browser.runtime.sendMessage({
+      return browser.runtime.sendMessage({
         type: "state.get",
       });
     case null:
-      return await browser.runtime.sendMessage({
+      return browser.runtime.sendMessage({
         type: "state.delete",
       });
     default:
-      return await browser.runtime.sendMessage({
+      return browser.runtime.sendMessage({
         type: "state.set",
         data,
       });
   }
+};
+
+/**
+ * @typedef {Object} Settings
+ *
+ * @property {Object} loginAutomatically
+ * @property {boolean} loginAutomatically.hunter
+ * @property {Object} loginAutomatically.google
+ * @property {boolean} loginAutomatically.google.email
+ * @property {boolean} loginAutomatically.google.password
+ *
+ * @property {Object} assignmentCenter
+ * @property {boolean} assignmentCenter.fixCalendarHeaderOverflow
+ * @property {boolean} assignmentCenter.statusColors
+ */
+
+/**
+ * Set or get user settings.
+ * @param {(any|null)?} data If provided, the value to set. If null, reset settings.
+ * @returns {Promise<Settings>}
+ */
+const settings = async (data) => {
+  switch (data) {
+    case undefined:
+      return browser.runtime.sendMessage({
+        type: "settings.get",
+      });
+    case null:
+      return browser.runtime.sendMessage({
+        type: "settings.reset",
+      });
+    default:
+      return browser.runtime.sendMessage({
+        type: "settings.set",
+        data,
+      });
+  }
+};
+
+/**
+ * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.
+ * @template T The return value of `fn()`
+ * @param {(settings: Settings) => Promise<boolean>|boolean} predicate Whether or not to run `fn()`. Passed in current settings.
+ * @param {() => T} fn The function to run.
+ * @returns {() => Promise<T?>} The return value of `fn()`, or void if `fn()` doesn't get called.
+ */
+const featureFlag = (predicate, fn) => async () => {
+  if (await predicate(await settings())) return fn();
+  else console.debug("Predicate falsy, not calling fn().");
 };
 
 /**
@@ -87,11 +141,6 @@ const promiseError = (fn) => async () => {
     alert(`Error in promise: ${err}\nstack: ${err.stack}`);
     throw err;
   }
-};
-
-const dbg = (a) => {
-  console.log(a);
-  return a;
 };
 
 console.log("Ready!");
