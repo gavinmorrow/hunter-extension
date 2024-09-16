@@ -49,6 +49,6 @@ const colorByStatus = async () => {
   }
 };
 
-Promise.allSettled(
-  [fixCalendarHeaderOverflow, colorByStatus].map((fn) => promiseError(fn)()),
-);
+promiseError(async () => {
+  await Promise.allSettled([fixCalendarHeaderOverflow(), colorByStatus()]);
+})();
