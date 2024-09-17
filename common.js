@@ -84,6 +84,7 @@ const tabState = async (data) => {
  *
  * @property {Object} loginAutomatically
  * @property {boolean} loginAutomatically.hunter
+ * @property {boolean} loginAutomatically.blackbaud
  * @property {Object} loginAutomatically.google
  * @property {boolean} loginAutomatically.google.email
  * @property {boolean} loginAutomatically.google.password

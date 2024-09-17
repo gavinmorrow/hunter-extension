@@ -26,6 +26,16 @@ const hunterLogin = featureFlag(
   },
 );
 
+const blackbaudLogin = featureFlag(
+  (s) => s.loginAutomatically.blackbaud,
+  async () => {
+    console.log("Trying to login w/ Blackbaud...");
+
+    const btn = await waitForElem("#primary-button");
+    btn?.click();
+  },
+);
+
 /**
  * Wrap a function, to make it run only when the user is logging in.
  * @param {() => Promise<any>} fn The function to run.
@@ -82,6 +92,7 @@ const googlePassword = featureFlag(
 promiseError(async () => {
   const loginPromise = Promise.any([
     hunterLogin(),
+    blackbaudLogin(),
     googleEmail(),
     googlePassword(),
   ]);

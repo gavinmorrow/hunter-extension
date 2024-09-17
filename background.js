@@ -55,6 +55,7 @@ const tabStateListener = async (msg, sender) => {
 const defaultSettings = {
   loginAutomatically: {
     hunter: true,
+    blackbaud: true,
     google: {
       email: true,
       password: true,
