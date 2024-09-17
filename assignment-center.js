@@ -1,5 +1,26 @@
 console.log("Modifying assignment center...");
 
+const views = {
+  calendar: async () => views.getElem("calendar"),
+  list: async () => views.getElem("list"),
+
+  /** @param {"list"|"calendar"} view */
+  switchTo: async (view) => views.getElem(view).then((btn) => btn.click()),
+
+  /** @param {"list"|"calendar"} view The name of the icon in the input */
+  getElem: async (view) =>
+    waitForElem(`[aria-label='Assignment center view'] [icon='${view}'] input`),
+
+  currentView: async () => {
+    const calendar = await views.getElem("calendar");
+    const list = await views.getElem("list");
+
+    if (calendar.value === "1") return "calendar";
+    else if (list.value === "1") return "list";
+    else throw new Error("Unknown view!"); // unreachable
+  },
+};
+
 /**
  * FIXES: At the top of the calendar, if the month is too long, it wraps onto
  * the next line. However, the containing div doesn't grow to fit.
@@ -12,13 +33,6 @@ const fixCalendarHeaderOverflow = featureFlag(
     else console.error("calendar header not found.");
   },
 );
-
-const switchToListView = async () => {
-  const listViewBtn = await waitForElem(
-    "[aria-label='Assignment center view'] [icon='list'] input",
-  );
-  listViewBtn.click();
-};
 
 const statusColorFor = async (status) => {
   const {
@@ -93,6 +107,6 @@ promiseError(async () => {
   await modifyCalendarView();
 
   // Do this afterwards, because it requires switching to the list view.
-  await switchToListView();
+  await views.switchTo("list");
   await modifyListView();
 })();
