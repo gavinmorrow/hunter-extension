@@ -62,5 +62,8 @@ const colorByStatus = featureFlag(
 );
 
 promiseError(async () => {
-  await Promise.allSettled([fixCalendarHeaderOverflow(), colorByStatus()]);
+  await fixCalendarHeaderOverflow();
+
+  // Do this afterwards, because it requires switching to the list view.
+  await colorByStatus();
 })();
