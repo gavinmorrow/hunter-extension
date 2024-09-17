@@ -62,9 +62,15 @@ const defaultSettings = {
     },
   },
   assignmentCenter: {
+    calendar: {
+      enabled: true,
+      fixCalendarHeaderOverflow: true,
+    },
+    list: {
+      enabled: true,
+      fullStatusColors: false,
+    },
     reloadOnBroken: true,
-    fixCalendarHeaderOverflow: true,
-    fullStatusColors: false,
     statusColors: {
       todo: "blue",
       inProgress: "yellow",

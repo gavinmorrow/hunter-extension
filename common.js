@@ -82,6 +82,7 @@ const tabState = async (data) => {
 /**
  * @typedef {Object} Settings
  *
+ *
  * @property {Object} loginAutomatically
  * @property {boolean} loginAutomatically.hunter
  * @property {boolean} loginAutomatically.blackbaud
@@ -89,14 +90,22 @@ const tabState = async (data) => {
  * @property {boolean} loginAutomatically.google.email
  * @property {boolean} loginAutomatically.google.password
  *
+ *
  * @property {Object} assignmentCenter
+ * @property {boolean} assignmentCenter.enabled
  * @property {boolean} assignmentCenter.reloadOnBroken
- * @property {boolean} assignmentCenter.fixCalendarHeaderOverflow
- * @property {boolean} assignmentCenter.fullStatusColors
+ *
  * @property {Object} assignmentCenter.statusColors
  * @property {String} assignmentCenter.statusColors.todo
  * @property {String} assignmentCenter.statusColors.inProgress
  * @property {String} assignmentCenter.statusColors.completed
+ *
+ * @property {Object} assignmentCenter.calendar
+ * @property {boolean} assignmentCenter.calendar.fixCalendarHeaderOverflow
+ *
+ * @property {Object} assignmentCenter.list
+ * @property {boolean} assignmentCenter.list.enabled
+ * @property {boolean} assignmentCenter.list.fullStatusColors
  */
 
 /**

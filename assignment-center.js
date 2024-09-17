@@ -1,12 +1,11 @@
 console.log("Modifying assignment center...");
 
-// FIXME: doesn't work since the other one switches away from calendar.
 /**
  * FIXES: At the top of the calendar, if the month is too long, it wraps onto
  * the next line. However, the containing div doesn't grow to fit.
  */
 const fixCalendarHeaderOverflow = featureFlag(
-  (s) => s.assignmentCenter.fixCalendarHeaderOverflow,
+  (s) => s.assignmentCenter.calendar.fixCalendarHeaderOverflow,
   async () => {
     const calHeader = await waitForElem("#calendar-date-container");
     if (calHeader) calHeader.style.height = "fit-content";
@@ -38,7 +37,7 @@ const statusColorFor = async (status) => {
 // FIXME: doesn't refresh when html changes
 // maybe use observer for that?
 const colorByStatus = featureFlag(
-  (s) => s.assignmentCenter.fullStatusColors,
+  (s) => s.assignmentCenter.list.fullStatusColors,
   async () => {
     const getStatusElem = (elem) =>
       elem.querySelector("app-assignment-status-display span");
@@ -73,13 +72,27 @@ const assignmentCenterBroken = featureFlag(
   },
 );
 
+const modifyCalendarView = featureFlag(
+  (s) => s.assignmentCenter.calendar.enabled,
+  async () => {
+    await fixCalendarHeaderOverflow();
+  },
+);
+
+const modifyListView = featureFlag(
+  (s) => s.assignmentCenter.list.enabled,
+  async () => {
+    await colorByStatus();
+  },
+);
+
 promiseError(async () => {
   // needs to go first, bc everything else will fail if it is broken
   await assignmentCenterBroken();
 
-  await fixCalendarHeaderOverflow();
+  await modifyCalendarView();
 
   // Do this afterwards, because it requires switching to the list view.
   await switchToListView();
-  await colorByStatus();
+  await modifyListView();
 })();
