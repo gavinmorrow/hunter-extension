@@ -14,6 +14,13 @@ const fixCalendarHeaderOverflow = featureFlag(
   },
 );
 
+const switchToListView = async () => {
+  const listViewBtn = await waitForElem(
+    "[aria-label='Assignment center view'] [icon='list'] input",
+  );
+  listViewBtn.click();
+};
+
 const statusColorFor = async (status) => {
   const {
     assignmentCenter: { statusColors },
@@ -33,11 +40,6 @@ const statusColorFor = async (status) => {
 const colorByStatus = featureFlag(
   (s) => s.assignmentCenter.fullStatusColors,
   async () => {
-    const listViewBtn = await waitForElem(
-      "[aria-label='Assignment center view'] [icon='list'] input",
-    );
-    listViewBtn.click();
-
     const getStatusElem = (elem) =>
       elem.querySelector("app-assignment-status-display span");
 
@@ -66,7 +68,7 @@ const assignmentCenterBroken = featureFlag(
   async () => {
     const noActiveAssignments =
       document.body.textContent.indexOf("0 Active assignments") > -1;
-    const notLoggedIn = !(await alreadyLoggedIn());
+    const notLoggedIn = (await waitForElem("#site-logo")) === null;
     if (noActiveAssignments && notLoggedIn) location.reload();
   },
 );
@@ -78,5 +80,6 @@ promiseError(async () => {
   await fixCalendarHeaderOverflow();
 
   // Do this afterwards, because it requires switching to the list view.
+  await switchToListView();
   await colorByStatus();
 })();
