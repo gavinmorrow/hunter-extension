@@ -61,7 +61,20 @@ const colorByStatus = featureFlag(
   },
 );
 
+const assignmentCenterBroken = featureFlag(
+  (s) => s.assignmentCenter.reloadOnBroken,
+  async () => {
+    const noActiveAssignments =
+      document.body.textContent.indexOf("0 Active assignments") > -1;
+    const notLoggedIn = !(await alreadyLoggedIn());
+    if (noActiveAssignments && notLoggedIn) location.reload();
+  },
+);
+
 promiseError(async () => {
+  // needs to go first, bc everything else will fail if it is broken
+  await assignmentCenterBroken();
+
   await fixCalendarHeaderOverflow();
 
   // Do this afterwards, because it requires switching to the list view.

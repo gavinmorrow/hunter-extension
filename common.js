@@ -90,6 +90,7 @@ const tabState = async (data) => {
  * @property {boolean} loginAutomatically.google.password
  *
  * @property {Object} assignmentCenter
+ * @property {boolean} assignmentCenter.reloadOnBroken
  * @property {boolean} assignmentCenter.fixCalendarHeaderOverflow
  * @property {boolean} assignmentCenter.fullStatusColors
  * @property {Object} assignmentCenter.statusColors

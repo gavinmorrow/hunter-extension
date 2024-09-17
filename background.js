@@ -62,6 +62,7 @@ const defaultSettings = {
     },
   },
   assignmentCenter: {
+    reloadOnBroken: true,
     fixCalendarHeaderOverflow: true,
     fullStatusColors: false,
     statusColors: {
