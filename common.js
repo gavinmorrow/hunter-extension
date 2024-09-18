@@ -1,4 +1,5 @@
 const DEFAULT_TIMEOUT = 10000;
+const DEFAULT_INTERVAL = 100;
 
 const dbg = (a) => {
   console.log(a);
@@ -10,10 +11,10 @@ const dbg = (a) => {
  * @template T The type of the value to wait for.
  * @param {() => T} fn A function that returns the value to wait for. If the value is truthy, the promise resolves.
  * @param {number|undefined} timeout The amount to wait before failing (in ms). If undefined, will wait indefinitely. Defaults to DEFAULT_TIMEOUT.
- * @param {number} interval The interval to check for the element (in ms). Defaults to 100.
+ * @param {number} interval The interval to check for the element (in ms). Defaults to DEFAULT_INTERVAL.
  * @returns {Promise<T|null>} Resolves with the value returned by the function, or resolves with null if the timeout is reached.
  */
-const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = 100) =>
+const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) =>
   new Promise((resolve, reject) => {
     let timeoutId =
       timeout != undefined ? setTimeout(() => resolve(null), timeout) : null;
@@ -31,23 +32,26 @@ const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = 100) =>
  * Waits for an element to appear on the page.
  * @param {String} selector The query selector to wait for.
  * @param {number|undefined} timeout The amount to wait before failing (in ms). If undefined, will wait indefinitely. Defaults to DEFAULT_TIMEOUT.
- * @param {number} interval The interval to check for the element (in ms). Defaults to 100.
+ * @param {number} interval The interval to check for the element (in ms). Defaults to DEFAULT_INTERVAL.
  * @returns {Promise<HTMLElement|null>} A promise that resolves to the element if it is found, or resolves with null if the timeout is reached.
  */
-const waitForElem = (selector, timeout = DEFAULT_TIMEOUT, interval = 100) =>
-  waitFor(() => document.querySelector(selector), timeout, interval);
+const waitForElem = (
+  selector,
+  timeout = DEFAULT_TIMEOUT,
+  interval = DEFAULT_INTERVAL,
+) => waitFor(() => document.querySelector(selector), timeout, interval);
 
 /**
  * Waits for several elements to appear on the page.
  * @param {String} selector The query selector to wait for.
  * @param {number|undefined} timeout The amount to wait before failing (in ms). If undefined, will wait indefinitely. Defaults to DEFAULT_TIMEOUT.
- * @param {number} interval The interval to check for the element (in ms). Defaults to 100.
+ * @param {number} interval The interval to check for the element (in ms). Defaults to DEFAULT_INTERVAL.
  * @returns {Promise<HTMLElement|null>} A promise that resolves to the element if it is found, or resolves with null if the timeout is reached.
  */
 const waitForElems = async (
   selector,
   timeout = DEFAULT_TIMEOUT,
-  interval = 100,
+  interval = DEFAULT_INTERVAL,
 ) => {
   await waitFor(
     () => document.querySelectorAll(selector).length > 0,
