@@ -1,5 +1,5 @@
 const DEFAULT_TIMEOUT = 10000;
-const DEFAULT_INTERVAL = 100;
+const DEFAULT_INTERVAL = 16;
 
 const dbg = (a) => {
   console.log(a);
