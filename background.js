@@ -70,6 +70,9 @@ const defaultSettings = {
       enabled: true,
       fullStatusColors: false,
     },
+    filter: {
+      autoNotCompleted: true,
+    },
     reloadOnBroken: true,
     statusColors: {
       todo: "blue",

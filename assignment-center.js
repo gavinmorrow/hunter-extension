@@ -49,6 +49,20 @@ const fixCalendarHeaderOverflow = featureFlag(
   },
 );
 
+const filterByNotCompleted = featureFlag(
+  (s) => s.assignmentCenter.filter.autoNotCompleted,
+  async () => {
+    const completedInput = await waitFor(async () =>
+      Array.from(
+        document.querySelectorAll("label.sky-checkbox-wrapper.sky-switch"),
+      )
+        .filter((e) => e.textContent === "Completed")[0]
+        .querySelector("input"),
+    );
+    if (completedInput?.checked === true) completedInput.click();
+  },
+);
+
 const statusColorFor = async (status) => {
   const {
     assignmentCenter: { statusColors },
@@ -104,7 +118,10 @@ const assignmentCenterBroken = featureFlag(
 const modifyCalendarView = featureFlag(
   (s) => s.assignmentCenter.calendar.enabled,
   async () => {
-    await fixCalendarHeaderOverflow();
+    await Promise.allSettled([
+      fixCalendarHeaderOverflow(),
+      filterByNotCompleted(),
+    ]);
   },
 );
 
