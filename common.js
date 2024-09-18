@@ -143,7 +143,8 @@ const settings = async (data) => {
  */
 const featureFlag = (predicate, fn) => async () => {
   if (await predicate(await settings())) return fn();
-  else console.debug("Predicate falsy, not calling fn().");
+  else
+    console.debug("Predicate falsy, not calling fn().", predicate.toString());
 };
 
 /**
