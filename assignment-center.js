@@ -79,9 +79,9 @@ const colorByStatus = featureFlag(
 const assignmentCenterBroken = featureFlag(
   (s) => s.assignmentCenter.reloadOnBroken,
   async () => {
+    const notLoggedIn = (await waitForElem("#site-logo", 2000)) === null;
     const noActiveAssignments =
       document.body.textContent.indexOf("0 Active assignments") > -1;
-    const notLoggedIn = (await waitForElem("#site-logo")) === null;
     if (noActiveAssignments && notLoggedIn) location.reload();
   },
 );
@@ -104,9 +104,14 @@ promiseError(async () => {
   // needs to go first, bc everything else will fail if it is broken
   await assignmentCenterBroken();
 
-  await modifyCalendarView();
-
-  // Do this afterwards, because it requires switching to the list view.
-  await views.switchTo("list");
-  await modifyListView();
+  switch (await views.currentView()) {
+    case "calendar":
+      await modifyCalendarView();
+      break;
+    case "list":
+      await modifyListView();
+      break;
+    default:
+      throw new Error(`Unknown view: ${await views.currentView()}`);
+  }
 })();
