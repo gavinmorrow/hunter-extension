@@ -1,13 +1,16 @@
 console.log("Modifying assignment center...");
 
+/**
+ * @typedef {"list"|"calendar"} View
+ */
 const views = {
   calendar: async () => views.getElem("calendar"),
   list: async () => views.getElem("list"),
 
-  /** @param {"list"|"calendar"} view */
+  /** @param {View} view */
   switchTo: async (view) => views.getElem(view).then((btn) => btn.click()),
 
-  /** @param {"list"|"calendar"} view The name of the icon in the input */
+  /** @param {View} view The name of the icon in the input */
   getElem: async (view) =>
     waitForElem(`[aria-label='Assignment center view'] [icon='${view}'] input`),
 
@@ -18,6 +21,18 @@ const views = {
     if (calendar.value === "1") return "calendar";
     else if (list.value === "1") return "list";
     else throw new Error("Unknown view!"); // unreachable
+  },
+
+  /**
+   * Register an event handler to be called on every view change.
+   * @param {(newView: View, e: Event) => any} fn
+   */
+  onChange: async (fn) => {
+    const allViews = ["calendar", "list"];
+    for (const view of allViews) {
+      const elem = await views.getElem(view);
+      elem.addEventListener("change", fn.bind(null, view));
+    }
   },
 };
 
@@ -100,11 +115,8 @@ const modifyListView = featureFlag(
   },
 );
 
-promiseError(async () => {
-  // needs to go first, bc everything else will fail if it is broken
-  await assignmentCenterBroken();
-
-  switch (await views.currentView()) {
+const modifyView = async (view) => {
+  switch (view) {
     case "calendar":
       await modifyCalendarView();
       break;
@@ -112,6 +124,14 @@ promiseError(async () => {
       await modifyListView();
       break;
     default:
-      throw new Error(`Unknown view: ${await views.currentView()}`);
+      throw new Error(`Unknown view: ${view}`);
   }
+};
+
+promiseError(async () => {
+  // needs to go first, bc everything else will fail if it is broken
+  await assignmentCenterBroken();
+
+  views.onChange(modifyView);
+  await modifyView(await views.currentView());
 })();
