@@ -118,10 +118,7 @@ const assignmentCenterBroken = featureFlag(
 const modifyCalendarView = featureFlag(
   (s) => s.assignmentCenter.calendar.enabled,
   async () => {
-    await Promise.allSettled([
-      fixCalendarHeaderOverflow(),
-      filterByNotCompleted(),
-    ]);
+    await fixCalendarHeaderOverflow();
   },
 );
 
@@ -129,6 +126,13 @@ const modifyListView = featureFlag(
   (s) => s.assignmentCenter.list.enabled,
   async () => {
     await colorByStatus();
+  },
+);
+
+const modifyFilters = featureFlag(
+  (s) => s.assignmentCenter.filter.enabled,
+  async () => {
+    await filterByNotCompleted();
   },
 );
 
@@ -148,6 +152,9 @@ const modifyView = async (view) => {
 promiseError(async () => {
   // needs to go first, bc everything else will fail if it is broken
   await assignmentCenterBroken();
+
+  // These are seperate bc filters don't get reset on view change
+  await modifyFilters();
 
   views.onChange(modifyView);
   await modifyView(await views.currentView());

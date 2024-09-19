@@ -71,6 +71,7 @@ const defaultSettings = {
       fullStatusColors: false,
     },
     filter: {
+      enabled: true,
       autoNotCompleted: true,
     },
     reloadOnBroken: true,

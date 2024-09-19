@@ -112,6 +112,7 @@ const tabState = async (data) => {
  * @property {boolean} assignmentCenter.list.fullStatusColors
  *
  * @property {Object} assignmentCenter.filter
+ * @property {boolean} assignmentCenter.filter.enabled
  * @property {boolean} assignmentCenter.filter.autoNotCompleted
  */
 
