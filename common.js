@@ -46,7 +46,7 @@ const waitForElem = (
  * @param {String} selector The query selector to wait for.
  * @param {number|undefined} timeout The amount to wait before failing (in ms). If undefined, will wait indefinitely. Defaults to DEFAULT_TIMEOUT.
  * @param {number} interval The interval to check for the element (in ms). Defaults to DEFAULT_INTERVAL.
- * @returns {Promise<HTMLElement|null>} A promise that resolves to the element if it is found, or resolves with null if the timeout is reached.
+ * @returns {Promise<NodeListOf<Element>|null>} A promise that resolves to the element if it is found, or resolves with null if the timeout is reached.
  */
 const waitForElems = async (
   selector,
