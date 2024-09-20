@@ -112,7 +112,15 @@ const assignmentCenterBroken = featureFlag(
     const activeAssignments =
       document.body.textContent.indexOf("0 Active assignments") === -1;
     if (!activeAssignments && !loggedIn) location.reload();
-    else if (activeAssignments && loggedIn) views.switchTo("calendar");
+
+    let currentView = null;
+    try {
+      currentView = await views.currentView();
+    } catch (err) {
+      console.error(err);
+    }
+    if (activeAssignments && loggedIn && currentView === null)
+      views.switchTo("calendar");
   },
 );
 
@@ -127,6 +135,8 @@ const modifyListView = featureFlag(
   (s) => s.assignmentCenter.list.enabled,
   async () => {
     await colorByStatus();
+    console.log(await scrapeAssignments());
+    console.log((await scrapeAssignments()).map((a) => a.fullDetails));
   },
 );
 
