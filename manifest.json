@@ -21,7 +21,9 @@
 
   "content_scripts": [
     {
-      "matches": ["https://hunterschools.myschoolapp.com/lms-assignment/*"],
+      "matches": [
+        "https://hunterschools.myschoolapp.com/lms-assignment/assignment-center/*"
+      ],
       "js": ["browser-polyfill.min.js", "common.js", "assignment-center.js"]
     },
     {
