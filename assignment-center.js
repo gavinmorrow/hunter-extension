@@ -108,10 +108,11 @@ const colorByStatus = featureFlag(
 const assignmentCenterBroken = featureFlag(
   (s) => s.assignmentCenter.reloadOnBroken,
   async () => {
-    const notLoggedIn = (await waitForElem("#site-logo", 2000)) === null;
-    const noActiveAssignments =
-      document.body.textContent.indexOf("0 Active assignments") > -1;
-    if (noActiveAssignments && notLoggedIn) location.reload();
+    const loggedIn = (await waitForElem("#site-logo", 2000)) != null;
+    const activeAssignments =
+      document.body.textContent.indexOf("0 Active assignments") === -1;
+    if (!activeAssignments && !loggedIn) location.reload();
+    else if (activeAssignments && loggedIn) views.switchTo("calendar");
   },
 );
 
