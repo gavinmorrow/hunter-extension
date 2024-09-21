@@ -113,14 +113,11 @@ const assignmentCenterBroken = featureFlag(
       document.body.textContent.indexOf("0 Active assignments") === -1;
     if (!activeAssignments && !loggedIn) location.reload();
 
-    let currentView = null;
-    try {
-      currentView = await views.currentView();
-    } catch (err) {
-      console.error(err);
-    }
-    if (activeAssignments && loggedIn && currentView === null)
-      views.switchTo("calendar");
+    // this is really weird, but there's a bug in blackbaud where sometimes the
+    // calendar *input* will be selected (ie [value="1"]), but the button won't
+    // be selected and the calendar isn't actually shown.
+    // So `views.currentView()` returns "calendar", but it isn't really selected.
+    await views.switchTo(await views.currentView());
   },
 );
 
