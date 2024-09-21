@@ -15,12 +15,18 @@ const views = {
     waitForElem(`[aria-label='Assignment center view'] [icon='${view}'] input`),
 
   currentView: async () => {
+    /** @type {HTMLInputElement} */
     const calendar = await views.getElem("calendar");
+    /** @type {HTMLInputElement} */
     const list = await views.getElem("list");
 
-    if (calendar.value === "1") return "calendar";
-    else if (list.value === "1") return "list";
-    else throw new Error("Unknown view!"); // unreachable
+    if (calendar.checked) return "calendar";
+    else if (list.checked) return "list";
+    else {
+      // unreachable
+      console.error("Unknown view!");
+      return null;
+    }
   },
 
   /**
@@ -113,11 +119,7 @@ const assignmentCenterBroken = featureFlag(
       document.body.textContent.indexOf("0 Active assignments") === -1;
     if (!activeAssignments && !loggedIn) location.reload();
 
-    // this is really weird, but there's a bug in blackbaud where sometimes the
-    // calendar *input* will be selected (ie [value="1"]), but the button won't
-    // be selected and the calendar isn't actually shown.
-    // So `views.currentView()` returns "calendar", but it isn't really selected.
-    await views.switchTo(await views.currentView());
+    if ((await views.currentView()) == null) await views.switchTo("calendar");
   },
 );
 
