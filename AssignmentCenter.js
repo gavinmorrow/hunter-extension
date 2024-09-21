@@ -1,5 +1,5 @@
 /**
- * @typedef {String} Color A CSS color in `rgb(<r>,<g>,<b>)` format
+ * @typedef {String} Color Either a CSS color in `rgb(<r>,<g>,<b>)` format, or the empty string `""`.
  * @typedef {String} Link
  */
 
