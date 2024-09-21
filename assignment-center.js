@@ -23,7 +23,6 @@ const views = {
     if (calendar.checked) return "calendar";
     else if (list.checked) return "list";
     else {
-      // unreachable
       console.error("Unknown view!");
       return null;
     }
