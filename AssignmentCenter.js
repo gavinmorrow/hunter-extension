@@ -5,8 +5,8 @@
 
 /**
  * @typedef {Object} AssignmentDetails
- * @property {String} dueDate
- * @property {String} assignedDate
+ * @property {Date} dueDate
+ * @property {Date} assignedDate
  * @property {Number?} maxPoints
  * @property {{ name: String, link: Link }?} class
  * @property {String} type
@@ -135,7 +135,12 @@ class AssignmentCenter extends HTMLElement {
     const hasPoints = parts.length === 6;
 
     // first two elements
-    const [dueDate, assignedDate] = parts;
+    const [dueDate, assignedDate] = parts
+      .slice(0, 2)
+      // The strings start with either "Due: " or "Assigned: ", followed by a
+      // date. To parse the date, they need to be removed.
+      .map((str) => str.replace("Due: ", "").replace("Assigned: ", ""))
+      .map(AssignmentCenter.#parseBlackbaudDate);
     const maxPoints = hasPoints ? parseInt(parts[2]) : null;
     // *maybe* the third element
     const class_ = isTask
@@ -154,6 +159,39 @@ class AssignmentCenter extends HTMLElement {
       type,
       isTask,
     };
+  }
+
+  /**
+   * Parse a blackbaud date string into a javascript `Date`.
+   * @param {String} str A date in the format `mm/dd/yyyy hh:mm AM`.
+   * @returns {Date}
+   */
+  static #parseBlackbaudDate(str) {
+    const [date, time, amPm] = str.split(" ");
+    const [month, day, year] = date.split("/").map(Number);
+    const [hour12, min] = time.split(":").map(Number);
+    const hour24 = AssignmentCenter.#hour12ToHour24(hour12, amPm);
+
+    return new Date(year, month - 1, day, hour24, min);
+  }
+
+  /**
+   * Convert a time from 12-hour time to 24-hour time.
+   * @param {Number} hour The 12-hour hour.
+   * @param {"AM"|"PM"} amPm
+   * @returns {Number}
+   */
+  static #hour12ToHour24(hour, amPm) {
+    switch (amPm) {
+      case "AM":
+        // 12AM, ie midnight, is 00:00
+        if (hour === 12) return 0;
+        return hour;
+      case "PM":
+        // 12PM, ie noon, is 12:00
+        if (hour === 12) return 12;
+        return hour + 12;
+    }
   }
 }
 
