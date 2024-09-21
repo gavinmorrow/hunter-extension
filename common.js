@@ -104,6 +104,9 @@ const tabState = async (data) => {
  * @property {String} assignmentCenter.statusColors.inProgress
  * @property {String} assignmentCenter.statusColors.completed
  *
+ * @property {Object} assignmentCenter.customUi
+ * @property {boolean} assignmentCenter.customUi.enabled
+ *
  * @property {Object} assignmentCenter.calendar
  * @property {boolean} assignmentCenter.calendar.fixCalendarHeaderOverflow
  *

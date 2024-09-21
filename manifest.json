@@ -24,7 +24,12 @@
       "matches": [
         "https://hunterschools.myschoolapp.com/lms-assignment/assignment-center/*"
       ],
-      "js": ["browser-polyfill.min.js", "common.js", "assignment-center.js"]
+      "js": [
+        "browser-polyfill.min.js",
+        "common.js",
+        "AssignmentCenter.js",
+        "assignment-center.js"
+      ]
     },
     {
       "matches": [

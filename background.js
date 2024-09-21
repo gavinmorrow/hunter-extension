@@ -62,6 +62,9 @@ const defaultSettings = {
     },
   },
   assignmentCenter: {
+    customUi: {
+      enabled: true,
+    },
     calendar: {
       enabled: true,
       fixCalendarHeaderOverflow: true,
