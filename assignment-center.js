@@ -1,4 +1,4 @@
-console.log("Modifying assignment center...");
+console.info("Modifying assignment center...");
 
 /**
  * @typedef {"list"|"calendar"} View
@@ -126,6 +126,7 @@ const assignmentCenterBroken = featureFlag(
 const modifyCalendarView = featureFlag(
   (s) => s.assignmentCenter.calendar.enabled,
   async () => {
+    console.info("Modifying calendar view...");
     await fixCalendarHeaderOverflow();
   },
 );
@@ -133,15 +134,16 @@ const modifyCalendarView = featureFlag(
 const modifyListView = featureFlag(
   (s) => s.assignmentCenter.list.enabled,
   async () => {
+    console.info("Modifying list view...");
     await colorByStatus();
     console.log(await scrapeAssignments());
-    console.log((await scrapeAssignments()).map((a) => a.fullDetails));
   },
 );
 
 const modifyFilters = featureFlag(
   (s) => s.assignmentCenter.filter.enabled,
   async () => {
+    console.info("Modifying filters...");
     await filterByNotCompleted();
   },
 );
