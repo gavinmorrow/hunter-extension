@@ -83,34 +83,6 @@ const statusColorFor = async (status) => {
   }
 };
 
-// FIXME: doesn't refresh when html changes
-// maybe use observer for that?
-const colorByStatus = featureFlag(
-  (s) => s.assignmentCenter.list.fullStatusColors,
-  async () => {
-    const getStatusElem = (elem) =>
-      elem.querySelector("app-assignment-status-display span");
-
-    const assignments = Array.from(
-      await waitForElems(
-        "app-student-assignments-repeater .sky-repeater-item-content",
-        100,
-      ),
-    )
-      // for some reason, there are some empty rows
-      .filter((e) => getStatusElem(e) != null)
-      .map((assignmentElem) => ({
-        elem: assignmentElem,
-        status: getStatusElem(assignmentElem).textContent,
-      }));
-    console.log(assignments.map((e) => e.status));
-
-    for (const { elem, status } of assignments) {
-      elem.style.backgroundColor = await statusColorFor(status);
-    }
-  },
-);
-
 const assignmentCenterBroken = featureFlag(
   (s) => s.assignmentCenter.reloadOnBroken,
   async () => {
@@ -135,7 +107,6 @@ const modifyListView = featureFlag(
   (s) => s.assignmentCenter.list.enabled,
   async () => {
     console.info("Modifying list view...");
-    await colorByStatus();
     console.log(await scrapeAssignments());
   },
 );

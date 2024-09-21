@@ -68,7 +68,6 @@ const defaultSettings = {
     },
     list: {
       enabled: true,
-      fullStatusColors: false,
     },
     filter: {
       enabled: true,
