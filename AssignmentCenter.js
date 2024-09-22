@@ -49,14 +49,24 @@ class AssignmentCenter extends HTMLElement {
     shadow.addEventListener("click", (e) => e.stopPropagation());
     shadow.addEventListener("mousedown", (e) => e.stopPropagation());
 
+    const style = document.createElement("style");
+    style.textContent = `\
+ol {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+`;
+    shadow.appendChild(style);
+
     const text = document.createElement("ol");
-    for (const assignment of this.assignments) {
-      const li = document.createElement("li");
-      const pre = document.createElement("pre");
-      pre.textContent = JSON.stringify(assignment, null, 4);
-      li.appendChild(pre);
-      text.appendChild(li);
-    }
+    text.append(
+      ...this.assignments.map((assignment) => {
+        const li = document.createElement("li");
+        const box = new AssignmentBox(assignment);
+        li.appendChild(box);
+        return li;
+      }),
+    );
     shadow.appendChild(text);
   }
 
@@ -202,4 +212,36 @@ class AssignmentCenter extends HTMLElement {
 
 if (!customElements.get("assignment-center")) {
   customElements.define("assignment-center", AssignmentCenter);
+}
+
+class AssignmentBox extends HTMLElement {
+  /** @type {Assignment} */
+  assignment;
+
+  /**
+   * @param {Assignment} assignment
+   */
+  constructor(assignment) {
+    super();
+    this.assignment = assignment;
+  }
+
+  connectedCallback() {
+    // Create a shadow root
+    const shadow = this.attachShadow({ mode: "open" });
+    shadow.appendChild(this.#makeTitleElem());
+  }
+
+  #makeTitleElem() {
+    const e = document.createElement("p");
+    const a = document.createElement("a");
+    a.textContent = this.assignment.title;
+    a.href = this.assignment.link;
+    e.appendChild(a);
+    return e;
+  }
+}
+
+if (!customElements.get("assignment-box")) {
+  customElements.define("assignment-box", AssignmentBox);
 }
