@@ -60,7 +60,7 @@ class AssignmentCenter extends HTMLElement {
     shadow.appendChild(text);
   }
 
-  /** @returns {Promise<Assignment[]>} */
+  /** @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date. */
   static async scrapeAssignments() {
     // sky-split-view-workspace-content Whole section
     //   app-student-assignments-repeater Each header(+content)
@@ -93,7 +93,12 @@ class AssignmentCenter extends HTMLElement {
     );
     if (assignments == null) return null;
 
-    return Array.from(assignments).map(AssignmentCenter.#parseAssignmentElem);
+    return Array.from(assignments)
+      .map(AssignmentCenter.#parseAssignmentElem)
+      .toSorted(
+        /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
+          a.details.dueDate - b.details.dueDate,
+      );
   }
 
   /**
