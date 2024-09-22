@@ -24,6 +24,7 @@ const views = {
     else if (list.checked) return "list";
     else {
       console.error("Unknown view!");
+      debugger;
       return null;
     }
   },
@@ -83,6 +84,9 @@ const statusColorFor = async (status) => {
 };
 
 const createCustomUi = async () => {
+  // switch to list view, so scraping is possible
+  views.switchTo("list");
+
   const oldElem = document.querySelector("app-student-assignment-center");
 
   // construct our own element
