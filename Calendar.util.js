@@ -22,7 +22,9 @@ const Calendar = {
     if (dayWithOffset > numDaysInCurrentMonth) {
       // roll over to next month
 
-      const remainingOffset = dayWithOffset - numDaysInCurrentMonth;
+      // minus one because it goes to the end of the current month, then one
+      // more day to roll over to the next month.
+      const remainingOffset = dayWithOffset - numDaysInCurrentMonth - 1;
 
       // handle rolling over years too
       // remember that months are 0-indexed (so 0-11)
