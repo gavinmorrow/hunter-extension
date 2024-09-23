@@ -188,7 +188,7 @@ const _calendarUnitTests = [
   },
   function handlesYearRolloverBack() {
     const day = new Date(2024, 1, 18);
-    const nextDay = Calendar.offsetFromDay(day, 55);
+    const nextDay = Calendar.offsetFromDay(day, -55);
     return _assert(
       { eq: [nextDay.getDate(), 25] },
       { eq: [nextDay.getMonth(), 11] },
