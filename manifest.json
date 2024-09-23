@@ -27,6 +27,7 @@
       "js": [
         "browser-polyfill.min.js",
         "common.js",
+        "Calendar.util.js",
         "AssignmentCenter.js",
         "assignment-center.js"
       ]
