@@ -89,15 +89,20 @@ const createCustomUi = async () => {
 
   const oldElem = document.querySelector("app-student-assignment-center");
 
-  // construct our own element
-  const assignmentCenter = new AssignmentCenter(
-    oldElem,
-    await AssignmentCenter.scrapeAssignments(),
-  );
-  oldElem.parentElement.appendChild(assignmentCenter);
+  try {
+    // construct our own element
+    const assignmentCenter = new AssignmentCenter(
+      oldElem,
+      await AssignmentCenter.scrapeAssignments(),
+    );
+    oldElem.parentElement.appendChild(assignmentCenter);
 
-  // hide theirs
-  oldElem.hidden = true;
+    // hide theirs
+    oldElem.hidden = true;
+  } catch (err) {
+    alert(`There was an error creating the custom UI: ${err}`);
+    console.error(err);
+  }
 };
 
 const assignmentCenterBroken = featureFlag(
