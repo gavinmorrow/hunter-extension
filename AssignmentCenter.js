@@ -82,12 +82,12 @@ ol > li > ul {
     // **Be careful when doing custom date manipulation.**
     const today = new Date();
     const dateOfMonday = AssignmentCenter.#dateForMondayOfWeek(today);
-    Array(5 /* days */ * 4 /* weeks */)
+    Array(7 /* days */ * 4 /* weeks */)
       .fill(0)
       .map((_, i) => AssignmentCenter.#offsetFromDay(dateOfMonday, i))
       .map((date) => {
         // filter out weekends
-        if (date.getDay() == 0 || date.getDay() == 6) return;
+        if (date.getDay() == 0 || date.getDay() == 6) return null;
 
         const li = document.createElement("li");
         li.value = date.getDate();
