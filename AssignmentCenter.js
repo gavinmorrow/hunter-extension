@@ -57,15 +57,16 @@ ol {
   grid-template-rows: repeat(4, 1fr);
 
   list-style-position: inside;
+  padding: 0;
 }
 ol > li {
   background-color: lightgreen;
   border: 2px solid red;
 }
 
-ol > li > li {
-  list-style: none;
-
+ol > li > ul {
+  list-style-type: none;
+  padding: 0;
 }
 `;
     shadow.appendChild(style);
