@@ -121,3 +121,97 @@ const Calendar = {
     return Calendar.offsetFromDay(date, offsetFromMonday);
   },
 };
+
+const _assert = (...os) => {
+  for (const o of os) {
+    if (o.eq != null) {
+      const [a, b] = o.eq;
+      const res = a === b;
+      if (!res) {
+        console.error(`Assertion failed! ${a} !== ${b}`);
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+};
+const _calendarUnitTests = [
+  function oneDayForwardNoRollover() {
+    const day = new Date(2024, 3, 22);
+    const nextDay = Calendar.offsetFromDay(day, 1);
+    return _assert({ eq: [nextDay.getDate(), 23] });
+  },
+  function oneDayBackNoRollover() {
+    const day = new Date(2024, 3, 22);
+    const nextDay = Calendar.offsetFromDay(day, -1);
+    return _assert({ eq: [nextDay.getDate(), 21] });
+  },
+
+  function manyDayForwardNoRollover() {
+    const day = new Date(2024, 3, 22);
+    const nextDay = Calendar.offsetFromDay(day, 7);
+    return _assert({ eq: [nextDay.getDate(), 29] });
+  },
+  function manyDayBackNoRollover() {
+    const day = new Date(2024, 3, 22);
+    const nextDay = Calendar.offsetFromDay(day, -7);
+    return _assert({ eq: [nextDay.getDate(), 15] });
+  },
+
+  function handlesMonthRolloverForward() {
+    const day = new Date(2024, 9, 3);
+    const nextDay = Calendar.offsetFromDay(day, 30);
+    return _assert(
+      { eq: [nextDay.getDate(), 2] },
+      { eq: [nextDay.getMonth(), 10] },
+    );
+  },
+  function handlesMonthRolloverBack() {
+    const day = new Date(2024, 9, 3);
+    const nextDay = Calendar.offsetFromDay(day, -7);
+    return _assert(
+      { eq: [nextDay.getDate(), 26] },
+      { eq: [nextDay.getMonth(), 8] },
+    );
+  },
+
+  function handlesYearRolloverForward() {
+    const day = new Date(2024, 9, 3);
+    const nextDay = Calendar.offsetFromDay(day, 91);
+    return _assert(
+      { eq: [nextDay.getDate(), 2] },
+      { eq: [nextDay.getMonth(), 0] },
+    );
+  },
+  function handlesYearRolloverBack() {
+    const day = new Date(2024, 1, 18);
+    const nextDay = Calendar.offsetFromDay(day, 55);
+    return _assert(
+      { eq: [nextDay.getDate(), 25] },
+      { eq: [nextDay.getMonth(), 11] },
+    );
+  },
+
+  function handlesLeapYear() {
+    const day = new Date(2024, 1, 28);
+    const nextDay = Calendar.offsetFromDay(day, 1);
+    return _assert({ eq: [nextDay.getDate(), 29] });
+  },
+  function handlesNoLeapYear() {
+    const day = new Date(2023, 1, 28);
+    const nextDay = Calendar.offsetFromDay(day, 1);
+    return _assert(
+      { eq: [nextDay.getDate(), 1] },
+      { eq: [nextDay.getMonth(), 2] },
+    );
+  },
+];
+function _calendarUnitTestsRunAll() {
+  for (const test of _calendarUnitTests) {
+    const res = test();
+    if (res == false) console.error("Test failed!", test.toString());
+  }
+  console.info("Unit tests finished.");
+}
+_calendarUnitTestsRunAll();
