@@ -55,10 +55,17 @@ ol {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: repeat(4, 1fr);
+
+  list-style-position: inside;
 }
 ol > li {
   background-color: lightgreen;
   border: 2px solid red;
+}
+
+ol > li > li {
+  list-style: none;
+
 }
 `;
     shadow.appendChild(style);
@@ -78,6 +85,9 @@ ol > li {
       .fill(0)
       .map((_, i) => AssignmentCenter.#offsetFromDay(dateOfMonday, i))
       .map((date) => {
+        // filter out weekends
+        if (date.getDay() == 0 || date.getDay() == 6) return;
+
         const li = document.createElement("li");
         li.value = date.getDate();
         const list = document.createElement("ul");
@@ -95,6 +105,7 @@ ol > li {
         li.appendChild(list);
         return li;
       })
+      .filter((e) => e != null)
       .forEach((list) => grid.appendChild(list));
 
     return grid;
