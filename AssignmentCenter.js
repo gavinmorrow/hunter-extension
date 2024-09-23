@@ -51,22 +51,30 @@ class AssignmentCenter extends HTMLElement {
 
     const style = document.createElement("style");
     style.textContent = `\
-ol {
+#main-calendar {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: auto repeat(4, minmax(7em, auto));
 
-  list-style-position: inside;
-  padding: 0;
-}
-ol > li {
-  background-color: lightgreen;
-  border: 2px solid red;
-}
+  margin: 1em;
 
-ol > li > ul {
-  list-style-type: none;
-  padding: 0;
+  border: 0.5px solid black;
+  & > * {
+    border: 0.5px solid black;
+  }
+
+  & .calendar-header-box {
+    text-align: center;
+  }
+
+  & .calendar-box {
+    background-color: lightgreen;
+
+    & ul {
+      list-style-type: none;
+      padding: 0;
+    }
+  }
 }
 `;
     shadow.appendChild(style);
@@ -75,7 +83,33 @@ ol > li > ul {
   }
 
   #createCalendarGrid() {
-    const grid = document.createElement("ol");
+    const grid = document.createElement("main");
+    grid.id = "main-calendar";
+
+    // create top row
+    const topRow = Array(5)
+      .fill(0)
+      .map((_, i) => {
+        switch (i) {
+          case 0:
+            return "Monday";
+          case 1:
+            return "Tuesday";
+          case 2:
+            return "Wednesday";
+          case 3:
+            return "Thursday";
+          case 4:
+            return "Friday";
+        }
+      })
+      .map((day) => {
+        const box = document.createElement("div");
+        box.classList.add("calendar-header-box");
+        box.textContent = day;
+        return box;
+      })
+      .forEach((elem) => grid.appendChild(elem));
 
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
@@ -89,8 +123,13 @@ ol > li > ul {
         // filter out weekends
         if (date.getDay() == 0 || date.getDay() == 6) return null;
 
-        const li = document.createElement("li");
-        li.value = date.getDate();
+        const box = document.createElement("div");
+        box.classList.add("calendar-box");
+
+        const dateElem = document.createElement("p");
+        dateElem.textContent = date.getDate();
+        box.appendChild(dateElem);
+
         const list = document.createElement("ul");
         this.assignments
           .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
@@ -101,8 +140,9 @@ ol > li > ul {
             return li;
           })
           .forEach((li) => list.appendChild(li));
-        li.appendChild(list);
-        return li;
+        box.appendChild(list);
+
+        return box;
       })
       .filter((e) => e != null)
       .forEach((list) => grid.appendChild(list));
