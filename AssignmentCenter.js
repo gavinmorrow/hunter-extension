@@ -401,23 +401,10 @@ a {
   }
 
   #assignmentStatusColor() {
-    console.log({ status: this.assignment.status });
-    switch (this.assignment.status) {
-      case "To do":
-        return "oklch(42% 0.07 214)";
-      case "In progress":
-        return "oklch(42% 0.07 302)";
-      case "Completed":
-        return "oklch(42% 0.07 146)";
-      case "Graded":
-        return "oklch(42% 0.07 86)";
-      case "Missing":
-      case "Overdue":
-        return "oklch(42% 0.07 0)";
-      default:
-        console.error(`Unknown status "${this.assignment.status}!"`);
-        return "oklch(from var(--color-bg-box) calc(l*150%) c h)";
-    }
+    const status = this.assignment.status;
+    const colors = this.settings.assignmentCenter.customUi.statusColors;
+
+    return colors[status] ?? "oklch(from var(--color-bg-box) calc(l*150%) c h)";
   }
 }
 
