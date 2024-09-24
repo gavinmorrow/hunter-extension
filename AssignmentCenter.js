@@ -1,6 +1,7 @@
 /**
  * @typedef {String} Color Either a CSS color in `rgb(<r>,<g>,<b>)` format, or the empty string `""`.
  * @typedef {String} Link
+ * @typedef {"To do"|"In progress"|"Completed"|"Graded"|"Missing"|"Overdue"} Status
  */
 
 /**
@@ -19,6 +20,7 @@
  * @property {String} title
  * @property {Link} link
  * @property {AssignmentDetails} details
+ * @property {Status} status
  */
 
 class AssignmentCenter extends HTMLElement {
@@ -239,12 +241,16 @@ main {
     const details = AssignmentCenter.#parseFullDetailsElem(
       elem.querySelector("div.middle-block div.assignment-details"),
     );
+    const status = elem
+      .querySelector("div.right-block app-assignment-status-display")
+      .textContent.trim();
 
     return {
       color,
       title,
       link,
       details,
+      status,
     };
   }
 
@@ -336,6 +342,34 @@ class AssignmentBox extends HTMLElement {
     a.href = this.assignment.link;
     e.appendChild(a);
     return e;
+  }
+
+  #assignmentClassColor() {
+    if (this.assignment.color === "") {
+      return "oklch(from var(--color-bg-box) calc(l*200%) c h)";
+    } else {
+      return this.assignment.color;
+    }
+  }
+
+  #assignmentStatusColor() {
+    console.log({ status: this.assignment.status });
+    switch (this.assignment.status) {
+      case "To do":
+        return "blue";
+      case "In progress":
+        return "purple";
+      case "Completed":
+        return "forestgreen";
+      case "Graded":
+        return "green";
+      case "Missing":
+      case "Overdue":
+        return "red";
+      default:
+        console.error(`Unknown status "${this.assignment.status}!"`);
+        return "oklch(from var(--color-bg-box) calc(l*150%) c h)";
+    }
   }
 }
 
