@@ -129,7 +129,6 @@ const modifyListView = featureFlag(
   (s) => s.assignmentCenter.list.enabled,
   async () => {
     console.info("Modifying list view...");
-    console.log(await scrapeAssignments());
   },
 );
 
