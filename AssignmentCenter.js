@@ -57,9 +57,9 @@ main {
   --color-text: #eee;
   --color-text-link: #bbf;
 
-  --color-border: #406;
+  --color-border: #333;
 
-  --color-bg-root: #203;
+  --color-bg-root: #111;
   --color-bg-box: oklch(from var(--color-bg-root) calc(l*120%) c h);
 
   color: var(--color-text);
