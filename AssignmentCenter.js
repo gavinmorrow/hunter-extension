@@ -93,7 +93,7 @@ main {
 
     & > * {
       margin: 0;
-      padding: 0.5em;
+      padding: 0;
     }
 
     & .calendar-date {
@@ -102,6 +102,10 @@ main {
 
     & ul {
       list-style-type: none;
+
+      & li {
+        margin: 0.5em;
+      }
     }
   }
 
@@ -351,7 +355,9 @@ article {
   position: relative;
   background-color: oklch(from ${this.#assignmentStatusColor()} 42% 0.07 h);
 
-  padding: 0.25em;
+  --base-padding: 0.25em;
+  padding: var(--base-padding);
+  padding-left: calc(var(--base-padding) * 2);
   border-radius: 0.25em;
 
   /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
@@ -365,7 +371,7 @@ article::before {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 0.25em;
+  width: var(--base-padding);
 }
 
 p {
