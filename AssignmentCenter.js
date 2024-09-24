@@ -79,6 +79,7 @@ main {
   }
 
   & .calendar-box {
+    position: relative;
     background-color: var(--color-bg-box);
 
     & > * {
@@ -93,6 +94,17 @@ main {
     & ul {
       list-style-type: none;
     }
+  }
+
+  & .calendar-box.disabled::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: oklch(from var(--color-bg-box) calc(l*75%) c h / 50%);
+    backdrop-filter: blur(0.1em);
   }
 }
 `;
@@ -146,6 +158,8 @@ main {
 
         const box = document.createElement("div");
         box.classList.add("calendar-box");
+
+        if (date.getTime() < today.getTime()) box.classList.add("disabled");
 
         const dateElem = document.createElement("p");
         dateElem.classList.add("calendar-date");
