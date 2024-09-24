@@ -55,6 +55,8 @@ class AssignmentCenter extends HTMLElement {
     style.textContent = `\
 main {
   --color-text: #eee;
+  --color-text-link: #bbf;
+
   --color-border: #406;
 
   --color-bg-root: #203;
@@ -332,7 +334,43 @@ class AssignmentBox extends HTMLElement {
   connectedCallback() {
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
-    shadow.appendChild(this.#makeTitleElem());
+
+    const style = document.createElement("style");
+    style.textContent = `\
+article {
+  position: relative;
+  background-color: oklch(from ${this.#assignmentStatusColor()} 42% 0.07 h);
+
+  padding: 0.25em;
+  border-radius: 0.25em;
+
+  /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
+  clip-path: inset(0 round 0.25em);
+}
+
+article::before {
+  content: "";
+  background-color: ${this.#assignmentClassColor()};
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.25em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-text-link);
+}
+`;
+    shadow.appendChild(style);
+
+    const root = document.createElement("article");
+    root.appendChild(this.#makeTitleElem());
+    shadow.appendChild(root);
   }
 
   #makeTitleElem() {
