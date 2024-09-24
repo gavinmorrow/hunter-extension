@@ -394,16 +394,16 @@ a {
     console.log({ status: this.assignment.status });
     switch (this.assignment.status) {
       case "To do":
-        return "blue";
+        return "#0c5765";
       case "In progress":
-        return "purple";
+        return "#54436d";
       case "Completed":
-        return "forestgreen";
+        return "#325735";
       case "Graded":
-        return "green";
+        return "#5e4a1a";
       case "Missing":
       case "Overdue":
-        return "red";
+        return "6c3c4b";
       default:
         console.error(`Unknown status "${this.assignment.status}!"`);
         return "oklch(from var(--color-bg-box) calc(l*150%) c h)";
