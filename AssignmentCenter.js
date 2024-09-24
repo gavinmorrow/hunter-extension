@@ -51,16 +51,27 @@ class AssignmentCenter extends HTMLElement {
 
     const style = document.createElement("style");
     style.textContent = `\
+main {
+  --color-text: #eee;
+  --color-border: #406;
+
+  --color-bg-root: #203;
+  --color-bg-box: oklch(from var(--color-bg-root) calc(l*120%) c h);
+
+  color: var(--color-text);
+  background-color: var(--color-bg-root);
+
+  padding: 1em;
+}
+
 #main-calendar {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: auto repeat(4, minmax(7em, auto));
 
-  margin: 1em;
-
-  border: 0.5px solid black;
+  border: 0.5px solid var(--color-border);
   & > * {
-    border: 0.5px solid black;
+    border: 0.5px solid var(--color-border);
   }
 
   & .calendar-header-box {
@@ -68,22 +79,32 @@ class AssignmentCenter extends HTMLElement {
   }
 
   & .calendar-box {
-    background-color: lightgreen;
+    background-color: var(--color-bg-box);
+
+    & > * {
+      margin: 0;
+      padding: 0.5em;
+    }
+
+    & .calendar-date {
+      background-color: oklch(from var(--color-bg-box) calc(l*120%) c h);
+    }
 
     & ul {
       list-style-type: none;
-      padding: 0;
     }
   }
 }
 `;
     shadow.appendChild(style);
 
-    shadow.appendChild(this.#createCalendarGrid());
+    const root = document.createElement("main");
+    root.appendChild(this.#createCalendarGrid());
+    shadow.appendChild(root);
   }
 
   #createCalendarGrid() {
-    const grid = document.createElement("main");
+    const grid = document.createElement("div");
     grid.id = "main-calendar";
 
     // create top row
@@ -127,6 +148,7 @@ class AssignmentCenter extends HTMLElement {
         box.classList.add("calendar-box");
 
         const dateElem = document.createElement("p");
+        dateElem.classList.add("calendar-date");
         dateElem.textContent = date.getDate();
         box.appendChild(dateElem);
 
