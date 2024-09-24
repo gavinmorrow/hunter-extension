@@ -94,6 +94,7 @@ const createCustomUi = async () => {
     const assignmentCenter = new AssignmentCenter(
       oldElem,
       await AssignmentCenter.scrapeAssignments(),
+      await settings(),
     );
     oldElem.parentElement.appendChild(assignmentCenter);
 

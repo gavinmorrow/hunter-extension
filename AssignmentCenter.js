@@ -33,14 +33,19 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Assignment[]} */
   assignments;
 
+  /** @type {Settings} */
+  settings;
+
   /**
    * @param {HTMLElement} oldElem The original Blackbaud assignment center. (An `app-student-assignment-center`.)
    * @param {Assignment[]} assignments
+   * @param {Settings} settings The extension settings. Passed in here so that it can be non-async.
    */
-  constructor(oldElem, assignments) {
+  constructor(oldElem, assignments, settings) {
     super();
     this.oldElem = oldElem;
     this.assignments = assignments;
+    this.settings = settings;
   }
 
   connectedCallback() {
@@ -173,7 +178,7 @@ main {
         const list = document.createElement("ul");
         this.assignments
           .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
-          .map((a) => new AssignmentBox(a))
+          .map((a) => new AssignmentBox(a, this.settings))
           .map((e) => {
             const li = document.createElement("li");
             li.appendChild(e);
@@ -323,12 +328,17 @@ class AssignmentBox extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
+  /** @type {Settings} */
+  settings;
+
   /**
    * @param {Assignment} assignment
+   * @param {Settings} settings
    */
-  constructor(assignment) {
+  constructor(assignment, settings) {
     super();
     this.assignment = assignment;
+    this.settings = settings;
   }
 
   connectedCallback() {
