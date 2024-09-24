@@ -108,7 +108,7 @@ main {
     grid.id = "main-calendar";
 
     // create top row
-    const topRow = Array(5)
+    Array(5)
       .fill(0)
       .map((_, i) => {
         switch (i) {
