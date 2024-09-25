@@ -356,22 +356,25 @@ article {
   background-color: ${this.#assignmentStatusColor()};
 
   --base-padding: 0.25em;
+  --width-class-color: 0.5em;
   padding: var(--base-padding);
-  padding-left: calc(var(--base-padding) * 2);
+  padding-left: calc(var(--base-padding) + var(--width-class-color));
+  padding-right: calc(var(--base-padding) + var(--width-class-color));
   border-radius: 0.25em;
 
   /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
   clip-path: inset(0 round 0.25em);
-}
 
-article::before {
-  content: "";
-  background-color: ${this.#assignmentClassColor()};
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: var(--base-padding);
+  &::before, &::after {
+    content: "";
+    background-color: ${this.#assignmentClassColor()};
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: var(--width-class-color);
+  }
+  &::before { left: 0; }
+  &::after { right: 0; }
 }
 
 p {
