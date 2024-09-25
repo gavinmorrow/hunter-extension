@@ -354,13 +354,18 @@ class AssignmentBox extends HTMLElement {
 article {
   position: relative;
   background-color: ${this.#assignmentStatusColor()};
+  box-sizing: border-box;
 
   --base-padding: 0.25em;
   --width-class-color: 0.5em;
   padding: var(--base-padding);
   padding-left: calc(var(--base-padding) + var(--width-class-color));
   padding-right: calc(var(--base-padding) + var(--width-class-color));
-  border-radius: 0.25em;
+
+  --border-width: 2px;
+  --inner-border-width: calc(var(--border-radius) - 2px);
+  --border-radius: var(--base-padding);
+  border-radius: var(--border-radius);
 
   /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
   clip-path: inset(0 round 0.25em);
@@ -373,8 +378,12 @@ article {
     bottom: 0;
     width: var(--width-class-color);
   }
-  &::before { left: 0; }
-  &::after { right: 0; }
+  &::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
+  &::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
+
+  &.type-major {
+    border: var(--border-width) solid yellow;
+  }
 }
 
 p {
@@ -388,7 +397,12 @@ a {
     shadow.appendChild(style);
 
     const root = document.createElement("article");
+
+    if (this.assignment.details.type.indexOf("Major") > -1)
+      root.classList.add("type-major");
+
     root.appendChild(this.#makeTitleElem());
+
     shadow.appendChild(root);
   }
 
