@@ -11,6 +11,7 @@ const Calendar = {
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
 
+    date = Calendar.resetDate(date);
     const dayInMonth = date.getDate();
     const dayWithOffset = dayInMonth + offset;
 
@@ -80,14 +81,30 @@ const Calendar = {
   },
 
   /**
+   * Reset a date to 00:00.00 on the day.
+   * @param {Date} date
+   */
+  resetDate(date) {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+  },
+
+  /**
    * Checks if two dates are on the same day.
    * @param {Date} a
    * @param {Date} b
    */
   datesAreSameDay(a, b) {
     // Erase the time component from both, then compare.
-    const aErased = new Date(a.getFullYear(), a.getMonth(), a.getDate());
-    const bErased = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+    const aErased = Calendar.resetDate(a);
+    const bErased = Calendar.resetDate(b);
 
     return aErased.getTime() === bErased.getTime();
   },

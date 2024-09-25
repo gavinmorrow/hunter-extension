@@ -160,7 +160,7 @@ main {
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
-    const today = new Date();
+    const today = Calendar.resetDate(new Date());
     const dateOfMonday = Calendar.dateForMondayOfWeek(today);
     Array(7 /* days */ * 4 /* weeks */)
       .fill(0)
