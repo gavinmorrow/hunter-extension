@@ -107,6 +107,10 @@ main {
         margin: 0.5em;
       }
     }
+
+    &.today, &.today .calendar-date {
+      background-color: black;
+    }
   }
 
   & .calendar-box.disabled::before {
@@ -173,6 +177,7 @@ main {
         box.classList.add("calendar-box");
 
         if (date.getTime() < today.getTime()) box.classList.add("disabled");
+        if (Calendar.datesAreSameDay(today, date)) box.classList.add("today");
 
         const dateElem = document.createElement("p");
         dateElem.classList.add("calendar-date");
