@@ -182,6 +182,18 @@ main {
         const list = document.createElement("ul");
         this.assignments
           .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
+          .sort((a, b) => {
+            console.log({ a, b });
+            if (a.status === b.status) {
+              // sort by type
+              const aMajor = a.details.type.indexOf("Major") > -1;
+              const bMajor = b.details.type.indexOf("Major") > -1;
+              if (aMajor && !bMajor) return -1;
+              if (aMajor && bMajor) return 0;
+              if (!aMajor && bMajor) return 1;
+            }
+            return AssignmentCenter.#sortStatuses(a.status, b.status);
+          })
           .map((a) => new AssignmentBox(a, this.settings))
           .map((e) => {
             const li = document.createElement("li");
@@ -197,6 +209,24 @@ main {
       .forEach((list) => grid.appendChild(list));
 
     return grid;
+  }
+
+  /**
+   * @param {Status} a
+   * @param {Status} b
+   * @returns {-1|0|1}
+   */
+  static #sortStatuses(a, b) {
+    // TODO: treat "To do" and "In progress" as equal?
+    const order = [
+      "Missing",
+      "Overdue",
+      "To do",
+      "In progress",
+      "Completed",
+      "Graded",
+    ];
+    return order.indexOf(a) - order.indexOf(b);
   }
 
   /** @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date. */
