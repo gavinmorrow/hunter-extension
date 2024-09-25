@@ -353,7 +353,7 @@ class AssignmentBox extends HTMLElement {
     style.textContent = `\
 article {
   position: relative;
-  background-color: oklch(from ${this.#assignmentStatusColor()} 42% 0.07 h);
+  background-color: ${this.#assignmentStatusColor()};
 
   --base-padding: 0.25em;
   padding: var(--base-padding);

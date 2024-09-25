@@ -65,12 +65,13 @@ const defaultSettings = {
     customUi: {
       enabled: true,
       statusColors: {
-        "To do": "oklch(42% 0.07 214)",
-        "In progress": "oklch(42% 0.07 302)",
-        Completed: "oklch(42% 0.07 146)",
-        Graded: "oklch(42% 0.07 86)",
-        Missing: "oklch(42% 0.07 0)",
-        Overdue: "oklch(42% 0.07 0)",
+        // "To do": "oklch(42% 0.07 86)" /* yellow */,
+        "To do": "oklch(42% 0.07 214)" /* blue */,
+        "In progress": "oklch(42% 0.07 214)" /* blue */,
+        Completed: "oklch(42% 0 0)" /* grey */,
+        Graded: "oklch(42% 0.07 146)" /* green */,
+        Missing: "oklch(42% 0.07 0)" /* red */,
+        Overdue: "oklch(42% 0.07 0)" /* red */,
       },
     },
     calendar: {
