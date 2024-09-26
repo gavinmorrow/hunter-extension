@@ -68,7 +68,7 @@ const defaultSettings = {
         // "To do": "oklch(42% 0.07 86)" /* yellow */,
         "To do": "oklch(42% 0.07 214)" /* blue */,
         "In progress": "oklch(42% 0.07 214)" /* blue */,
-        Completed: "oklch(42% 0 0)" /* grey */,
+        Completed: "oklch(42% 0.07 146)" /* grey */,
         Graded: "oklch(42% 0.07 146)" /* green */,
         Missing: "oklch(42% 0.07 0)" /* red */,
         Overdue: "oklch(42% 0.07 0)" /* red */,

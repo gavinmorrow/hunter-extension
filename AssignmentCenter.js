@@ -60,7 +60,7 @@ class AssignmentCenter extends HTMLElement {
     style.textContent = `\
 main {
   --color-text: #eee;
-  --color-text-link: #ddf;
+  --color-text-link: #fff;
 
   --color-border: #333;
 
