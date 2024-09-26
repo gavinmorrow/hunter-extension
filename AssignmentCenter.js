@@ -75,7 +75,9 @@ main {
 
 #main-calendar {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* The "0" is to prevent column from growing past 1fr.
+   * See <https://stackoverflow.com/a/43312314> */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-template-rows: auto repeat(4, minmax(7em, auto));
 
   border: 0.5px solid var(--color-border);
@@ -90,9 +92,6 @@ main {
   & .calendar-box {
     position: relative;
     background-color: var(--color-bg-box);
-
-    /* Prevent column from growing past 1fr */
-    min-width: 0;
 
     & > * {
       margin: 0;
