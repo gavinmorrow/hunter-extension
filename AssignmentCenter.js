@@ -91,6 +91,9 @@ main {
     position: relative;
     background-color: var(--color-bg-box);
 
+    /* Prevent column from growing past 1fr */
+    min-width: 0;
+
     & > * {
       margin: 0;
       padding: 0;
@@ -422,6 +425,12 @@ article {
     border: var(--border-width) solid yellow;
   }
 
+  &.collapse #title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
   &:focus-within, &:hover {
     background-color: oklch(from ${this.#assignmentStatusColor()} calc(l + 0.07) c h);
   }
@@ -447,6 +456,7 @@ a {
 
     if (this.assignment.details.type.indexOf("Major") > -1)
       root.classList.add("type-major");
+    if (this.assignment.status === "Completed") root.classList.add("collapse");
 
     root.appendChild(this.#makeTitleElem());
 
@@ -455,6 +465,7 @@ a {
 
   #makeTitleElem() {
     const e = document.createElement("p");
+    e.id = "title";
     const a = document.createElement("a");
     a.textContent = this.assignment.title;
     a.href = this.assignment.link;
