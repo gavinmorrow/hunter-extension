@@ -20,68 +20,7 @@ class AssignmentBox extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     const style = document.createElement("style");
-    style.textContent = `\
-article {
-  position: relative;
-  background-color: ${this.#assignmentStatusColor()};
-  box-sizing: border-box;
-
-  --base-padding: 0.25em;
-  --width-class-color: 0.5em;
-  padding: var(--base-padding);
-  padding-left: calc(var(--base-padding) + var(--width-class-color));
-  padding-right: calc(var(--base-padding) + var(--width-class-color));
-
-  --border-width: 2px;
-  --inner-border-width: calc(var(--border-radius) - 2px);
-  --border-radius: var(--base-padding);
-  border-radius: var(--border-radius);
-
-  /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
-  clip-path: inset(0 round 0.25em);
-
-  transition: background 0.2s ease-in-out;
-
-  &::before, &::after {
-    content: "";
-    background-color: ${this.#assignmentClassColor()};
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: var(--width-class-color);
-  }
-  &::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
-  &::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
-
-  &.type-major {
-    border: var(--border-width) solid yellow;
-  }
-
-  &.collapse #title {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  &:focus-within, &:hover {
-    background-color: oklch(from ${this.#assignmentStatusColor()} calc(l + 0.07) c h);
-  }
-}
-
-p {
-  margin: 0;
-}
-
-a {
-  color: var(--color-text-link);
-  text-decoration: none;
-
-  &:hover, &:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-}
-`;
+    style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
     const root = document.createElement("article");
@@ -135,6 +74,71 @@ a {
 
   #shouldCollapse() {
     return this.assignment.status === "Completed";
+  }
+
+  #getStylesheet() {
+    return `\
+article {
+position: relative;
+background-color: ${this.#assignmentStatusColor()};
+box-sizing: border-box;
+
+--base-padding: 0.25em;
+--width-class-color: 0.5em;
+padding: var(--base-padding);
+padding-left: calc(var(--base-padding) + var(--width-class-color));
+padding-right: calc(var(--base-padding) + var(--width-class-color));
+
+--border-width: 2px;
+--inner-border-width: calc(var(--border-radius) - 2px);
+--border-radius: var(--base-padding);
+border-radius: var(--border-radius);
+
+/* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
+clip-path: inset(0 round 0.25em);
+
+transition: background 0.2s ease-in-out;
+
+&::before, &::after {
+  content: "";
+  background-color: ${this.#assignmentClassColor()};
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--width-class-color);
+}
+&::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
+&::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
+
+&.type-major {
+  border: var(--border-width) solid yellow;
+}
+
+&.collapse #title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+&:focus-within, &:hover {
+  background-color: oklch(from ${this.#assignmentStatusColor()} calc(l + 0.07) c h);
+}
+}
+
+p {
+margin: 0;
+}
+
+a {
+color: var(--color-text-link);
+text-decoration: none;
+
+&:hover, &:focus {
+  text-decoration: underline;
+  outline: none;
+}
+}
+`;
   }
 }
 
