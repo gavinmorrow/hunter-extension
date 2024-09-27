@@ -98,6 +98,19 @@ const createCustomUi = async () => {
     );
     oldElem.parentElement.appendChild(assignmentCenter);
 
+    // construct close button
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Toggle custom UI";
+    closeBtn.style.position = "fixed";
+    closeBtn.style.zIndex = "1000000000";
+    closeBtn.style.top = "0";
+    closeBtn.style.left = "0";
+    closeBtn.addEventListener("click", (_e) => {
+      oldElem.hidden = !oldElem.hidden;
+      assignmentCenter.hidden = !assignmentCenter.hidden;
+    });
+    oldElem.parentElement.appendChild(closeBtn);
+
     // hide theirs
     oldElem.hidden = true;
   } catch (err) {
