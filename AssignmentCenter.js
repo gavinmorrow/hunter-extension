@@ -36,6 +36,13 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Settings} */
   settings;
 
+  // The `calendar` param is needed bc at the time of calling it, the
+  // `#main-calendar` element isn't necessarily created yet.
+  /**
+   * Show a day of the week in the calendar (ie a column in the grid).
+   * @param {HTMLElement} calendar The `#main-calendar` element.
+   * @param {0|1|2|3|4|5|6} day The day (of the week, 0-indexed) to show. Only `0` and `6` have any effect, the rest are no-ops.
+   */
   #showDay(calendar, day) {
     if (day === 0 || day === 6) {
       const dayName = day === 0 ? "sunday" : "saturday";
