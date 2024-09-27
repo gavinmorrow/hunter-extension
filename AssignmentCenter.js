@@ -457,6 +457,15 @@ a {
       root.classList.add("type-major");
     if (this.assignment.status === "Completed") root.classList.add("collapse");
 
+    // make entire card clickable to open link
+    // see <https://inclusive-components.design/cards/> and <https://css-tricks.com/block-links-the-search-for-a-perfect-solution/>
+    root.style.cursor = "pointer";
+    root.addEventListener("click", (e) => {
+      const link = root.querySelector("#title a");
+      if (e.target === link) return;
+      else link.click();
+    });
+
     root.appendChild(this.#makeTitleElem());
 
     shadow.appendChild(root);
