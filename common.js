@@ -16,16 +16,23 @@ const dbg = (a) => {
  */
 const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) =>
   new Promise((resolve, reject) => {
+    // set timeout and interval
     let timeoutId =
       timeout != undefined ? setTimeout(() => resolve(null), timeout) : null;
-    let intervalId = setInterval(() => {
+    let intervalId = setInterval(run, interval);
+
+    // run immediately to minimize delay if it's already ready
+    run();
+
+    // use `function` keyword for hoisting
+    function run() {
       const result = fn();
       if (result) {
         clearInterval(intervalId);
         clearTimeout(timeoutId);
         resolve(result);
       }
-    }, interval);
+    }
   });
 
 /**
