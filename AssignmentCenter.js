@@ -190,7 +190,6 @@ main {
         this.assignments
           .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
           .sort((a, b) => {
-            console.log({ a, b });
             if (a.status === b.status) {
               // sort by type
               const aMajor = a.details.type.indexOf("Major") > -1;
@@ -378,8 +377,6 @@ main {
 
     /** A time in the format "hhmm" (but a JS number) */
     const now = today.getHours() * 100 + today.getMinutes();
-
-    console.log({ now, cutoffTime });
 
     return (
       (now < cutoffTime && Calendar.datesAreSameDay(date, today)) ||
