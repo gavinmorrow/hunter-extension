@@ -490,7 +490,8 @@ a {
     root.style.cursor = "pointer";
     root.addEventListener("click", (e) => {
       const link = root.querySelector("#title a");
-      if (e.target === link) return;
+      if (e.target === link || document.getSelection().toString() !== "")
+        return;
       else link.click();
     });
 
