@@ -36,21 +36,12 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Settings} */
   settings;
 
-  #_showDay = { 0: false, 6: false };
-  #setWeekends(grid, value, ...days) {
-    const { style } = grid;
-    for (const day of days) {
+  #showDay(calendar, day) {
+    if (day === 0 || day === 6) {
       const dayName = day === 0 ? "sunday" : "saturday";
-      style.setProperty(`--show-${dayName}`, value ? "1" : "0");
-      grid.querySelectorAll(`.calendar-header-box`)[day].style.display = value
-        ? "block"
-        : "none";
-      this.#_showDay[day] = value;
+      const className = `show-${dayName}`;
+      calendar.classList.add(className);
     }
-  }
-  #dayIsShown(day) {
-    console.log(this.#_showDay, day);
-    return this.#_showDay[day] ?? true;
   }
 
   /**
@@ -93,6 +84,9 @@ main {
 #main-calendar {
   --show-sunday: 0;
   --show-saturday: 0;
+  &.show-sunday { --show-sunday: 1; }
+  &.show-saturday { --show-saturday: 1; }
+
   --num-grid-columns: calc(5 + var(--show-sunday) + var(--show-saturday));
   display: grid;
   /* The "0" is to prevent column from growing past 1fr.
@@ -145,6 +139,13 @@ main {
     background-color: oklch(from var(--color-bg-box) calc(l*75%) c h / 50%);
     backdrop-filter: blur(0.1em);
   }
+
+  &:not(.show-sunday) .sunday {
+    display: none
+  }
+  &:not(.show-saturday) .saturday {
+    display: none
+  }
 }
 `;
     shadow.appendChild(style);
@@ -182,23 +183,29 @@ main {
       .map((day) => {
         const box = document.createElement("div");
         box.classList.add("calendar-header-box");
+        if (day === "Sunday" || day === "Saturday")
+          box.classList.add(day.toLowerCase());
         box.textContent = day;
         return box;
       })
       .forEach((elem) => grid.appendChild(elem));
-    this.#setWeekends(grid, false, 0, 6);
 
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
     const today = Calendar.resetDate(new Date());
-    const dateOfMonday = Calendar.dateForMondayOfWeek(today);
+    const dateOfMonday = Calendar.dateForSundayOfWeek(today);
     Array(7 /* days */ * 4 /* weeks */)
       .fill(0)
       .map((_, i) => Calendar.offsetFromDay(dateOfMonday, i))
       .map((date) => {
         const box = document.createElement("div");
         box.classList.add("calendar-box");
+
+        // add class for weekends
+        const day = date.getDay();
+        if (day === 0) box.classList.add("sunday");
+        if (day === 6) box.classList.add("saturday");
 
         if (date.getTime() < today.getTime()) box.classList.add("disabled");
         if (this.#dateIsSelected(date)) box.classList.add("today");
@@ -214,14 +221,9 @@ main {
           Calendar.datesAreSameDay(a.details.dueDate, date),
         );
 
-        // filter out weekends *if there are no assignments on it*
-        const day = date.getDay();
-        if (day === 0 || day === 6) {
-          const shouldShow = assignments.length > 0 || this.#dayIsShown(day);
-          console.log({ day, shouldShow, real: this.#dayIsShown(day) });
-          this.#setWeekends(grid, shouldShow, day);
-          if (!shouldShow) return null;
-        }
+        // show the day in calendar (really applies to just weekends, but is a
+        // no-op for weekdays so it's okay)
+        if (assignments.length > 0) this.#showDay(grid, day);
 
         // add assignment elements
         assignments

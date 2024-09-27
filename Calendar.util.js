@@ -129,15 +129,15 @@ const Calendar = {
   },
 
   /** @param {Date} date @returns {Date} */
-  dateForMondayOfWeek(date) {
+  dateForSundayOfWeek(date) {
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
 
     /** number from 0-6 (sunday-saturday) */
     const dayOfWeek = date.getDay();
-    /** how much to add to current date to get the monday in the week */
-    const offsetFromMonday = 1 - dayOfWeek;
-    return Calendar.offsetFromDay(date, offsetFromMonday);
+    /** how much to add to current date to get the sunday in the week */
+    const offsetFromSunday = 0 - dayOfWeek;
+    return Calendar.offsetFromDay(date, offsetFromSunday);
   },
 };
 
