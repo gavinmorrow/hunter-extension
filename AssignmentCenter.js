@@ -483,7 +483,7 @@ a {
     // add classes for majors and completed assignments
     if (this.assignment.details.type.indexOf("Major") > -1)
       root.classList.add("type-major");
-    if (this.assignment.status === "Completed") root.classList.add("collapse");
+    if (this.#shouldCollapse()) root.classList.add("collapse");
 
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and <https://css-tricks.com/block-links-the-search-for-a-perfect-solution/>
@@ -505,6 +505,7 @@ a {
     e.id = "title";
     const a = document.createElement("a");
     a.textContent = this.assignment.title;
+    if (this.#shouldCollapse()) a.title = this.assignment.title;
     a.href = this.assignment.link;
     e.appendChild(a);
     return e;
@@ -523,6 +524,10 @@ a {
     const colors = this.settings.assignmentCenter.customUi.statusColors;
 
     return colors[status] ?? "oklch(from var(--color-bg-box) calc(l*150%) c h)";
+  }
+
+  #shouldCollapse() {
+    return this.assignment.status === "Completed";
   }
 }
 
