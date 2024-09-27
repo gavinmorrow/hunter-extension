@@ -36,6 +36,23 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Settings} */
   settings;
 
+  #_showDay = { 0: false, 6: false };
+  #setWeekends(grid, value, ...days) {
+    const { style } = grid;
+    for (const day of days) {
+      const dayName = day === 0 ? "sunday" : "saturday";
+      style.setProperty(`--show-${dayName}`, value ? "1" : "0");
+      grid.querySelectorAll(`.calendar-header-box`)[day].style.display = value
+        ? "block"
+        : "none";
+      this.#_showDay[day] = value;
+    }
+  }
+  #dayIsShown(day) {
+    console.log(this.#_showDay, day);
+    return this.#_showDay[day] ?? true;
+  }
+
   /**
    * @param {HTMLElement} oldElem The original Blackbaud assignment center. (An `app-student-assignment-center`.)
    * @param {Assignment[]} assignments
@@ -74,10 +91,13 @@ main {
 }
 
 #main-calendar {
+  --show-sunday: 0;
+  --show-saturday: 0;
+  --num-grid-columns: calc(5 + var(--show-sunday) + var(--show-saturday));
   display: grid;
   /* The "0" is to prevent column from growing past 1fr.
    * See <https://stackoverflow.com/a/43312314> */
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--num-grid-columns), minmax(0, 1fr));
   grid-template-rows: auto repeat(4, minmax(7em, auto));
 
   border: 0.5px solid var(--color-border);
@@ -139,20 +159,24 @@ main {
     grid.id = "main-calendar";
 
     // create top row
-    Array(5)
+    Array(7)
       .fill(0)
       .map((_, i) => {
         switch (i) {
           case 0:
-            return "Monday";
+            return "Sunday";
           case 1:
-            return "Tuesday";
+            return "Monday";
           case 2:
-            return "Wednesday";
+            return "Tuesday";
           case 3:
-            return "Thursday";
+            return "Wednesday";
           case 4:
+            return "Thursday";
+          case 5:
             return "Friday";
+          case 6:
+            return "Saturday";
         }
       })
       .map((day) => {
@@ -162,6 +186,7 @@ main {
         return box;
       })
       .forEach((elem) => grid.appendChild(elem));
+    this.#setWeekends(grid, false, 0, 6);
 
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
@@ -172,9 +197,6 @@ main {
       .fill(0)
       .map((_, i) => Calendar.offsetFromDay(dateOfMonday, i))
       .map((date) => {
-        // filter out weekends
-        if (date.getDay() == 0 || date.getDay() == 6) return null;
-
         const box = document.createElement("div");
         box.classList.add("calendar-box");
 
@@ -187,8 +209,22 @@ main {
         box.appendChild(dateElem);
 
         const list = document.createElement("ul");
-        this.assignments
-          .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
+        // get assignments for current day
+        const assignments = this.assignments.filter((a) =>
+          Calendar.datesAreSameDay(a.details.dueDate, date),
+        );
+
+        // filter out weekends *if there are no assignments on it*
+        const day = date.getDay();
+        if (day === 0 || day === 6) {
+          const shouldShow = assignments.length > 0 || this.#dayIsShown(day);
+          console.log({ day, shouldShow, real: this.#dayIsShown(day) });
+          this.#setWeekends(grid, shouldShow, day);
+          if (!shouldShow) return null;
+        }
+
+        // add assignment elements
+        assignments
           .sort((a, b) => {
             if (a.status === b.status) {
               // sort by type
