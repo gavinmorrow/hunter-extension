@@ -98,6 +98,7 @@ const tabState = async (data) => {
  * @property {Object} assignmentCenter
  * @property {boolean} assignmentCenter.enabled
  * @property {boolean} assignmentCenter.reloadOnBroken
+ * @property {boolean} assignmentCenter.hideLowerNavbar
  *
  * @property {Object} assignmentCenter.statusColors
  * @property {String} assignmentCenter.statusColors.todo

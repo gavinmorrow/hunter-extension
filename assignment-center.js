@@ -69,6 +69,21 @@ const filterByNotCompleted = featureFlag(
   },
 );
 
+const hideLowerNavbar = featureFlag(
+  (s) => s.assignmentCenter.hideLowerNavbar,
+  async () => {
+    const lowerNavbar = await waitForElem("#site-nav-lower");
+    if (lowerNavbar == null) return;
+    lowerNavbar.hidden = true;
+
+    // set new height for spacer
+    // the spacer determines the amount of space the full header takes up
+    const spacerElem = await waitForElem("#site-top-spacer");
+    if (spacerElem == null) return;
+    spacerElem.style.height = "var(--sky-viewport-top)";
+  },
+);
+
 const statusColorFor = async (status) => {
   const {
     assignmentCenter: { statusColors },
@@ -170,6 +185,9 @@ const modifyView = async (view) => {
 promiseError(async () => {
   // needs to go first, bc everything else will fail if it is broken
   await assignmentCenterBroken();
+
+  // this should run regardless of whether or not the custom UI is enabled
+  await hideLowerNavbar();
 
   if ((await settings()).assignmentCenter.customUi.enabled) {
     await createCustomUi();

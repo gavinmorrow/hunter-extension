@@ -86,6 +86,7 @@ const defaultSettings = {
       autoNotCompleted: true,
     },
     reloadOnBroken: true,
+    hideLowerNavbar: true,
     statusColors: {
       todo: "blue",
       inProgress: "yellow",
