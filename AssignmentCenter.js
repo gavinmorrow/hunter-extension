@@ -179,7 +179,7 @@ main {
         box.classList.add("calendar-box");
 
         if (date.getTime() < today.getTime()) box.classList.add("disabled");
-        if (Calendar.datesAreSameDay(today, date)) box.classList.add("today");
+        if (this.#dateIsSelected(date)) box.classList.add("today");
 
         const dateElem = document.createElement("p");
         dateElem.classList.add("calendar-date");
@@ -358,6 +358,33 @@ main {
     const hour24 = Calendar.hour12ToHour24(hour12, amPm);
 
     return new Date(year, month - 1, day, hour24, min);
+  }
+
+  /**
+   * Check if the date given is the one to be highlighted in the calendar.
+   * @param {Date} date
+   */
+  #dateIsSelected(date) {
+    const {
+      assignmentCenter: {
+        customUi: { nextDayCutoff },
+      },
+    } = this.settings;
+    /** A time in the format "hhmm" (but a JS number) */
+    const cutoffTime = Number(nextDayCutoff.replace(":", ""));
+
+    const today = new Date();
+    const tomorrow = Calendar.offsetFromDay(today, 1);
+
+    /** A time in the format "hhmm" (but a JS number) */
+    const now = today.getHours() * 100 + today.getMinutes();
+
+    console.log({ now, cutoffTime });
+
+    return (
+      (now < cutoffTime && Calendar.datesAreSameDay(date, today)) ||
+      (now >= cutoffTime && Calendar.datesAreSameDay(date, tomorrow))
+    );
   }
 }
 
