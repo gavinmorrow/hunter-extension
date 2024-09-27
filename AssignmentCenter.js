@@ -453,6 +453,7 @@ a {
 
     const root = document.createElement("article");
 
+    // add classes for majors and completed assignments
     if (this.assignment.details.type.indexOf("Major") > -1)
       root.classList.add("type-major");
     if (this.assignment.status === "Completed") root.classList.add("collapse");
@@ -466,6 +467,7 @@ a {
       else link.click();
     });
 
+    // add the element for assignment title
     root.appendChild(this.#makeTitleElem());
 
     shadow.appendChild(root);
