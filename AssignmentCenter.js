@@ -72,89 +72,7 @@ class AssignmentCenter extends HTMLElement {
     shadow.addEventListener("mousedown", (e) => e.stopPropagation());
 
     const style = document.createElement("style");
-    style.textContent = `\
-main {
-  --color-text: #eee;
-  --color-text-link: #fff;
-
-  --color-border: #333;
-
-  --color-bg-root: #111;
-  --color-bg-box: oklch(from var(--color-bg-root) calc(l*120%) c h);
-
-  color: var(--color-text);
-  background-color: var(--color-bg-root);
-
-  padding: 1em;
-}
-
-#main-calendar {
-  --show-sunday: 0;
-  --show-saturday: 0;
-  &.show-sunday { --show-sunday: 1; }
-  &.show-saturday { --show-saturday: 1; }
-
-  --num-grid-columns: calc(5 + var(--show-sunday) + var(--show-saturday));
-  display: grid;
-  /* The "0" is to prevent column from growing past 1fr.
-   * See <https://stackoverflow.com/a/43312314> */
-  grid-template-columns: repeat(var(--num-grid-columns), minmax(0, 1fr));
-  grid-template-rows: auto repeat(4, minmax(7em, auto));
-
-  border: 0.5px solid var(--color-border);
-  & > * {
-    border: 0.5px solid var(--color-border);
-  }
-
-  & .calendar-header-box {
-    text-align: center;
-  }
-
-  & .calendar-box {
-    position: relative;
-    background-color: var(--color-bg-box);
-
-    & > * {
-      margin: 0;
-      padding: 0;
-    }
-
-    & .calendar-date {
-      background-color: oklch(from var(--color-bg-box) calc(l*120%) c h);
-    }
-
-    & ul {
-      list-style-type: none;
-
-      & li {
-        margin: 0.5em;
-      }
-    }
-
-    &.today, &.today .calendar-date {
-      background-color: black;
-    }
-  }
-
-  & .calendar-box.disabled::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background-color: oklch(from var(--color-bg-box) calc(l*75%) c h / 50%);
-    backdrop-filter: blur(0.1em);
-  }
-
-  &:not(.show-sunday) .sunday {
-    display: none
-  }
-  &:not(.show-saturday) .saturday {
-    display: none
-  }
-}
-`;
+    style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
     const root = document.createElement("main");
@@ -419,6 +337,92 @@ main {
         ).length > 0;
       if (assignmentsExistOnDate) return date;
     }
+  }
+
+  #getStylesheet() {
+    return `\
+main {
+  --color-text: #eee;
+  --color-text-link: #fff;
+
+  --color-border: #333;
+
+  --color-bg-root: #111;
+  --color-bg-box: oklch(from var(--color-bg-root) calc(l*120%) c h);
+
+  color: var(--color-text);
+  background-color: var(--color-bg-root);
+
+  padding: 1em;
+}
+
+#main-calendar {
+  --show-sunday: 0;
+  --show-saturday: 0;
+  &.show-sunday { --show-sunday: 1; }
+  &.show-saturday { --show-saturday: 1; }
+
+  --num-grid-columns: calc(5 + var(--show-sunday) + var(--show-saturday));
+  display: grid;
+  /* The "0" is to prevent column from growing past 1fr.
+   * See <https://stackoverflow.com/a/43312314> */
+  grid-template-columns: repeat(var(--num-grid-columns), minmax(0, 1fr));
+  grid-template-rows: auto repeat(4, minmax(7em, auto));
+
+  border: 0.5px solid var(--color-border);
+  & > * {
+    border: 0.5px solid var(--color-border);
+  }
+
+  & .calendar-header-box {
+    text-align: center;
+  }
+
+  & .calendar-box {
+    position: relative;
+    background-color: var(--color-bg-box);
+
+    & > * {
+      margin: 0;
+      padding: 0;
+    }
+
+    & .calendar-date {
+      background-color: oklch(from var(--color-bg-box) calc(l*120%) c h);
+    }
+
+    & ul {
+      list-style-type: none;
+
+      & li {
+        margin: 0.5em;
+      }
+    }
+
+    &.today, &.today .calendar-date {
+      background-color: black;
+    }
+  }
+
+  & .calendar-box.disabled::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: oklch(from var(--color-bg-box) calc(l*75%) c h / 50%);
+    backdrop-filter: blur(0.1em);
+  }
+
+  &:not(.show-sunday) .sunday {
+    display: none
+  }
+  &:not(.show-saturday) .saturday {
+    display: none
+  }
+}
+`;
   }
 }
 
