@@ -282,32 +282,6 @@ main {
 
   /** @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date. */
   static async scrapeAssignments() {
-    // sky-split-view-workspace-content Whole section
-    //   app-student-assignments-repeater Each header(+content)
-    //     sky-repeater-item-content content For each header
-    //       sky-repeater sky-repeater-item-title Indiv assignment
-    //           div.left-block Assignment color (its in the style:background-color)
-    //           div.middle-block Assignment data
-    //             div:nth(0) Assignment title
-    //               app-assignment-title-link a The link itself
-    //             div.assignment-details Assignment details
-    //               text node The " Due: 9/20/2024 11:59 PM | Assigned: 9/12/2024 12:00 AM " text
-    //               span:nth(0) button a The class link "CHEMISTRY - 60"
-    //               span:nth(1) The " | Test/Exam (Major) "
-    //               span:nth(2) The " | Assignment "
-    //           div.right-block app-assignment-status-display Assignment status
-    //               sky-icon i::before Status icon
-    //               button Status text // FIXME: does this work when you can't click it?
-
-    // const SECTION_NAMES = [
-    //   "Missing or overdue",
-    //   "Due today",
-    //   "Due tomorrow",
-    //   "Due this week",
-    //   "Due next week",
-    //   "Due after next week",
-    // ];
-
     const assignments = await waitForElems(
       "app-student-assignments-repeater sky-repeater-item-content sky-repeater sky-repeater-item-title",
     );
@@ -326,6 +300,23 @@ main {
    * @returns {Assignment}
    */
   static #parseAssignmentElem(elem) {
+    // sky-split-view-workspace-content Whole section
+    //   app-student-assignments-repeater Each header(+content)
+    //     sky-repeater-item-content content For each header
+    //       sky-repeater sky-repeater-item-title Indiv assignment
+    //           div.left-block Assignment color (its in the style:background-color)
+    //           div.middle-block Assignment data
+    //             div:nth(0) Assignment title
+    //               app-assignment-title-link a The link itself
+    //             div.assignment-details Assignment details
+    //               text node The " Due: 9/20/2024 11:59 PM | Assigned: 9/12/2024 12:00 AM " text
+    //               span:nth(0) button a The class link "CHEMISTRY - 60"
+    //               span:nth(1) The " | Test/Exam (Major) "
+    //               span:nth(2) The " | Assignment "
+    //           div.right-block app-assignment-status-display Assignment status
+    //               sky-icon i::before Status icon
+    //               button Status text // FIXME: does this work when you can't click it?
+
     const color = elem.querySelector("div.left-block").style.backgroundColor;
     const { textContent: title, href: link } = elem.querySelector(
       "div.middle-block app-assignment-title-link a",
