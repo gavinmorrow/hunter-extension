@@ -73,7 +73,6 @@ const defaultSettings = {
         Missing: "oklch(42% 0.17 0)" /* red */,
         Overdue: "oklch(42% 0.17 0)" /* red */,
       },
-      nextDayCutoff: "12:34",
     },
     calendar: {
       enabled: true,

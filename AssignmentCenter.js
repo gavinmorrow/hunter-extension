@@ -402,24 +402,25 @@ main {
    * @param {Date} date
    */
   #dateIsSelected(date) {
-    const {
-      assignmentCenter: {
-        customUi: { nextDayCutoff },
-      },
-    } = this.settings;
-    /** A time in the format "hhmm" (but a JS number) */
-    const cutoffTime = Number(nextDayCutoff.replace(":", ""));
+    return Calendar.datesAreSameDay(date, this.#findSelectedDate());
+  }
 
+  /**
+   * Finds the date that should be selected in the calendar.
+   * @param {number} start How many days from today to start counting. Defaults to `1`.
+   */
+  #findSelectedDate(start = 1) {
     const today = new Date();
-    const tomorrow = Calendar.offsetFromDay(today, 1);
+    for (let offset = start; true; offset += 1) {
+      const date = Calendar.offsetFromDay(today, offset);
 
-    /** A time in the format "hhmm" (but a JS number) */
-    const now = today.getHours() * 100 + today.getMinutes();
-
-    return (
-      (now < cutoffTime && Calendar.datesAreSameDay(date, today)) ||
-      (now >= cutoffTime && Calendar.datesAreSameDay(date, tomorrow))
-    );
+      // check if assignments exist on date
+      const assignmentsExistOnDate =
+        this.assignments.filter((a) =>
+          Calendar.datesAreSameDay(a.details.dueDate, date),
+        ).length > 0;
+      if (assignmentsExistOnDate) return date;
+    }
   }
 }
 
