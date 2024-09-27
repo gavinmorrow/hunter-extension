@@ -367,7 +367,8 @@ main {
   /* The "0" is to prevent column from growing past 1fr.
    * See <https://stackoverflow.com/a/43312314> */
   grid-template-columns: repeat(var(--num-grid-columns), minmax(0, 1fr));
-  grid-template-rows: auto repeat(4, minmax(7em, auto));
+  grid-template-rows: auto;
+  grid-auto-rows: minmax(7em, auto);
 
   border: 0.5px solid var(--color-border);
   & > * {
