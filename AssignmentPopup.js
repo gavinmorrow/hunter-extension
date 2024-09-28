@@ -21,6 +21,13 @@ class AssignmentPopup extends HTMLElement {
     title.textContent = this.assignment.title;
     root.appendChild(title);
 
+    // get assignment description, if available
+    const des = document.createElement("div");
+    // do NOT escape, b/c this content is taken directly from the innerHTML
+    // of the full description page
+    des.innerHTML = this.assignment.description ?? "<i>No description</i>";
+    root.appendChild(des);
+
     shadow.appendChild(root);
   }
 

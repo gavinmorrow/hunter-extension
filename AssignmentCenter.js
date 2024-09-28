@@ -19,6 +19,7 @@
  * @property {Color} color
  * @property {String} title
  * @property {Link} link
+ * @property {String?} description an innerHTML string.
  * @property {AssignmentDetails} details
  * @property {Status} status
  */
