@@ -21,13 +21,26 @@ class AssignmentPopup extends HTMLElement {
   #getStylesheet() {
     return `\
 #popup-root {
+  --color-bg: oklch(from var(--color-bg-box) calc(l*120%) c h / 88%);
+  --len-padding: 1em;
+  --len-border: 1px;
+
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 10em;
+  top: 100%;
+  left: var(--width-class-color);
+
+  min-width: calc(100% - 2 * var(--width-class-color));
   height: 10em;
-  background-color: grey;
-  z-index: 1000;
+
+  box-sizing: border-box;
+  z-index: 1;
+
+  background-color: var(--color-bg);
+  box-shadow: 0 0.5em 1em 0 var(--color-bg);
+  backdrop-filter: blur(0.5em);
+
+  padding: var(--len-padding);
+  border-radius: var(--len-padding);
 }
 `;
   }
