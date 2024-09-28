@@ -90,20 +90,22 @@ class AssignmentBox extends HTMLElement {
 article {
   position: relative;
 
+  --base-padding: 0.25em;
+  --width-class-color: 0.5em;
+
+  --border-width: 2px;
+  --inner-border-width: calc(var(--border-radius) - 2px);
+  --border-radius: var(--base-padding);
+
   &>div {
     position: relative;
     background-color: ${this.#assignmentStatusColor()};
     box-sizing: border-box;
 
-    --base-padding: 0.25em;
-    --width-class-color: 0.5em;
     padding: var(--base-padding);
     padding-left: calc(var(--base-padding) + var(--width-class-color));
     padding-right: calc(var(--base-padding) + var(--width-class-color));
 
-    --border-width: 2px;
-    --inner-border-width: calc(var(--border-radius) - 2px);
-    --border-radius: var(--base-padding);
     border-radius: var(--border-radius);
 
     /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
