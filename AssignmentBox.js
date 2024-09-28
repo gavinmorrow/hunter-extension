@@ -97,8 +97,6 @@ article {
   /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
   clip-path: inset(0 round 0.25em);
 
-  transition: background 0.2s ease-in-out;
-
   &::before, &::after {
     content: "";
     background-color: ${this.#assignmentClassColor()};
