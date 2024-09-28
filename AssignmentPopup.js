@@ -12,10 +12,23 @@ class AssignmentPopup extends HTMLElement {
     const style = document.createElement("style");
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
+
+    const root = document.createElement("article");
+    root.id = "popup-root";
+    shadow.appendChild(root);
   }
 
   #getStylesheet() {
     return `\
+#popup-root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10em;
+  height: 10em;
+  background-color: grey;
+  z-index: 1000;
+}
 `;
   }
 }

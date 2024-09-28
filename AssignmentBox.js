@@ -27,7 +27,8 @@ class AssignmentBox extends HTMLElement {
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
-    const root = document.createElement("article");
+    const wrapper = document.createElement("article");
+    const root = document.createElement("div");
 
     // add classes for majors and completed assignments
     if (this.assignment.details.type.indexOf("Major") > -1)
@@ -47,11 +48,11 @@ class AssignmentBox extends HTMLElement {
     // add the element for assignment title
     root.appendChild(this.#makeTitleElem());
 
-    // add popup
-    this.popup.hidden = true;
-    root.appendChild(this.popup);
+    wrapper.appendChild(root);
 
-    shadow.appendChild(root);
+    // add popup
+    wrapper.appendChild(this.popup);
+    shadow.appendChild(wrapper);
   }
 
   #makeTitleElem() {
@@ -88,24 +89,28 @@ class AssignmentBox extends HTMLElement {
     return `\
 article {
   position: relative;
-  background-color: ${this.#assignmentStatusColor()};
-  box-sizing: border-box;
 
-  --base-padding: 0.25em;
-  --width-class-color: 0.5em;
-  padding: var(--base-padding);
-  padding-left: calc(var(--base-padding) + var(--width-class-color));
-  padding-right: calc(var(--base-padding) + var(--width-class-color));
+  &>div {
+    position: relative;
+    background-color: ${this.#assignmentStatusColor()};
+    box-sizing: border-box;
 
-  --border-width: 2px;
-  --inner-border-width: calc(var(--border-radius) - 2px);
-  --border-radius: var(--base-padding);
-  border-radius: var(--border-radius);
+    --base-padding: 0.25em;
+    --width-class-color: 0.5em;
+    padding: var(--base-padding);
+    padding-left: calc(var(--base-padding) + var(--width-class-color));
+    padding-right: calc(var(--base-padding) + var(--width-class-color));
 
-  /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
-  clip-path: inset(0 round 0.25em);
+    --border-width: 2px;
+    --inner-border-width: calc(var(--border-radius) - 2px);
+    --border-radius: var(--base-padding);
+    border-radius: var(--border-radius);
 
-  &::before, &::after {
+    /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
+    clip-path: inset(0 round 0.25em);
+  }
+
+  &>div::before, &>div::after {
     content: "";
     background-color: ${this.#assignmentClassColor()};
     position: absolute;
@@ -113,8 +118,8 @@ article {
     bottom: 0;
     width: var(--width-class-color);
   }
-  &::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
-  &::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
+  &>div::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
+  &>div::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
 
   &.type-major {
     border: var(--border-width) solid yellow;
@@ -126,8 +131,12 @@ article {
     overflow: hidden;
   }
 
-  &:focus-within, &:hover {
+  &:focus-within>div, &:hover>div {
     background-color: oklch(from ${this.#assignmentStatusColor()} calc(l + 0.07) c h);
+  }
+
+  &:not(:hover, :focus-within) assignment-popup {
+    display: none;
   }
 }
 
