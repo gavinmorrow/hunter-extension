@@ -1,6 +1,11 @@
 class AssignmentPopup extends HTMLElement {
-  constructor() {
+  /** @type {Assignment} */
+  assignment;
+
+  constructor(assignment) {
     super();
+
+    this.assignment = assignment;
   }
 
   connectedCallback() {
