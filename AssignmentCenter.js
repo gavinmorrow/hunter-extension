@@ -137,7 +137,12 @@ class AssignmentCenter extends HTMLElement {
 
         const dateElem = document.createElement("p");
         dateElem.classList.add("calendar-date");
-        dateElem.textContent = date.getDate();
+        if (date.getDate() === 1)
+          dateElem.textContent =
+            date.toLocaleString("default", {
+              month: "short",
+            }) + " ";
+        dateElem.textContent += date.getDate();
         box.appendChild(dateElem);
 
         const list = document.createElement("ul");
