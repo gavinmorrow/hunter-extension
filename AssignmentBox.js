@@ -5,6 +5,9 @@ class AssignmentBox extends HTMLElement {
   /** @type {Settings} */
   settings;
 
+  /** @type {AssignmentPopup} */
+  popup;
+
   /**
    * @param {Assignment} assignment
    * @param {Settings} settings
@@ -13,6 +16,7 @@ class AssignmentBox extends HTMLElement {
     super();
     this.assignment = assignment;
     this.settings = settings;
+    this.popup = new AssignmentPopup(this.assignment);
   }
 
   connectedCallback() {
@@ -42,6 +46,10 @@ class AssignmentBox extends HTMLElement {
 
     // add the element for assignment title
     root.appendChild(this.#makeTitleElem());
+
+    // add popup
+    this.popup.hidden = true;
+    root.appendChild(this.popup);
 
     shadow.appendChild(root);
   }

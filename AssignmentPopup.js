@@ -4,7 +4,6 @@ class AssignmentPopup extends HTMLElement {
 
   constructor(assignment) {
     super();
-
     this.assignment = assignment;
   }
 
