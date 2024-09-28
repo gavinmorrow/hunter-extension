@@ -375,6 +375,8 @@ main {
   grid-template-rows: auto;
   grid-auto-rows: minmax(7em, auto);
 
+  margin-bottom: 7em;
+
   border: 0.5px solid var(--color-border);
   & > * {
     border: 0.5px solid var(--color-border);
