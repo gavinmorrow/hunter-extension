@@ -15,6 +15,12 @@ class AssignmentPopup extends HTMLElement {
 
     const root = document.createElement("article");
     root.id = "popup-root";
+
+    // title
+    const title = document.createElement("h2");
+    title.textContent = this.assignment.title;
+    root.appendChild(title);
+
     shadow.appendChild(root);
   }
 
@@ -22,15 +28,13 @@ class AssignmentPopup extends HTMLElement {
     return `\
 #popup-root {
   --color-bg: oklch(from var(--color-bg-box) calc(l*120%) c h / 88%);
-  --len-padding: 1em;
-  --len-border: 1px;
+  --len-padding: calc(var(--base-padding) + var(--width-class-color));
 
   position: absolute;
   top: 100%;
   left: var(--width-class-color);
 
-  min-width: calc(100% - 2 * var(--width-class-color));
-  height: 10em;
+  width: calc(100% - 2 * var(--width-class-color));
 
   box-sizing: border-box;
   z-index: 1;
@@ -41,6 +45,11 @@ class AssignmentPopup extends HTMLElement {
 
   padding: var(--len-padding);
   border-radius: var(--len-padding);
+
+  & h2 {
+    font-size: medium;
+    margin: 0;
+  }
 }
 `;
   }
