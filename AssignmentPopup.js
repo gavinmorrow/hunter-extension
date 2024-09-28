@@ -10,6 +10,14 @@ class AssignmentPopup extends HTMLElement {
 
   connectedCallback() {
     const shadow = this.attachShadow({ mode: "open" });
+    const style = document.createElement("style");
+    style.textContent = this.getStylesheet();
+    shadow.appendChild(style);
+  }
+
+  getStylesheet() {
+    return `\
+`;
   }
 }
 
