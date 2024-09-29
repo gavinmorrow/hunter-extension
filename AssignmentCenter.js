@@ -356,7 +356,7 @@ class AssignmentCenter extends HTMLElement {
           ),
         );
         const desc = descElem?.innerHTML;
-        assignment.description = desc;
+        assignment.description = desc ?? "";
         resolve(assignment);
       });
       iframe.src = assignment.link;

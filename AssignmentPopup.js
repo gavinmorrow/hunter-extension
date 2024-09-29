@@ -26,11 +26,11 @@ class AssignmentPopup extends HTMLElement {
     root.appendChild(title);
 
     // get assignment description, if available
-    const des = document.createElement("div");
+    const descElem = document.createElement("div");
     // do NOT escape, b/c this content is taken directly from the innerHTML
     // of the full description page
-    des.innerHTML = this.assignment.description ?? "<i>No description</i>";
-    root.appendChild(des);
+    descElem.innerHTML = this.#getDesc();
+    root.appendChild(descElem);
 
     return root;
   }
@@ -38,6 +38,13 @@ class AssignmentPopup extends HTMLElement {
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
+  }
+
+  #getDesc() {
+    const rawDesc = this.assignment.description;
+    if (rawDesc === null || rawDesc === undefined) return "<i>Loading...</i>";
+    else if (rawDesc === "") return "<i>No description</i>";
+    else return rawDesc;
   }
 
   #getStylesheet() {
