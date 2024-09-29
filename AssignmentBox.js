@@ -17,6 +17,7 @@ class AssignmentBox extends HTMLElement {
     this.assignment = assignment;
     this.settings = settings;
     this.popup = new AssignmentPopup(this.assignment);
+    this.updateAssignment = this.#updateAssignment.bind(this);
   }
 
   connectedCallback() {
@@ -27,6 +28,10 @@ class AssignmentBox extends HTMLElement {
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
+    shadow.appendChild(this.#createRoot());
+  }
+
+  #createRoot() {
     const wrapper = document.createElement("article");
     const root = document.createElement("div");
 
@@ -52,7 +57,14 @@ class AssignmentBox extends HTMLElement {
 
     // add popup
     wrapper.appendChild(this.popup);
-    shadow.appendChild(wrapper);
+
+    return wrapper;
+  }
+
+  #updateAssignment(assignment) {
+    this.assignment = assignment;
+    this.popup = new AssignmentPopup(this.assignment);
+    this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
   }
 
   #makeTitleElem() {

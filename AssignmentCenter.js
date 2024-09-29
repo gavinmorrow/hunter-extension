@@ -169,6 +169,14 @@ class AssignmentCenter extends HTMLElement {
             }
             return AssignmentCenter.#sortStatuses(a.status, b.status);
           })
+          .map((assignment) => {
+            // Eventually the description will be updated, just not immediately
+            //  since we can't wait that long.
+            AssignmentCenter.#addDescriptionToAssignment(assignment).then((a) =>
+              this.#updateAssignment(a),
+            );
+            return assignment;
+          })
           .map((a) => new AssignmentBox(a, this.settings))
           .map((e) => {
             const li = document.createElement("li");
@@ -184,6 +192,28 @@ class AssignmentCenter extends HTMLElement {
       .forEach((list) => grid.appendChild(list));
 
     return grid;
+  }
+
+  /** @param {Assignment} assignment */
+  #updateAssignment(assignment) {
+    // update internal object
+    const index = this.assignments.findIndex((a) =>
+      assignmentsEq(a, assignment),
+    );
+    if (index === -1) this.assignments.push(assignment);
+    else this.assignments[index] = assignment;
+
+    // update the element corresponding to it
+    const assignmentBox = Array.from(
+      this.shadowRoot.querySelectorAll("assignment-box"),
+    ).find((box) => assignmentsEq(box.assignment, assignment));
+    const newBox = new AssignmentBox(assignment, this.settings);
+    assignmentBox.replaceWith(newBox);
+
+    /** @param {Assignment} a @param {Assignment} b */
+    function assignmentsEq(a, b) {
+      return a.link === b.link && a.link !== "javascript:void(0)";
+    }
   }
 
   /**
@@ -303,6 +333,37 @@ class AssignmentCenter extends HTMLElement {
       type,
       isTask,
     };
+  }
+
+  /** @param {Assignment} assignment */
+  static #addDescriptionToAssignment(assignment) {
+    return new Promise((resolve, _reject) => {
+      if (assignment.description != null) return resolve(assignment);
+      if (assignment.link == "javascript:void(0)") {
+        // TODO: Custom Task support
+        console.warn(
+          "Tried to get description for custom task. Custom tasks are not yet supported.",
+        );
+        return resolve(assignment);
+      }
+
+      // create iframe for it
+      const iframe = document.createElement("iframe");
+      iframe.addEventListener("load", async () => {
+        const doc = iframe.contentDocument;
+        const descElem = await waitFor(() =>
+          doc.querySelector(
+            "app-assignment-description-box sky-box-content .sky-box-content div",
+          ),
+        );
+        const desc = descElem?.innerHTML;
+        assignment.description = desc;
+        resolve(assignment);
+      });
+      iframe.src = assignment.link;
+      iframe.hidden = true;
+      document.body.appendChild(iframe);
+    });
   }
 
   /**
