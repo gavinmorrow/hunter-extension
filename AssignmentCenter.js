@@ -200,7 +200,7 @@ class AssignmentCenter extends HTMLElement {
     const index = this.assignments.findIndex((a) =>
       assignmentsEq(a, assignment),
     );
-    if (index === -1) this.assignments.push(assignment);
+    if (index === -1) return;
     else this.assignments[index] = assignment;
 
     // update the element corresponding to it
