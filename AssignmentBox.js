@@ -63,7 +63,7 @@ class AssignmentBox extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
-    this.popup = new AssignmentPopup(this.assignment);
+    this.popup.updateAssignment(assignment);
     this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
   }
 

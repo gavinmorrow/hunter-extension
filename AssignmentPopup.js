@@ -5,6 +5,7 @@ class AssignmentPopup extends HTMLElement {
   constructor(assignment) {
     super();
     this.assignment = assignment;
+    this.updateAssignment = this.#updateAssignment.bind(this);
   }
 
   connectedCallback() {
@@ -12,7 +13,10 @@ class AssignmentPopup extends HTMLElement {
     const style = document.createElement("style");
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
+    shadow.appendChild(this.#createRoot());
+  }
 
+  #createRoot() {
     const root = document.createElement("article");
     root.id = "popup-root";
 
@@ -28,7 +32,12 @@ class AssignmentPopup extends HTMLElement {
     des.innerHTML = this.assignment.description ?? "<i>No description</i>";
     root.appendChild(des);
 
-    shadow.appendChild(root);
+    return root;
+  }
+
+  #updateAssignment(assignment) {
+    this.assignment = assignment;
+    this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
   }
 
   #getStylesheet() {

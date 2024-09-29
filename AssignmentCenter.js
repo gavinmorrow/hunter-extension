@@ -207,8 +207,7 @@ class AssignmentCenter extends HTMLElement {
     const assignmentBox = Array.from(
       this.shadowRoot.querySelectorAll("assignment-box"),
     ).find((box) => assignmentsEq(box.assignment, assignment));
-    const newBox = new AssignmentBox(assignment, this.settings);
-    assignmentBox.replaceWith(newBox);
+    assignmentBox.updateAssignment(assignment);
 
     /** @param {Assignment} a @param {Assignment} b */
     function assignmentsEq(a, b) {
