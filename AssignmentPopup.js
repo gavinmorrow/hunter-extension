@@ -41,7 +41,7 @@ class AssignmentPopup extends HTMLElement {
   top: 100%;
   left: var(--width-class-color);
 
-  width: calc(100% - 2 * var(--width-class-color));
+  min-width: 22em;
 
   box-sizing: border-box;
   z-index: 1;
