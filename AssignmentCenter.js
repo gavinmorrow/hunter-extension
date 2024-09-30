@@ -44,7 +44,8 @@ class AssignmentCenter extends HTMLElement {
    * @param {HTMLElement} calendar The `#main-calendar` element.
    * @param {0|1|2|3|4|5|6} day The day (of the week, 0-indexed) to show. Only `0` and `6` have any effect, the rest are no-ops.
    */
-  #showDay(calendar, day) {
+  #showDay(day) {
+    const calendar = this.shadowRoot.getElementById("main-calendar");
     if (day === 0 || day === 6) {
       const dayName = day === 0 ? "sunday" : "saturday";
       const className = `show-${dayName}`;
@@ -62,9 +63,8 @@ class AssignmentCenter extends HTMLElement {
     this.oldElem = oldElem;
     this.assignments = assignments;
     this.settings = settings;
-  }
 
-  connectedCallback() {
+    // create DOM
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
 
@@ -79,6 +79,10 @@ class AssignmentCenter extends HTMLElement {
     const root = document.createElement("main");
     root.appendChild(this.#createCalendarGrid());
     shadow.appendChild(root);
+  }
+
+  connectedCallback() {
+    this.#hydrateCalendar();
   }
 
   #createCalendarGrid() {
@@ -120,10 +124,7 @@ class AssignmentCenter extends HTMLElement {
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
     const today = Calendar.resetDate(new Date());
-    const dateOfMonday = Calendar.dateForSundayOfWeek(today);
-    Array(7 /* days */ * 4 /* weeks */)
-      .fill(0)
-      .map((_, i) => Calendar.offsetFromDay(dateOfMonday, i))
+    AssignmentCenter.#allCalendarDates()
       .map((date) => {
         const box = document.createElement("div");
         box.classList.add("calendar-box");
@@ -147,43 +148,7 @@ class AssignmentCenter extends HTMLElement {
         box.appendChild(dateElem);
 
         const list = document.createElement("ul");
-        // get assignments for current day
-        const assignments = this.assignments.filter((a) =>
-          Calendar.datesAreSameDay(a.details.dueDate, date),
-        );
-
-        // show the day in calendar (really applies to just weekends, but is a
-        // no-op for weekdays so it's okay)
-        if (assignments.length > 0) this.#showDay(grid, day);
-
-        // add assignment elements
-        assignments
-          .sort((a, b) => {
-            if (a.status === b.status) {
-              // sort by type
-              const aMajor = a.details.type.indexOf("Major") > -1;
-              const bMajor = b.details.type.indexOf("Major") > -1;
-              if (aMajor && !bMajor) return -1;
-              if (aMajor && bMajor) return 0;
-              if (!aMajor && bMajor) return 1;
-            }
-            return AssignmentCenter.#sortStatuses(a.status, b.status);
-          })
-          .map((assignment) => {
-            // Eventually the description will be updated, just not immediately
-            //  since we can't wait that long.
-            AssignmentCenter.#addDescriptionToAssignment(assignment).then((a) =>
-              this.#updateAssignment(a),
-            );
-            return assignment;
-          })
-          .map((a) => new AssignmentBox(a, this.settings))
-          .map((e) => {
-            const li = document.createElement("li");
-            li.appendChild(e);
-            return li;
-          })
-          .forEach((li) => list.appendChild(li));
+        list.id = AssignmentCenter.#idForAssignmentList(date);
         box.appendChild(list);
 
         return box;
@@ -192,6 +157,65 @@ class AssignmentCenter extends HTMLElement {
       .forEach((list) => grid.appendChild(list));
 
     return grid;
+  }
+
+  #hydrateCalendar() {
+    AssignmentCenter.#allCalendarDates().map((date) => {
+      const list = this.shadowRoot.getElementById(
+        AssignmentCenter.#idForAssignmentList(date),
+      );
+
+      // get assignments for current day
+      const assignments = this.assignments.filter((a) =>
+        Calendar.datesAreSameDay(a.details.dueDate, date),
+      );
+
+      // show the day in calendar (really applies to just weekends, but is a
+      // no-op for weekdays so it's okay)
+      const day = date.getDay();
+      if (assignments.length > 0) this.#showDay(day);
+
+      // add assignment elements
+      assignments
+        .sort((a, b) => {
+          if (a.status === b.status) {
+            // sort by type
+            const aMajor = a.details.type.indexOf("Major") > -1;
+            const bMajor = b.details.type.indexOf("Major") > -1;
+            if (aMajor && !bMajor) return -1;
+            if (aMajor && bMajor) return 0;
+            if (!aMajor && bMajor) return 1;
+          }
+          return AssignmentCenter.#sortStatuses(a.status, b.status);
+        })
+        .map((assignment) => {
+          // Eventually the description will be updated, just not immediately
+          //  since we can't wait that long.
+          AssignmentCenter.#addDescriptionToAssignment(assignment).then((a) =>
+            this.#updateAssignment(a),
+          );
+          return assignment;
+        })
+        .map((a) => new AssignmentBox(a, this.settings))
+        .map((e) => {
+          const li = document.createElement("li");
+          li.appendChild(e);
+          return li;
+        })
+        .forEach((li) => list.appendChild(li));
+    });
+  }
+
+  static #allCalendarDates() {
+    const today = Calendar.resetDate(new Date());
+    const dateOfSunday = Calendar.dateForSundayOfWeek(today);
+    return Array(7 /* days */ * 4 /* weeks */)
+      .fill(0)
+      .map((_, i) => Calendar.offsetFromDay(dateOfSunday, i));
+  }
+
+  static #idForAssignmentList(date) {
+    return `assignment-list-${date.getTime()}`;
   }
 
   /** @param {Assignment} assignment */
