@@ -20,13 +20,9 @@ class AssignmentPopup extends HTMLElement {
     const root = document.createElement("article");
     root.id = "popup-root";
 
-    // title
-    const title = document.createElement("h2");
-    title.textContent = this.assignment.title;
-    root.appendChild(title);
-
     // get assignment description, if available
     const descElem = document.createElement("div");
+    descElem.id = "desc";
     // do NOT escape, b/c this content is taken directly from the innerHTML
     // of the full description page
     descElem.innerHTML = this.#getDesc();
@@ -69,9 +65,8 @@ class AssignmentPopup extends HTMLElement {
   padding: var(--len-padding);
   border-radius: var(--len-padding);
 
-  & h2 {
-    font-size: medium;
-    margin: 0;
+  & #desc > p:first-of-type {
+    margin-top: 0;
   }
 }
 `;
