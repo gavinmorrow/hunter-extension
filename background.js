@@ -16,10 +16,6 @@ const tabState = async (tabId, newValue) => {
   const tabName = `state.${tabId}`;
   switch (newValue) {
     case undefined:
-      console.log(
-        "returning",
-        (await browser.storage.session.get({ [tabName]: {} }))[tabName],
-      );
       return (await browser.storage.session.get({ [tabName]: {} }))[tabName];
     case null:
       return await browser.storage.session.remove(tabName);
@@ -106,7 +102,6 @@ const resetSettings = async () => setSettings({});
 const settingsListener = async (msg, sender) => {
   switch (msg.type) {
     case "settings.get":
-      console.log(await getSettings());
       return getSettings();
     case "settings.set":
       await setSettings(msg.data);
