@@ -122,27 +122,27 @@ article {
 
     /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
     clip-path: inset(0 round 0.25em);
-  }
 
-  &>div::before, &>div::after {
-    content: "";
-    background-color: ${this.#assignmentClassColor()};
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: var(--width-class-color);
-  }
-  &>div::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
-  &>div::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
+    &::before, &::after {
+      content: "";
+      background-color: ${this.#assignmentClassColor()};
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: var(--width-class-color);
+    }
+    &::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
+    &::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
 
-  &.type-major {
-    border: var(--border-width) solid yellow;
-  }
+    &.type-major {
+      border: var(--border-width) solid yellow;
+    }
 
-  &.collapse #title {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+    &.collapse #title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 
   &:focus-within>div, &:hover>div {
