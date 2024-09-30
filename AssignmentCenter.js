@@ -335,34 +335,30 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /** @param {Assignment} assignment */
-  static #addDescriptionToAssignment(assignment) {
-    return new Promise((resolve, _reject) => {
-      if (assignment.description != null) return resolve(assignment);
-      if (assignment.link == "javascript:void(0)") {
-        // TODO: Custom Task support
-        console.warn(
-          "Tried to get description for custom task. Custom tasks are not yet supported.",
-        );
-        return resolve(assignment);
-      }
+  static async #addDescriptionToAssignment(assignment) {
+    if (assignment.description != null) return assignment;
+    if (assignment.link == "javascript:void(0)") {
+      // TODO: Custom Task support
+      console.warn(
+        "Tried to get description for custom task. Custom tasks are not yet supported.",
+      );
+      return assignment;
+    }
 
-      // create iframe for it
-      const iframe = document.createElement("iframe");
-      iframe.addEventListener("load", async () => {
-        const doc = iframe.contentDocument;
-        const descElem = await waitFor(() =>
-          doc.querySelector(
-            "app-assignment-description-box sky-box-content .sky-box-content div",
-          ),
-        );
-        const desc = descElem?.innerHTML;
-        assignment.description = desc ?? "";
-        resolve(assignment);
-      });
-      iframe.src = assignment.link;
-      iframe.hidden = true;
-      document.body.appendChild(iframe);
-    });
+    const studentUserId = await getStudentUserId();
+    const assignmentIndexId = AssignmentCenter.#parseAssignmentLinkForIndexId(
+      assignment.link,
+    );
+    const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
+    assignment.description = fullDetails.LongDescription;
+    return assignment;
+  }
+
+  static #parseAssignmentLinkForIndexId(link) {
+    const regexp =
+      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/;
+    const id = link.match(regexp)?.groups.id;
+    return id;
   }
 
   /**

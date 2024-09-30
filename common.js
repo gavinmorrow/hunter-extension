@@ -178,4 +178,22 @@ const promiseError = (fn) => async () => {
   }
 };
 
+/**
+ * @typedef {Object} BlackbaudAssignment
+ * @property {String} LongDescription
+ *
+ * // lots of other things too but i'm too lazy to list them, add more as needed
+ */
+
+/**
+ * Fetch an assignment from the Blackbaud API.
+ * @param {string} assignmentIndexId Can be found in the link of an assignment.
+ * @param {string} studentUserId Can be found in the user's "Profile" link.
+ * @returns {Promise<BlackbaudAssignment>} Direct response from a Blackbaud API.
+ */
+const fetchAssignment = async (assignmentIndexId, studentUserId) =>
+  fetch(
+    `https://hunterschools.myschoolapp.com/api/assignment2/UserAssignmentDetailsGetAllStudentData?assignmentIndexId=${assignmentIndexId}&studentUserId=${studentUserId}&personaId=2`,
+  ).then((r) => r.json());
+
 console.log("Ready!");
