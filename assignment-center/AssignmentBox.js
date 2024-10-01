@@ -31,16 +31,6 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    // make entire card clickable to open link
-    // see <https://inclusive-components.design/cards/> and <https://css-tricks.com/block-links-the-search-for-a-perfect-solution/>
-    root.style.cursor = "pointer";
-    root.addEventListener("click", (e) => {
-      const link = root.querySelector("#title a");
-      if (e.target === link || document.getSelection().toString() !== "")
-        return;
-      else link.click();
-    });
-
     // add the element for assignment title
     root.appendChild(this.#createTitleElem());
 
