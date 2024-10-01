@@ -6,34 +6,40 @@ class AssignmentPopup extends HTMLElement {
     super();
     this.assignment = assignment;
     this.updateAssignment = this.#updateAssignment.bind(this);
-    this.attachShadow({ mode: "open" });
-  }
 
-  connectedCallback() {
+    // create DOM
+    const shadow = this.attachShadow({ mode: "open" });
+
     const style = document.createElement("style");
     style.textContent = this.#getStylesheet();
-    this.shadowRoot.appendChild(style);
-    this.shadowRoot.appendChild(this.#createRoot());
-  }
+    shadow.appendChild(style);
 
-  #createRoot() {
     const root = document.createElement("article");
     root.id = "popup-root";
 
     // get assignment description, if available
     const descElem = document.createElement("div");
     descElem.id = "desc";
+    root.appendChild(descElem);
+
+    shadow.appendChild(root);
+  }
+
+  connectedCallback() {
+    this.#hydrateDescription();
+  }
+
+  #hydrateDescription() {
+    // get assignment description, if available
+    const descElem = this.shadowRoot.getElementById("desc");
     // do NOT escape, b/c this content is taken directly from the innerHTML
     // of the full description page
     descElem.innerHTML = this.#getDesc();
-    root.appendChild(descElem);
-
-    return root;
   }
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
-    this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
+    this.#hydrateDescription();
   }
 
   #getDesc() {
