@@ -2,9 +2,18 @@ class AssignmentPopup extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  constructor(assignment) {
+  /** @type {(newValue: Assignment) => void} */
+  #setAssignment;
+
+  /**
+   * @param {Assignment} assignment
+   * @param {(newValue: Assignment) => void} setAssignment
+   */
+  constructor(assignment, setAssignment) {
     super();
     this.assignment = assignment;
+    this.#setAssignment = setAssignment;
+
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM
@@ -16,6 +25,18 @@ class AssignmentPopup extends HTMLElement {
 
     const root = document.createElement("article");
     root.id = "popup-root";
+
+    // assignment status
+    const statusBtn = document.createElement("button");
+    statusBtn.id = "status-btn";
+    statusBtn.addEventListener("click", (e) => {
+      // TODO: toggle assignment
+      // this.assignment.status = this.#nextStatus();
+      this.#setAssignment(
+        dbg({ ...this.assignment, status: this.#nextStatus() }),
+      );
+    });
+    root.appendChild(statusBtn);
 
     // assignment description
     const descElem = document.createElement("div");
@@ -29,6 +50,13 @@ class AssignmentPopup extends HTMLElement {
     this.#updateAssignment(this.assignment);
   }
 
+  #hydrateStatus() {
+    const statusBtn = this.shadowRoot.getElementById("status-btn");
+    statusBtn.textContent = "Mark as ";
+    if (this.#nextStatus() == null) statusBtn.hidden = true;
+    else statusBtn.textContent += this.#nextStatus();
+  }
+
   #hydrateDescription() {
     // get assignment description, if available
     const descElem = this.shadowRoot.getElementById("desc");
@@ -39,6 +67,7 @@ class AssignmentPopup extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
+    this.#hydrateStatus();
     this.#hydrateDescription();
   }
 
@@ -47,6 +76,20 @@ class AssignmentPopup extends HTMLElement {
     if (rawDesc === null || rawDesc === undefined) return "<i>Loading...</i>";
     else if (rawDesc === "") return "<i>No description</i>";
     else return rawDesc;
+  }
+
+  /** @returns {Status?} The status to toggle to, or null if the status should not be toggled. */
+  #nextStatus() {
+    switch (this.assignment.status) {
+      case "Overdue":
+      case "Missing":
+      case "To do":
+        return "Completed";
+      case "Completed":
+        return "To do";
+      default:
+        return null;
+    }
   }
 
   #getStylesheet() {

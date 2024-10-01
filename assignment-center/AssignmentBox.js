@@ -2,6 +2,9 @@ class AssignmentBox extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
+  /** @type {(newValue: Assignment) => void} */
+  #setAssignment;
+
   /** @type {Settings} */
   settings;
 
@@ -10,13 +13,18 @@ class AssignmentBox extends HTMLElement {
 
   /**
    * @param {Assignment} assignment
+   * @param {(newValue: Assignment) => void} setAssignment
    * @param {Settings} settings
    */
-  constructor(assignment, settings) {
+  constructor(assignment, setAssignment, settings) {
     super();
     this.assignment = assignment;
+    this.#setAssignment = setAssignment;
     this.settings = settings;
-    this.popup = new AssignmentPopup(this.assignment);
+    this.popup = new AssignmentPopup(
+      this.assignment,
+      this.#setAssignment.bind(this),
+    );
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM

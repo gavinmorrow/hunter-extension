@@ -196,7 +196,14 @@ class AssignmentCenter extends HTMLElement {
           );
           return assignment;
         })
-        .map((a) => new AssignmentBox(a, this.settings))
+        .map(
+          (a) =>
+            new AssignmentBox(
+              a,
+              this.#updateAssignment.bind(this),
+              this.settings,
+            ),
+        )
         .map((e) => {
           const li = document.createElement("li");
           li.appendChild(e);
@@ -228,6 +235,7 @@ class AssignmentCenter extends HTMLElement {
     else this.assignments[index] = assignment;
 
     // update the element corresponding to it
+    /** @type {AssignmentBox} */
     const assignmentBox = Array.from(
       this.shadowRoot.querySelectorAll("assignment-box"),
     ).find((box) => assignmentsEq(box.assignment, assignment));
