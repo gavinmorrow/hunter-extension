@@ -17,7 +17,7 @@ class AssignmentPopup extends HTMLElement {
     const root = document.createElement("article");
     root.id = "popup-root";
 
-    // get assignment description, if available
+    // assignment description
     const descElem = document.createElement("div");
     descElem.id = "desc";
     root.appendChild(descElem);
