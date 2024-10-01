@@ -269,19 +269,12 @@ class AssignmentCenter extends HTMLElement {
     }
 
     const studentUserId = await getStudentUserId();
-    const assignmentIndexId = AssignmentCenter.#parseAssignmentLinkForIndexId(
-      assignment.link,
-    );
+    const assignmentIndexId = assignment.link.match(
+      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
+    )?.groups.id;
     const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
     assignment.description = fullDetails.LongDescription;
     return assignment;
-  }
-
-  static #parseAssignmentLinkForIndexId(link) {
-    const regexp =
-      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/;
-    const id = link.match(regexp)?.groups.id;
-    return id;
   }
 
   /**
