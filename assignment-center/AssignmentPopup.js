@@ -26,7 +26,7 @@ class AssignmentPopup extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#hydrateDescription();
+    this.#updateAssignment(this.assignment);
   }
 
   #hydrateDescription() {
