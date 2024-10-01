@@ -32,6 +32,7 @@
         "assignment-center/AssignmentPopup.js",
         "assignment-center/AssignmentBox.js",
         "assignment-center/AssignmentCenter.js",
+        "assignment-center/scrape-assignments.js",
         "assignment-center/assignment-center.js"
       ]
     },
