@@ -18,9 +18,8 @@ class AssignmentBox extends HTMLElement {
     this.settings = settings;
     this.popup = new AssignmentPopup(this.assignment);
     this.updateAssignment = this.#updateAssignment.bind(this);
-  }
 
-  connectedCallback() {
+    // create DOM
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
 
@@ -28,17 +27,9 @@ class AssignmentBox extends HTMLElement {
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
-    shadow.appendChild(this.#createRoot());
-  }
-
-  #createRoot() {
     const wrapper = document.createElement("article");
     const root = document.createElement("div");
-
-    // add classes for majors and completed assignments
-    if (this.assignment.details.type.indexOf("Major") > -1)
-      root.classList.add("type-major");
-    if (this.#shouldCollapse()) root.classList.add("collapse");
+    root.id = "root";
 
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and <https://css-tricks.com/block-links-the-search-for-a-perfect-solution/>
@@ -51,31 +42,46 @@ class AssignmentBox extends HTMLElement {
     });
 
     // add the element for assignment title
-    root.appendChild(this.#makeTitleElem());
+    root.appendChild(this.#createTitleElem());
 
     wrapper.appendChild(root);
 
     // add popup
     wrapper.appendChild(this.popup);
 
-    return wrapper;
+    shadow.appendChild(wrapper);
+  }
+
+  connectedCallback() {
+    // add classes for majors and completed assignments
+    const root = this.shadowRoot.getElementById("root");
+    if (this.assignment.details.type.indexOf("Major") > -1)
+      root.classList.add("type-major");
+    if (this.#shouldCollapse()) root.classList.add("collapse");
+
+    this.#hydrateTitleElem();
   }
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
+    this.#hydrateTitleElem();
     this.popup.updateAssignment(assignment);
-    this.shadowRoot.querySelector("article").replaceWith(this.#createRoot());
   }
 
-  #makeTitleElem() {
+  #createTitleElem() {
     const e = document.createElement("p");
     e.id = "title";
-    const a = document.createElement("a");
-    a.textContent = this.assignment.title;
-    if (this.#shouldCollapse()) a.title = this.assignment.title;
-    a.href = this.assignment.link;
-    e.appendChild(a);
+    e.appendChild(document.createElement("a"));
     return e;
+  }
+
+  #hydrateTitleElem() {
+    const titleElem = this.shadowRoot.querySelector("#title a");
+
+    titleElem.textContent = this.assignment.title;
+    if (this.#shouldCollapse()) titleElem.title = this.assignment.title;
+
+    titleElem.href = this.assignment.link;
   }
 
   #assignmentClassColor() {
