@@ -29,10 +29,10 @@
         "common.js",
         "Calendar.util.js",
         "student-user-id.js",
-        "AssignmentPopup.js",
-        "AssignmentBox.js",
-        "AssignmentCenter.js",
-        "assignment-center.js"
+        "assignment-center/AssignmentPopup.js",
+        "assignment-center/AssignmentBox.js",
+        "assignment-center/AssignmentCenter.js",
+        "assignment-center/assignment-center.js"
       ]
     },
     {
