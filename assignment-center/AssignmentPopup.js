@@ -52,7 +52,7 @@ class AssignmentPopup extends HTMLElement {
   #getStylesheet() {
     return `\
 #popup-root {
-  --color-bg: oklch(from var(--color-bg-box) calc(l*120%) c h / 88%);
+  --color-bg: oklch(from var(--color-bg-box) calc(l*150%) c h / 88%);
   --len-padding: calc(var(--base-padding) + var(--width-class-color));
 
   position: absolute;
@@ -65,7 +65,7 @@ class AssignmentPopup extends HTMLElement {
   z-index: 1;
 
   background-color: var(--color-bg);
-  box-shadow: 0 0.5em 1em 0 var(--color-bg);
+  box-shadow: 0 0.5em 1em 0 black;
   backdrop-filter: blur(0.5em);
 
   padding: var(--len-padding);
@@ -74,6 +74,11 @@ class AssignmentPopup extends HTMLElement {
   & #desc > p:first-of-type {
     margin-top: 0;
   }
+}
+
+a {
+  /* Prevent the color from being unreadable */
+  color: oklch(64% 0.2 262);
 }
 `;
   }
