@@ -233,7 +233,14 @@ class AssignmentCenter extends HTMLElement {
       assignmentsEq(a, assignment),
     );
     if (index === -1) return;
-    else this.assignments[index] = assignment;
+    const oldAssignment = this.assignments[index];
+    this.assignments[index] = assignment;
+
+    // check for if the status in the backend needs to be updated
+    if (oldAssignment.status !== assignment.status)
+      // This ignores a promise. It's okay, because we're not depending on the
+      // result.
+      updateAssignmentStatus(assignment.assignmentIndexId, assignment.status);
 
     // update the element corresponding to it
     /** @type {AssignmentBox} */

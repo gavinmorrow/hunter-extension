@@ -30,9 +30,7 @@ class AssignmentPopup extends HTMLElement {
     const statusBtn = document.createElement("button");
     statusBtn.id = "status-btn";
     statusBtn.addEventListener("click", (e) => {
-      // TODO: toggle assignment
-      this.assignment.status = this.#nextStatus();
-      this.#setAssignment(this.assignment);
+      this.#setAssignment({ ...this.assignment, status: this.#nextStatus() });
     });
     root.appendChild(statusBtn);
 
@@ -82,6 +80,7 @@ class AssignmentPopup extends HTMLElement {
       case "Overdue":
       case "Missing":
       case "To do":
+      case "In progress":
         return "Completed";
       case "Completed":
         return "To do";
