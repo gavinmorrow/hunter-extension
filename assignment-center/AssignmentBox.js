@@ -2,7 +2,7 @@ class AssignmentBox extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  /** @type {(newValue: Assignment) => void} */
+  /** @type {(changes: Assignment) => void} */
   #setAssignment;
 
   /** @type {Settings} */
@@ -13,7 +13,7 @@ class AssignmentBox extends HTMLElement {
 
   /**
    * @param {Assignment} assignment
-   * @param {(newValue: Assignment) => void} setAssignment
+   * @param {(changes: Assignment) => void} setAssignment
    * @param {Settings} settings
    */
   constructor(assignment, setAssignment, settings) {

@@ -192,8 +192,11 @@ class AssignmentCenter extends HTMLElement {
         .map((assignment) => {
           // Eventually the description will be updated, just not immediately
           //  since we can't wait that long.
-          AssignmentCenter.#addDescriptionToAssignment(assignment).then((a) =>
-            this.#updateAssignment(a),
+          AssignmentCenter.#getAssignmentDescription(assignment).then(
+            (description) =>
+              this.#updateAssignment(assignment.assignmentIndexId, {
+                description,
+              }),
           );
           return assignment;
         })
@@ -201,7 +204,7 @@ class AssignmentCenter extends HTMLElement {
           (a) =>
             new AssignmentBox(
               a,
-              this.#updateAssignment.bind(this),
+              this.#updateAssignment.bind(this, a.assignmentIndexId),
               this.settings,
             ),
         )
@@ -226,33 +229,25 @@ class AssignmentCenter extends HTMLElement {
     return `assignment-list-${date.getTime()}`;
   }
 
-  /** @param {Assignment} assignment */
-  #updateAssignment(assignment) {
+  /** @param {Number} id @param {Assignment} changes */
+  #updateAssignment(id, changes) {
     // update internal object
-    const index = this.assignments.findIndex((a) =>
-      assignmentsEq(a, assignment),
-    );
+    const index = this.assignments.findIndex((a) => a.assignmentIndexId === id);
     if (index === -1) return;
-    const oldAssignment = this.assignments[index];
-    this.assignments[index] = assignment;
+    this.assignments[index] = { ...this.assignments[index], ...changes };
 
     // check for if the status in the backend needs to be updated
-    if (oldAssignment.status !== assignment.status)
+    if (changes.status != undefined)
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
-      updateAssignmentStatus(assignment.assignmentIndexId, assignment.status);
+      updateAssignmentStatus(id, changes.status);
 
     // update the element corresponding to it
     /** @type {AssignmentBox} */
     const assignmentBox = Array.from(
       this.shadowRoot.querySelectorAll("assignment-box"),
-    ).find((box) => assignmentsEq(box.assignment, assignment));
-    assignmentBox.updateAssignment(assignment);
-
-    /** @param {Assignment} a @param {Assignment} b */
-    function assignmentsEq(a, b) {
-      return a.link === b.link && a.link !== "javascript:void(0)";
-    }
+    ).find((box) => box.assignment.assignmentIndexId === id);
+    assignmentBox.updateAssignment(this.assignments[index]);
   }
 
   /**
@@ -274,21 +269,20 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /** @param {Assignment} assignment */
-  static async #addDescriptionToAssignment(assignment) {
-    if (assignment.description != null) return assignment;
+  static async #getAssignmentDescription(assignment) {
+    if (assignment.description != null) return assignment.description;
     if (assignment.link == "javascript:void(0)") {
       // TODO: Custom Task support
       console.warn(
         "Tried to get description for custom task. Custom tasks are not yet supported.",
       );
-      return assignment;
+      return undefined;
     }
 
     const studentUserId = await getStudentUserId();
     const assignmentIndexId = assignment.assignmentIndexId;
     const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
-    assignment.description = fullDetails.LongDescription;
-    return assignment;
+    return fullDetails.LongDescription;
   }
 
   /**

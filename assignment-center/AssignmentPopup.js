@@ -2,12 +2,12 @@ class AssignmentPopup extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  /** @type {(newValue: Assignment) => void} */
+  /** @type {(changes: Assignment) => void} */
   #setAssignment;
 
   /**
    * @param {Assignment} assignment
-   * @param {(newValue: Assignment) => void} setAssignment
+   * @param {(changes: Assignment) => void} setAssignment
    */
   constructor(assignment, setAssignment) {
     super();
@@ -30,7 +30,7 @@ class AssignmentPopup extends HTMLElement {
     const statusBtn = document.createElement("button");
     statusBtn.id = "status-btn";
     statusBtn.addEventListener("click", (e) => {
-      this.#setAssignment({ ...this.assignment, status: this.#nextStatus() });
+      this.#setAssignment({ status: this.#nextStatus() });
     });
     root.appendChild(statusBtn);
 
