@@ -16,6 +16,7 @@
 
 /**
  * @typedef {Object} Assignment
+ * @property {Number} assignmentIndexId
  * @property {Color} color
  * @property {String} title
  * @property {Link} link
@@ -277,9 +278,7 @@ class AssignmentCenter extends HTMLElement {
     }
 
     const studentUserId = await getStudentUserId();
-    const assignmentIndexId = assignment.link.match(
-      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
-    )?.groups.id;
+    const assignmentIndexId = assignment.assignmentIndexId;
     const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
     assignment.description = fullDetails.LongDescription;
     return assignment;

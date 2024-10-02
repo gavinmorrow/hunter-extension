@@ -82,6 +82,11 @@ const parseAssignmentElem = (elem) => {
   const { textContent: title, href: link } = elem.querySelector(
     "div.middle-block app-assignment-title-link a",
   );
+  const assignmentIndexId = Number(
+    link.match(
+      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
+    )?.groups.id,
+  );
   const details = parseFullDetailsElem(
     elem.querySelector("div.middle-block div.assignment-details"),
   );
@@ -90,6 +95,7 @@ const parseAssignmentElem = (elem) => {
     .textContent.trim();
 
   return {
+    assignmentIndexId,
     color,
     title,
     link,
