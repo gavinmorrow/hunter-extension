@@ -34,6 +34,11 @@ class AssignmentPopup extends HTMLElement {
     });
     root.appendChild(statusBtn);
 
+    // assignment title
+    const titleElem = document.createElement("h2");
+    titleElem.id = "title";
+    root.appendChild(titleElem);
+
     // assignment description
     const descElem = document.createElement("div");
     descElem.id = "desc";
@@ -53,6 +58,11 @@ class AssignmentPopup extends HTMLElement {
     else statusBtn.textContent += this.#nextStatus();
   }
 
+  #hydrateTitle() {
+    const titleElem = this.shadowRoot.getElementById("title");
+    titleElem.textContent = this.assignment.title;
+  }
+
   #hydrateDescription() {
     // get assignment description, if available
     const descElem = this.shadowRoot.getElementById("desc");
@@ -64,6 +74,7 @@ class AssignmentPopup extends HTMLElement {
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.#hydrateStatus();
+    this.#hydrateTitle();
     this.#hydrateDescription();
   }
 
@@ -111,6 +122,16 @@ class AssignmentPopup extends HTMLElement {
   padding: var(--len-padding);
   border-radius: var(--len-padding);
 
+  & #desc > p:first-of-type {
+    margin-top: 0;
+  }
+
+  & #title {
+    font-size: medium;
+    margin: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+  }
   & #desc > p:first-of-type {
     margin-top: 0;
   }
