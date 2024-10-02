@@ -2,6 +2,9 @@ class AssignmentBox extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
+  /** @type {(changes: Assignment) => void} */
+  #setAssignment;
+
   /** @type {Settings} */
   settings;
 
@@ -10,13 +13,18 @@ class AssignmentBox extends HTMLElement {
 
   /**
    * @param {Assignment} assignment
+   * @param {(changes: Assignment) => void} setAssignment
    * @param {Settings} settings
    */
-  constructor(assignment, settings) {
+  constructor(assignment, setAssignment, settings) {
     super();
     this.assignment = assignment;
+    this.#setAssignment = setAssignment;
     this.settings = settings;
-    this.popup = new AssignmentPopup(this.assignment);
+    this.popup = new AssignmentPopup(
+      this.assignment,
+      this.#setAssignment.bind(this),
+    );
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM
@@ -24,7 +32,6 @@ class AssignmentBox extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     const style = document.createElement("style");
-    style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
 
     const wrapper = document.createElement("article");
@@ -46,21 +53,29 @@ class AssignmentBox extends HTMLElement {
   }
 
   connectedCallback() {
-    // add classes for majors and completed assignments
-    const root = this.shadowRoot.getElementById("root");
-    if (this.assignment.details.type.indexOf("Major") > -1)
-      root.classList.add("type-major");
-    if (this.#shouldCollapse()) root.classList.add("collapse");
-
-    this.#hydrateTitleElem();
-    this.#hydrateStatusElem();
+    this.#updateAssignment(this.assignment);
   }
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
+    this.#hydrateStyles();
     this.#hydrateTitleElem();
     this.#hydrateStatusElem();
     this.popup.updateAssignment(assignment);
+  }
+
+  #hydrateStyles() {
+    // add classes for majors and completed assignments
+    const root = this.shadowRoot.getElementById("root");
+
+    if (this.#isMajor()) root.classList.add("type-major");
+    else root.classList.remove("type-major");
+
+    if (this.#shouldCollapse()) root.classList.add("collapse");
+    else root.classList.remove("collapse");
+
+    const style = this.shadowRoot.querySelector("style");
+    style.textContent = this.#getStylesheet();
   }
 
   #createTitleElem() {
@@ -121,6 +136,10 @@ class AssignmentBox extends HTMLElement {
 
   #shouldCollapse() {
     return this.assignment.status === "Completed";
+  }
+
+  #isMajor() {
+    return this.assignment.details.type.indexOf("Major") > -1;
   }
 
   #getStylesheet() {

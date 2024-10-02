@@ -2,9 +2,18 @@ class AssignmentPopup extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  constructor(assignment) {
+  /** @type {(changes: Assignment) => void} */
+  #setAssignment;
+
+  /**
+   * @param {Assignment} assignment
+   * @param {(changes: Assignment) => void} setAssignment
+   */
+  constructor(assignment, setAssignment) {
     super();
     this.assignment = assignment;
+    this.#setAssignment = setAssignment;
+
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM
@@ -17,7 +26,20 @@ class AssignmentPopup extends HTMLElement {
     const root = document.createElement("article");
     root.id = "popup-root";
 
-    // get assignment description, if available
+    // assignment status
+    const statusBtn = document.createElement("button");
+    statusBtn.id = "status-btn";
+    statusBtn.addEventListener("click", (e) => {
+      this.#setAssignment({ status: this.#nextStatus() });
+    });
+    root.appendChild(statusBtn);
+
+    // assignment title
+    const titleElem = document.createElement("h2");
+    titleElem.id = "title";
+    root.appendChild(titleElem);
+
+    // assignment description
     const descElem = document.createElement("div");
     descElem.id = "desc";
     root.appendChild(descElem);
@@ -26,7 +48,19 @@ class AssignmentPopup extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#hydrateDescription();
+    this.#updateAssignment(this.assignment);
+  }
+
+  #hydrateStatus() {
+    const statusBtn = this.shadowRoot.getElementById("status-btn");
+    statusBtn.textContent = "Mark as ";
+    if (this.#nextStatus() == null) statusBtn.hidden = true;
+    else statusBtn.textContent += this.#nextStatus();
+  }
+
+  #hydrateTitle() {
+    const titleElem = this.shadowRoot.getElementById("title");
+    titleElem.textContent = this.assignment.title;
   }
 
   #hydrateDescription() {
@@ -39,6 +73,8 @@ class AssignmentPopup extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
+    this.#hydrateStatus();
+    this.#hydrateTitle();
     this.#hydrateDescription();
   }
 
@@ -49,10 +85,25 @@ class AssignmentPopup extends HTMLElement {
     else return rawDesc;
   }
 
+  /** @returns {Status?} The status to toggle to, or null if the status should not be toggled. */
+  #nextStatus() {
+    switch (this.assignment.status) {
+      case "Overdue":
+      case "Missing":
+      case "To do":
+      case "In progress":
+        return "Completed";
+      case "Completed":
+        return "To do";
+      default:
+        return null;
+    }
+  }
+
   #getStylesheet() {
     return `\
 #popup-root {
-  --color-bg: oklch(from var(--color-bg-box) calc(l*120%) c h / 88%);
+  --color-bg: oklch(from var(--color-bg-box) calc(l*150%) c h / 88%);
   --len-padding: calc(var(--base-padding) + var(--width-class-color));
 
   position: absolute;
@@ -65,7 +116,7 @@ class AssignmentPopup extends HTMLElement {
   z-index: 1;
 
   background-color: var(--color-bg);
-  box-shadow: 0 0.5em 1em 0 var(--color-bg);
+  box-shadow: 0 0.5em 1em 0 black;
   backdrop-filter: blur(0.5em);
 
   padding: var(--len-padding);
@@ -74,6 +125,21 @@ class AssignmentPopup extends HTMLElement {
   & #desc > p:first-of-type {
     margin-top: 0;
   }
+
+  & #title {
+    font-size: medium;
+    margin: 0;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+  }
+  & #desc > p:first-of-type {
+    margin-top: 0;
+  }
+}
+
+a {
+  /* Prevent the color from being unreadable */
+  color: oklch(64% 0.2 262);
 }
 `;
   }
