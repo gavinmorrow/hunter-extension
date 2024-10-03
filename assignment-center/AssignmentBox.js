@@ -41,9 +41,6 @@ class AssignmentBox extends HTMLElement {
     // add the element for assignment title
     root.appendChild(this.#createTitleElem());
 
-    // add the element for assignment status
-    root.appendChild(this.#createStatusElem());
-
     wrapper.appendChild(root);
 
     // add popup
@@ -60,7 +57,6 @@ class AssignmentBox extends HTMLElement {
     this.assignment = assignment;
     this.#hydrateStyles();
     this.#hydrateTitleElem();
-    this.#hydrateStatusElem();
     this.popup.updateAssignment(assignment);
   }
 
@@ -92,31 +88,6 @@ class AssignmentBox extends HTMLElement {
     if (this.#shouldCollapse()) titleElem.title = this.assignment.title;
 
     titleElem.href = this.assignment.link;
-  }
-
-  #createStatusElem() {
-    const btn = document.createElement("button");
-    btn.id = "status-btn";
-    return btn;
-  }
-
-  #hydrateStatusElem() {
-    const btn = this.shadowRoot.getElementById("status-btn");
-    const status = this.assignment.status;
-
-    /** @type {[Status]: String} */
-    const btnTextMap = {
-      Missing: "Complete",
-      Overdue: "Complete",
-      "To do": "Complete",
-      "In progress": "Complete",
-      Completed: "Mark as todo",
-      Graded: null,
-    };
-    const btnText = btnTextMap[status];
-
-    if (btnText == null) btn.hidden = true;
-    else btn.textContent = btnText;
   }
 
   #assignmentClassColor() {
@@ -183,15 +154,10 @@ article {
       border: var(--border-width) solid yellow;
     }
 
-    &.collapse {
-      & #title {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-      }
-      & #status-btn {
-        display: none;
-      }
+    &.collapse #title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 
