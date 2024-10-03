@@ -102,7 +102,7 @@ const createCustomUi = async () => {
   // switch to list view, so scraping is possible
   views.switchTo("list");
 
-  const oldElem = document.querySelector("app-student-assignment-center");
+  const oldElem = await waitForElem("app-student-assignment-center");
 
   try {
     // construct our own element
