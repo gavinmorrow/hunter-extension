@@ -215,6 +215,8 @@ class AssignmentCenter extends HTMLElement {
         })
         .forEach((li) => list.appendChild(li));
     });
+
+    console.timeEnd("full");
   }
 
   static #allCalendarDates() {

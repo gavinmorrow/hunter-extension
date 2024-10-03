@@ -1,3 +1,5 @@
+console.time("full");
+
 const DEFAULT_TIMEOUT = 10000;
 const DEFAULT_INTERVAL = 16;
 
@@ -14,8 +16,11 @@ const dbg = (a) => {
  * @param {number} interval The interval to check for the element (in ms). Defaults to DEFAULT_INTERVAL.
  * @returns {Promise<T|null>} Resolves with the value returned by the function, or resolves with null if the timeout is reached.
  */
+let i = 0;
 const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) =>
   new Promise((resolve, reject) => {
+    const profId = `waitFor ${i++}`;
+    console.time(profId);
     // set timeout and interval
     let timeoutId =
       timeout != undefined ? setTimeout(() => resolve(null), timeout) : null;
@@ -31,6 +36,7 @@ const waitFor = (fn, timeout = DEFAULT_TIMEOUT, interval = DEFAULT_INTERVAL) =>
         clearInterval(intervalId);
         clearTimeout(timeoutId);
         resolve(result);
+        console.timeEnd(profId);
       }
     }
   });
@@ -132,21 +138,35 @@ const tabState = async (data) => {
  * @param {(any|null)?} data If provided, the value to set. If null, reset settings.
  * @returns {Promise<Settings>}
  */
+let settingsCache = null;
 const settings = async (data) => {
-  switch (data) {
-    case undefined:
-      return browser.runtime.sendMessage({
-        type: "settings.get",
-      });
-    case null:
-      return browser.runtime.sendMessage({
-        type: "settings.reset",
-      });
-    default:
-      return browser.runtime.sendMessage({
-        type: "settings.set",
-        data,
-      });
+  try {
+    console.time("settings");
+    if (settingsCache != null) {
+      // fetchSettings().then((s) => (settingsCache = s));
+      return settingsCache;
+    }
+    settingsCache = await fetchSettings();
+    return settingsCache;
+    async function fetchSettings() {
+      switch (data) {
+        case undefined:
+          return browser.runtime.sendMessage({
+            type: "settings.get",
+          });
+        case null:
+          return browser.runtime.sendMessage({
+            type: "settings.reset",
+          });
+        default:
+          return browser.runtime.sendMessage({
+            type: "settings.set",
+            data,
+          });
+      }
+    }
+  } finally {
+    console.timeEnd("settings");
   }
 };
 
