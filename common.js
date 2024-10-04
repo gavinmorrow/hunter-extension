@@ -9,6 +9,21 @@ const dbg = (a) => {
 };
 
 /**
+ * [Memoize](https://en.wikipedia.org/wiki/Memoization) a function.
+ * @template T
+ * @param {() => Promise<T>|() => T} fn
+ * @returns {() => Promise<T>}
+ */
+const memo = (fn) => {
+  let cache = null;
+  return async () => {
+    if (cache != null) return cache;
+    cache = await fn();
+    return cache;
+  };
+};
+
+/**
  * Waits for a function to return a truthy value.
  * @template T The type of the value to wait for.
  * @param {() => T} fn A function that returns the value to wait for. If the value is truthy, the promise resolves.
@@ -133,42 +148,14 @@ const tabState = async (data) => {
  * @property {boolean} assignmentCenter.filter.autoNotCompleted
  */
 
-/**
- * Set or get user settings.
- * @param {(any|null)?} data If provided, the value to set. If null, reset settings.
- * @returns {Promise<Settings>}
- */
-let settingsCache = null;
-const settings = async (data) => {
-  try {
-    console.time("settings");
-    if (settingsCache != null) {
-      // fetchSettings().then((s) => (settingsCache = s));
-      return settingsCache;
-    }
-    settingsCache = await fetchSettings();
-    return settingsCache;
-    async function fetchSettings() {
-      switch (data) {
-        case undefined:
-          return browser.runtime.sendMessage({
-            type: "settings.get",
-          });
-        case null:
-          return browser.runtime.sendMessage({
-            type: "settings.reset",
-          });
-        default:
-          return browser.runtime.sendMessage({
-            type: "settings.set",
-            data,
-          });
-      }
-    }
-  } finally {
-    console.timeEnd("settings");
-  }
-};
+/** Set or get user settings. */
+const settings = memo(
+  /** @returns {Promise<Settings>} */
+  async () =>
+    browser.runtime.sendMessage({
+      type: "settings.get",
+    }),
+);
 
 /**
  * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.

@@ -36,15 +36,8 @@ const parseProfileLinkHref = (href) => {
   return userId;
 };
 
-let _getStudentUserIdCache = null;
-/**
- * Scrape the page for the student user id.
- * @returns {Promise<string?>} The student user id, or null.
- */
-const getStudentUserId = async () => {
-  if (_getStudentUserIdCache) return _getStudentUserIdCache;
-  const href = await inProfileSubnav(findProfileHref);
-  const id = parseProfileLinkHref(href);
-  _getStudentUserIdCache = id;
-  return id;
-};
+/** Scrape the page for the student user id. */
+const getStudentUserId = memo(
+  /** @returns {Promise<string?>} The student user id, or null. */
+  async () => inProfileSubnav(findProfileHref).then(parseProfileLinkHref),
+);
