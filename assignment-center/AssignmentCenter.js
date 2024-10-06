@@ -135,7 +135,7 @@ class AssignmentCenter extends HTMLElement {
         if (day === 0) box.classList.add("sunday");
         if (day === 6) box.classList.add("saturday");
 
-        if (date.getTime() < today.getTime()) box.classList.add("disabled");
+        if (date.getTime() < today.getTime()) box.classList.add("past");
         if (this.#dateIsSelected(date)) box.classList.add("today");
 
         const dateElem = document.createElement("p");
@@ -379,7 +379,7 @@ main {
     }
   }
 
-  & .calendar-box.disabled::before {
+  & .calendar-box.past::before {
     content: "";
     position: absolute;
     top: 0;
