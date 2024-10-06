@@ -104,6 +104,31 @@ const parseAssignmentElem = (elem) => {
   };
 };
 
+/**
+ * Get the filter element for either "Active assignments" or "Past assignments".
+ * @param {"Active"|"Past"} time
+ * @returns {Promise<HTMLElement>}
+ */
+const filterElem = async (time) =>
+  await waitFor(() =>
+    Array.from(document.querySelectorAll("sky-radio label")).find(
+      (elem) => elem.textContent == `${time} assignments`,
+    ),
+  );
+
+/**
+ * Sets the assignment filter to filter by "Active" or "Past".
+ * @param {"Active"|"Past"} time
+ */
+const filterBy = async (time) => filterElem(time).then((e) => e.click());
+
+const withFilter = async (time, fn) => {
+  await filterBy(time);
+  const res = await fn();
+  await filterBy("Active");
+  return res;
+};
+
 // So there's this *hilarious* bug: if there's an assignment due on Sunday,
 // then it will duplicated on Saturday (bc it shows up under both the Due
 // Tomorrow and Due Next Week sections in list view). The best part is that it
@@ -120,18 +145,33 @@ const deduplicateAssignments = (assignments) =>
       .values(),
   );
 
-/** @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date. */
-const scrapeAssignments = async () => {
-  const assignments = await waitForElems(
-    "app-student-assignments-repeater sky-repeater-item-content sky-repeater sky-repeater-item-title",
-  );
-  if (assignments == null) return null;
+/**
+ * @param {"Active"|"Past"} time
+ * @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date.
+ */
+const _scrapeAssignments = (time) =>
+  withFilter(time, async () => {
+    const assignments = await waitForElems(
+      "app-student-assignments-repeater sky-repeater-item-content sky-repeater sky-repeater-item-title",
+    );
+    if (assignments == null) return null;
 
-  // parse -> deduplicate -> sort
-  return deduplicateAssignments(
-    Array.from(assignments).map(parseAssignmentElem),
-  ).toSorted(
-    /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
-      a.details.dueDate - b.details.dueDate,
-  );
+    // parse -> deduplicate -> sort
+    return deduplicateAssignments(
+      Array.from(assignments).map(parseAssignmentElem),
+    ).toSorted(
+      /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
+        a.details.dueDate - b.details.dueDate,
+    );
+  });
+
+const scrapeAssignments = async () => {
+  // FIXME: this takes wayyy too long (~600±100ms)
+  console.time("assignments");
+  const activeAssignments = await _scrapeAssignments("Active");
+  const pastAssignments = await _scrapeAssignments("Past");
+  console.timeEnd("assignments");
+
+  // Should still be sorted, because past comes before active
+  return [...pastAssignments, ...activeAssignments];
 };
