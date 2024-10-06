@@ -65,6 +65,8 @@ class AssignmentCenter extends HTMLElement {
     this.assignments = assignments;
     this.settings = settings;
 
+    this.addAssignments = this.#addAssignments.bind(this);
+
     // create DOM
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
@@ -136,7 +138,6 @@ class AssignmentCenter extends HTMLElement {
         if (day === 6) box.classList.add("saturday");
 
         if (date.getTime() < today.getTime()) box.classList.add("past");
-        if (this.#dateIsSelected(date)) box.classList.add("today");
 
         const dateElem = document.createElement("p");
         dateElem.classList.add("calendar-date");
@@ -165,6 +166,9 @@ class AssignmentCenter extends HTMLElement {
       const list = this.shadowRoot.getElementById(
         AssignmentCenter.#idForAssignmentList(date),
       );
+
+      // add today class
+      if (this.#dateIsSelected(date)) list.parentElement.classList.add("today");
 
       // get assignments for current day
       const assignments = this.assignments
@@ -243,6 +247,7 @@ class AssignmentCenter extends HTMLElement {
   /** @param {Assignment[]} newAssignments */
   #addAssignments(newAssignments) {
     this.assignments = this.assignments.concat(newAssignments);
+    this.#hydrateCalendar();
   }
 
   /** @param {Number} id @param {Assignment} changes */
@@ -320,6 +325,7 @@ class AssignmentCenter extends HTMLElement {
    */
   #findSelectedDate(start = 1) {
     const today = new Date();
+    if (this.assignments.length === 0) return today;
     for (let offset = start; true; offset += 1) {
       const date = Calendar.offsetFromDay(today, offset);
 

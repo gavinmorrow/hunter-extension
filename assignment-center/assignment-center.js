@@ -108,7 +108,7 @@ const createCustomUi = async () => {
     // construct our own element
     const assignmentCenter = new AssignmentCenter(
       oldElem,
-      await scrapeAssignments(),
+      [],
       await settings(),
     );
     oldElem.parentElement.appendChild(assignmentCenter);
@@ -128,6 +128,9 @@ const createCustomUi = async () => {
 
     // hide theirs
     oldElem.hidden = true;
+
+    const assignments = await scrapeAssignments();
+    assignmentCenter.addAssignments(assignments);
   } catch (err) {
     alert(`There was an error creating the custom UI: ${err}`);
     console.error(err);
