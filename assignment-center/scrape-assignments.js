@@ -149,7 +149,7 @@ const deduplicateAssignments = (assignments) =>
  * @param {"Active"|"Past"} time
  * @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date.
  */
-const _scrapeAssignments = (time) =>
+const scrapeAssignments = (time) =>
   withFilter(time, async () => {
     const assignments = await waitForElems(
       "app-student-assignments-repeater sky-repeater-item-content sky-repeater sky-repeater-item-title",
@@ -164,14 +164,3 @@ const _scrapeAssignments = (time) =>
         a.details.dueDate - b.details.dueDate,
     );
   });
-
-const scrapeAssignments = async () => {
-  // FIXME: this takes wayyy too long (~600±100ms)
-  console.time("assignments");
-  const activeAssignments = await _scrapeAssignments("Active");
-  const pastAssignments = await _scrapeAssignments("Past");
-  console.timeEnd("assignments");
-
-  // Should still be sorted, because past comes before active
-  return [...pastAssignments, ...activeAssignments];
-};

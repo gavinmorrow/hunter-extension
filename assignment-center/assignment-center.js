@@ -129,8 +129,9 @@ const createCustomUi = async () => {
     // hide theirs
     oldElem.hidden = true;
 
-    const assignments = await scrapeAssignments();
-    assignmentCenter.addAssignments(assignments);
+    // Scrape active assignments first so it goes faster
+    await scrapeAssignments("Active").then(assignmentCenter.addAssignments);
+    await scrapeAssignments("Past").then(assignmentCenter.addAssignments);
   } catch (err) {
     alert(`There was an error creating the custom UI: ${err}`);
     console.error(err);
