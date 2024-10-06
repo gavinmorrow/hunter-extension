@@ -167,17 +167,8 @@ class AssignmentCenter extends HTMLElement {
       );
 
       // get assignments for current day
-      const assignments = this.assignments.filter((a) =>
-        Calendar.datesAreSameDay(a.details.dueDate, date),
-      );
-
-      // show the day in calendar (really applies to just weekends, but is a
-      // no-op for weekdays so it's okay)
-      const day = date.getDay();
-      if (assignments.length > 0) this.#showDay(day);
-
-      // add assignment elements
-      assignments
+      const assignments = this.assignments
+        .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
         .sort((a, b) => {
           if (a.status === b.status) {
             // sort by type
@@ -199,7 +190,11 @@ class AssignmentCenter extends HTMLElement {
               }),
           );
           return assignment;
-        })
+        });
+
+      // add new assignment elements
+      assignments
+        .filter((a) => this.#findAssignmentBoxFor(a.assignmentIndexId) == null)
         .map(
           (a) =>
             new AssignmentBox(
@@ -214,6 +209,22 @@ class AssignmentCenter extends HTMLElement {
           return li;
         })
         .forEach((li) => list.appendChild(li));
+
+      // update old assignment elements
+      assignments
+        .map(
+          /** @returns {[Assignment, AssignmentBox]} */ (a) => [
+            a,
+            this.#findAssignmentBoxFor(a.assignmentIndexId),
+          ],
+        )
+        .filter(([_, box]) => box != null)
+        .forEach(([a, box]) => box.updateAssignment(a));
+
+      // show the day in calendar (really applies to just weekends, but is a
+      // no-op for weekdays so it's okay)
+      const day = date.getDay();
+      if (assignments.length > 0) this.#showDay(day);
     });
   }
 
@@ -227,6 +238,11 @@ class AssignmentCenter extends HTMLElement {
 
   static #idForAssignmentList(date) {
     return `assignment-list-${date.getTime()}`;
+  }
+
+  /** @param {Assignment[]} newAssignments */
+  #addAssignments(newAssignments) {
+    this.assignments = this.assignments.concat(newAssignments);
   }
 
   /** @param {Number} id @param {Assignment} changes */
@@ -244,10 +260,15 @@ class AssignmentCenter extends HTMLElement {
 
     // update the element corresponding to it
     /** @type {AssignmentBox} */
-    const assignmentBox = Array.from(
-      this.shadowRoot.querySelectorAll("assignment-box"),
-    ).find((box) => box.assignment.assignmentIndexId === id);
+    const assignmentBox = this.#findAssignmentBoxFor(id);
     assignmentBox.updateAssignment(this.assignments[index]);
+  }
+
+  /** @param {number} assignmentIndexId @returns {AssignmentBox} */
+  #findAssignmentBoxFor(assignmentIndexId) {
+    return Array.from(this.shadowRoot.querySelectorAll("assignment-box")).find(
+      (box) => box.assignment.assignmentIndexId === assignmentIndexId,
+    );
   }
 
   /**
