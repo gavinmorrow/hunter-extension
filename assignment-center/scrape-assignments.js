@@ -104,6 +104,22 @@ const parseAssignmentElem = (elem) => {
   };
 };
 
+// So there's this *hilarious* bug: if there's an assignment due on Sunday,
+// then it will duplicated on Saturday (bc it shows up under both the Due
+// Tomorrow and Due Next Week sections in list view). The best part is that it
+// also shows up as duplicated in the calendar view??? How??? Anyways, I
+// decided that the simplest solution was to just always deduplicate all
+// assignments.
+/** @param {Assignment[]} assignments @returns {Assignment[]} */
+const deduplicateAssignments = (assignments) =>
+  Array.from(
+    assignments
+      // Use a Map, bc it already has deduplicating features in it.
+      // I don't use an object bc Map is kind of designed for this.
+      .reduce((map, a) => map.set(a.assignmentIndexId, a), new Map())
+      .values(),
+  );
+
 /** @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date. */
 const scrapeAssignments = async () => {
   const assignments = await waitForElems(
@@ -111,10 +127,11 @@ const scrapeAssignments = async () => {
   );
   if (assignments == null) return null;
 
-  return Array.from(assignments)
-    .map(parseAssignmentElem)
-    .toSorted(
-      /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
-        a.details.dueDate - b.details.dueDate,
-    );
+  // parse -> deduplicate -> sort
+  return deduplicateAssignments(
+    Array.from(assignments).map(parseAssignmentElem),
+  ).toSorted(
+    /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
+      a.details.dueDate - b.details.dueDate,
+  );
 };
