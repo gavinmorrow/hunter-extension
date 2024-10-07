@@ -108,7 +108,8 @@ class AssignmentPopup extends HTMLElement {
 
   position: absolute;
   top: 100%;
-  left: var(--width-class-color);
+  left: var(--popup-left);
+  right: var(--popup-right);
 
   min-width: 22em;
 

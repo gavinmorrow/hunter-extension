@@ -81,6 +81,9 @@ class AssignmentBox extends HTMLElement {
     if (this.#shouldCollapse()) root.classList.add("collapse");
     else root.classList.remove("collapse");
 
+    if (this.#shouldPopupLeft()) root.parentElement.classList.add("popup-left");
+    else root.parentElement.classList.remove("popup-left");
+
     const style = this.shadowRoot.querySelector("style");
     style.textContent = this.#getStylesheet();
   }
@@ -122,6 +125,12 @@ class AssignmentBox extends HTMLElement {
 
   #isMajor() {
     return this.assignment.details.type.indexOf("Major") > -1;
+  }
+
+  #shouldPopupLeft() {
+    const rightEdge = this.getBoundingClientRect().right;
+    const percentToEdge = rightEdge / window.innerWidth;
+    return percentToEdge > 0.5;
   }
 
   #getStylesheet() {
@@ -178,6 +187,13 @@ article {
 
   &:not(:hover, :focus-within) assignment-popup {
     display: none;
+  }
+
+  &:not(.popup-left) assignment-popup {
+    --popup-left: var(--width-class-color);
+  }
+  &.popup-left assignment-popup {
+    --popup-right: var(--width-class-color);
   }
 }
 
