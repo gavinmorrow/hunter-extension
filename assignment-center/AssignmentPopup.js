@@ -106,15 +106,8 @@ class AssignmentPopup extends HTMLElement {
   --color-bg: oklch(from var(--color-bg-box) calc(l*150%) c h / 88%);
   --len-padding: calc(var(--base-padding) + var(--width-class-color));
 
-  position: absolute;
-  top: 100%;
-  left: var(--popup-left);
-  right: var(--popup-right);
-
   min-width: 22em;
-
   box-sizing: border-box;
-  z-index: 2;
 
   background-color: var(--color-bg);
   box-shadow: 0 0.5em 1em 0 black;

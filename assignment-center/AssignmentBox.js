@@ -189,11 +189,16 @@ article {
     display: none;
   }
 
+  & assignment-popup {
+    position: absolute;
+    top: 100%;
+    z-index: 5;
+  }
   &:not(.popup-left) assignment-popup {
-    --popup-left: var(--width-class-color);
+    left: var(--width-class-color);
   }
   &.popup-left assignment-popup {
-    --popup-right: var(--width-class-color);
+    right: var(--width-class-color);
   }
 }
 
