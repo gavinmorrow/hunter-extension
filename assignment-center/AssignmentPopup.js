@@ -31,6 +31,7 @@ class AssignmentPopup extends HTMLElement {
     statusBtn.id = "status-btn";
     statusBtn.addEventListener("click", (e) => {
       this.#setAssignment({ status: this.#nextStatus() });
+      statusBtn.blur();
     });
     root.appendChild(statusBtn);
 
