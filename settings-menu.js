@@ -5,10 +5,13 @@ const settingsOptions = {
       hunter: "Automatically login to the hunter website.",
       blackbaud: "Automatically login on blackbaud.",
       google: {
-        email:
-          "Automatically select your email in the google login page when logging in to hunter.",
-        password:
-          "Automatically press the next button on the google login page (after your password is autofilled) when logging into hunter.",
+        desc: "",
+        type: {
+          email:
+            "Automatically select your email in the google login page when logging in to hunter.",
+          password:
+            "Automatically press the next button on the google login page (after your password is autofilled) when logging into hunter.",
+        },
       },
     },
   },
@@ -27,12 +30,13 @@ const settingsOptions = {
           statusColors: {
             desc: "The color for each assignment status. Can be any valid CSS color.",
             type: {
-              Overdue: "",
-              Missing: "",
-              "To do": "",
-              "In progress": "",
-              Completed: "",
-              Graded,
+              overdue: { type: "text", desc: "" },
+              missing: { type: "text", desc: "" },
+              toDo: { type: "text", desc: "" },
+              // FIXME: it needs to be "In progress", not "In Progress"
+              inProgress: { type: "text", desc: "" },
+              completed: { type: "text", desc: "" },
+              graded: { type: "text", desc: "" },
             },
           },
         },
@@ -62,23 +66,113 @@ class SettingsMenu extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     shadow.appendChild(document.createElement("style"));
 
-    const settingsBtn = document.createElement("button");
-    settingsBtn.id = "settings-btn";
-    settingsBtn.textContent = "Settings";
-    shadow.appendChild(settingsBtn);
+    // Prevent blackbaud from throwing a fit in the console
+    shadow.addEventListener("click", (e) => e.stopPropagation());
+    shadow.addEventListener("mousedown", (e) => e.stopPropagation());
 
     const modal = document.createElement("dialog");
     modal.id = "modal";
+    modal.append(...this.#createModalElements());
     shadow.appendChild(modal);
+
+    const settingsBtn = document.createElement("button");
+    settingsBtn.id = "settings-btn";
+    settingsBtn.textContent = "Settings";
+    settingsBtn.addEventListener("click", (e) => modal.showModal());
+    shadow.appendChild(settingsBtn);
   }
-  async connectedCallback() {}
+  async connectedCallback() {
+    this.#hydrateStyles();
+  }
 
   #createModalElements() {
-    let elems = [];
+    const toTitleCase = (camelCase) =>
+      camelCase.charAt(0).toUpperCase() +
+      camelCase.replaceAll(/([A-Z])/g, " $1").slice(1);
+
+    /** @param {String[]} path @param {[String, String|Object]} _ */
+    const createOptionElem = (path, [name, value]) => {
+      const newPath = path.concat([name]);
+      const readableName = toTitleCase(name);
+      const description = value.desc ?? value;
+
+      if (typeof value === "string" || typeof value?.type === "string") {
+        // final version, don't recurse
+
+        const label = document.createElement("label");
+
+        const nameElem = document.createElement("span");
+        nameElem.classList.add("name");
+        nameElem.textContent = readableName;
+
+        const descElem = document.createElement("span");
+        descElem.classList.add("description");
+        descElem.textContent = description;
+
+        const input = document.createElement("input");
+        input.name = newPath.join(".");
+        input.type = value?.type ?? "checkbox"; // default to bool
+
+        label.append(nameElem, descElem, input);
+        return label;
+      } else {
+        const fieldset = document.createElement("fieldset");
+
+        const legend = document.createElement("legend");
+        legend.textContent = readableName;
+
+        const descElem = document.createElement("p");
+        descElem.textContent = description;
+
+        const inputs = Object.entries(value.type ?? value).map(
+          createOptionElem.bind(this, newPath),
+        );
+
+        fieldset.append(legend, descElem, ...inputs);
+        return fieldset;
+      }
+    };
+
+    // Object.entires preserves insertion order
+    // <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#description>
+    return Object.entries(settingsOptions).map(createOptionElem.bind(this, []));
   }
   #hydrateModal(settings) {}
+
+  #hydrateStyles() {
+    this.shadowRoot.querySelector("style").textContent = this.#getStylesheet();
+  }
+
+  /** @param {String[]} path */
+  async #getValueFromPath(path) {
+    let o = await settings();
+    for (const segment of path) {
+      if (o == null) return null;
+      o = o[segment];
+    }
+    return o;
+  }
+
+  #getStylesheet() {
+    return `\
+label {
+  display: block;
+
+  & .description {
+    font-size: smaller;
+    color: grey;
+    margin-left: 1em;
+  }
+}
+`;
+  }
 }
 
 if (!customElements.get("settings-menu")) {
   customElements.define("settings-menu", SettingsMenu);
 }
+
+promiseError(async () => {
+  await waitForElem("#site-logo");
+  document.body.appendChild(new SettingsMenu());
+})();
