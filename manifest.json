@@ -26,6 +26,7 @@
       ],
       "js": [
         "browser-polyfill.min.js",
+        "custom-elements.min.js",
         "common.js",
         "Calendar.util.js",
         "student-user-id.js",
@@ -46,7 +47,12 @@
         "https://accounts.google.com/v3/signin/challenge/pwd?*",
         "https://accounts.google.com/signin/oauth/*"
       ],
-      "js": ["browser-polyfill.min.js", "common.js", "login-automatically.js"]
+      "js": [
+        "browser-polyfill.min.js",
+        "custom-elements.min.js",
+        "common.js",
+        "login-automatically.js"
+      ]
     }
   ]
 }
