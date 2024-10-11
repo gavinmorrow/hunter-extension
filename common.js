@@ -14,11 +14,15 @@ const dbg = (a) => {
  */
 const memo = (fn) => {
   let cache = null;
-  return async () => {
-    if (cache != null) return cache;
-    cache = await fn();
-    return cache;
-  };
+  const updateCache = (c) => (cache = c);
+  return [
+    async () => {
+      if (cache != null) return cache;
+      cache = await fn();
+      return cache;
+    },
+    updateCache,
+  ];
 };
 
 /**
@@ -142,14 +146,18 @@ const tabState = async (data) => {
  * @property {boolean} assignmentCenter.filter.autoNotCompleted
  */
 
-/** Set or get user settings. */
-const settings = memo(
+/** Get user settings. */
+const [settings, updateSettingsCache] = memo(
   /** @returns {Promise<Settings>} */
   async () =>
     browser.runtime.sendMessage({
       type: "settings.get",
     }),
 );
+
+/** Do a partial update of settings (only send what needs to be changed). */
+const updateSettings = async (partial) =>
+  browser.runtime.sendMessage({ type: "settings.update", data: partial });
 
 /**
  * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.

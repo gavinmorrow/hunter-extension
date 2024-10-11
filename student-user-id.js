@@ -37,7 +37,7 @@ const parseProfileLinkHref = (href) => {
 };
 
 /** Scrape the page for the student user id. */
-const getStudentUserId = memo(
+const [getStudentUserId, _updateStudentUserIdCache] = memo(
   /** @returns {Promise<string?>} The student user id, or null. */
   async () => inProfileSubnav(findProfileHref).then(parseProfileLinkHref),
 );

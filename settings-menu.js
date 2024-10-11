@@ -114,6 +114,23 @@ class SettingsMenu extends HTMLElement {
         const input = document.createElement("input");
         input.name = this.#idForPath(newPath);
         input.type = value?.type ?? "checkbox"; // default to bool
+        input.addEventListener("change", (e) => {
+          const newValue =
+            input.type === "checkbox" ? input.checked : input.value;
+          const partial = this.#constructFromPath(newPath, newValue);
+          updateSettings(partial).then(
+            (newSettings) => {
+              updateSettingsCache(newSettings);
+              this.#hydrateModal();
+              alert("Settings updated. Refresh the page.");
+              // FIXME: rest of the page doesn't dynamically update w/ settings change
+            },
+            (err) => {
+              alert("Error updating settings:", err);
+              console.error("Error updating settings:", err);
+            },
+          );
+        });
 
         label.append(nameElem, descElem, input);
         return label;
@@ -182,6 +199,15 @@ class SettingsMenu extends HTMLElement {
       o = o[segment];
     }
     return o;
+  }
+
+  /** @param {String[]} path */
+  #constructFromPath(path, value) {
+    if (path.length === 0) return value;
+
+    const outer = {};
+    outer[path[0]] = this.#constructFromPath(path.slice(1), value);
+    return outer;
   }
 
   #idForPath(path) {

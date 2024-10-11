@@ -92,11 +92,31 @@ const defaultSettings = {
   },
 };
 
+/** @param {Object} a @param {Object} b */
+const meshObjects = (a = {}, b = {}) => {
+  const o = structuredClone(a);
+  for (const p in b) {
+    if (Object.hasOwn(o, p) && typeof o[p] === "object")
+      o[p] = meshObjects(o[p], b[p]);
+    else o[p] = b[p];
+  }
+  console.log({ a, b, o });
+  return o;
+};
+
 const getSettings = async () =>
-  (await browser.storage.local.get({ settings: defaultSettings })).settings;
+  meshObjects(defaultSettings, (await browser.storage.local.get()).settings);
 
 const setSettings = async (newValue) =>
-  browser.storage.local.set({ settings: { ...newValue, ...defaultSettings } });
+  browser.storage.local.set({
+    settings: newValue,
+  });
+
+const updateSettings = async (partial) =>
+  browser.storage.local.get().then(({ settings: current }) => {
+    console.log({ current, partial });
+    setSettings(meshObjects(current, partial));
+  });
 
 const resetSettings = async () => setSettings({});
 
@@ -106,6 +126,9 @@ const settingsListener = async (msg, sender) => {
       return getSettings();
     case "settings.set":
       await setSettings(msg.data);
+      return getSettings();
+    case "settings.update":
+      await updateSettings(msg.data);
       return getSettings();
     case "settings.reset":
       await resetSettings();
