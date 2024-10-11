@@ -58,16 +58,17 @@ const defaultSettings = {
     },
   },
   assignmentCenter: {
+    enabled: true,
     customUi: {
       enabled: true,
       statusColors: {
         // "To do": "oklch(42% 0.07 86)" /* yellow */,
-        "To do": "oklch(42% 0.17 214)" /* blue */,
-        "In progress": "oklch(42% 0.17 214)" /* blue */,
-        Completed: "oklch(42% 0.17 146)" /* grey */,
-        Graded: "oklch(42% 0.17 146)" /* green */,
-        Missing: "oklch(42% 0.17 0)" /* red */,
-        Overdue: "oklch(42% 0.17 0)" /* red */,
+        toDo: "oklch(42% 0.17 214)" /* blue */,
+        inProgress: "oklch(42% 0.17 214)" /* blue */,
+        completed: "oklch(42% 0.17 146)" /* grey */,
+        graded: "oklch(42% 0.17 146)" /* green */,
+        missing: "oklch(42% 0.17 0)" /* red */,
+        overdue: "oklch(42% 0.17 0)" /* red */,
       },
     },
     calendar: {

@@ -113,7 +113,18 @@ class AssignmentBox extends HTMLElement {
   }
 
   #assignmentStatusColor() {
-    const status = this.assignment.status;
+    /** @param {Status} status */
+    const camelCaseStatus = (status) => {
+      switch (status) {
+        case "To do":
+          return "toDo";
+        case "In progress":
+          return "inProgress";
+        default:
+          return status.toLowerCase();
+      }
+    };
+    const status = camelCaseStatus(this.assignment.status);
     const colors = this.settings.assignmentCenter.customUi.statusColors;
 
     return colors[status] ?? "oklch(from var(--color-bg-box) calc(l*150%) c h)";

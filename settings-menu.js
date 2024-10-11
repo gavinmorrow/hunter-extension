@@ -33,7 +33,6 @@ const settingsOptions = {
               overdue: { type: "text", desc: "" },
               missing: { type: "text", desc: "" },
               toDo: { type: "text", desc: "" },
-              // FIXME: it needs to be "In progress", not "In Progress"
               inProgress: { type: "text", desc: "" },
               completed: { type: "text", desc: "" },
               graded: { type: "text", desc: "" },
@@ -83,6 +82,10 @@ class SettingsMenu extends HTMLElement {
   }
   async connectedCallback() {
     this.#hydrateStyles();
+
+    // It's okay to leave the Promise hanging here, bc we don't need its
+    // result. We're just doing it for the side effects.
+    this.#hydrateModal();
   }
 
   #createModalElements() {
@@ -92,13 +95,12 @@ class SettingsMenu extends HTMLElement {
 
     /** @param {String[]} path @param {[String, String|Object]} _ */
     const createOptionElem = (path, [name, value]) => {
-      const newPath = path.concat([name]);
+      const newPath = path.concat(name);
       const readableName = toTitleCase(name);
       const description = value.desc ?? value;
 
       if (typeof value === "string" || typeof value?.type === "string") {
         // final version, don't recurse
-
         const label = document.createElement("label");
 
         const nameElem = document.createElement("span");
@@ -110,13 +112,14 @@ class SettingsMenu extends HTMLElement {
         descElem.textContent = description;
 
         const input = document.createElement("input");
-        input.name = newPath.join(".");
+        input.name = this.#idForPath(newPath);
         input.type = value?.type ?? "checkbox"; // default to bool
 
         label.append(nameElem, descElem, input);
         return label;
       } else {
         const fieldset = document.createElement("fieldset");
+        fieldset.id = this.#idForPath(newPath);
 
         const legend = document.createElement("legend");
         legend.textContent = readableName;
@@ -137,7 +140,35 @@ class SettingsMenu extends HTMLElement {
     // <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#description>
     return Object.entries(settingsOptions).map(createOptionElem.bind(this, []));
   }
-  #hydrateModal(settings) {}
+  async #hydrateModal() {
+    /** @param {String[]} path @param {[String, String|Object]} _ */
+    const hydrate = async (path, [name, value]) => {
+      const fullPath = path.concat(name);
+
+      if (typeof value === "string" || typeof value?.type === "string") {
+        // final value, there should be an input for this
+        const settingValue = await this.#getValueFromPath(fullPath);
+
+        /** @type {HTMLInputElement} */
+        const elem = this.shadowRoot.querySelector(
+          `input[name="${this.#idForPath(fullPath)}"]`,
+        );
+
+        if (elem.type === "checkbox") {
+          if (settingValue === true) elem.checked = true;
+          else elem.checked = false;
+        } else elem.value = settingValue;
+      } else {
+        // a subcategory, recurse further
+        const subPaths = value.type ?? value;
+        return Object.entries(subPaths).forEach(hydrate.bind(this, fullPath));
+      }
+    };
+
+    return await Promise.all(
+      Object.entries(settingsOptions).map(hydrate.bind(this, [])),
+    );
+  }
 
   #hydrateStyles() {
     this.shadowRoot.querySelector("style").textContent = this.#getStylesheet();
@@ -151,6 +182,10 @@ class SettingsMenu extends HTMLElement {
       o = o[segment];
     }
     return o;
+  }
+
+  #idForPath(path) {
+    return path.join(".");
   }
 
   #getStylesheet() {
