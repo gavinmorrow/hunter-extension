@@ -95,7 +95,12 @@ class AssignmentPopup extends HTMLElement {
       case "In progress":
         return "Completed";
       case "Completed":
-        return "To do";
+        if (
+          Calendar.resetDate(this.assignment.details.dueDate).getTime() <
+          Calendar.resetDate(new Date()).getTime()
+        )
+          return dbg("Overdue");
+        else return "To do";
       default:
         return null;
     }

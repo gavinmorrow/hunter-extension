@@ -207,8 +207,8 @@ const fetchAssignment = async (assignmentIndexId, studentUserId) =>
 
 const updateAssignmentStatus = async (assignmentIndexId, status) => {
   const statusNumMap = {
-    Missing: -1,
-    Overdue: -1,
+    Missing: 2,
+    Overdue: 2,
     "To do": -1,
     "In progress": 0, // just mark it same as todo
     Completed: 1,
