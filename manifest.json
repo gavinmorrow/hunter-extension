@@ -29,6 +29,7 @@
         "common.js",
         "Calendar.util.js",
         "student-user-id.js",
+        "notify-update.js",
         "settings-menu.js",
         "assignment-center/AssignmentPopup.js",
         "assignment-center/AssignmentBox.js",
