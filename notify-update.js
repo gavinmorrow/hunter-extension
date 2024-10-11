@@ -2,7 +2,9 @@ const VERSION = "0.1.0";
 
 /** @returns {Promise<number>} */
 const getLatestVersion = async () =>
-  fetch("https://gavinmorrow.github.io/hunter-extension/versions.json")
+  fetch("https://gavinmorrow.github.io/hunter-extension/versions.json", {
+    cache: "no-cache",
+  })
     .then((r) => r.json())
     .then((versions) => versions.latest)
     .catch((err) => {
