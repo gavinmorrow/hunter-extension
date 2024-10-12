@@ -40,8 +40,6 @@ use Safari (like me), send me an email and I'll prioritize it!
 
 Click [here][firefox] to install. (You should use firefox!!)
 
----
-
 ## Permissions
 
 - It will ask for permissions on `hunterschools.myschoolapp.com`,
@@ -52,5 +50,10 @@ Click [here][firefox] to install. (You should use firefox!!)
   - accounts.google: This is a domain used by Google to log you in. If you
     don't use the autologin feature, you can safely disable this.
 
+---
+
+The source code for [this project][github] is available on github!
+
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
 [firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.4.xpi
+[github]: https://github.com/gavinmorrow/hunter-extension/
