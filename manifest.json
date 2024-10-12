@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "extension-test",
-  "version": "0.1.3",
+  "name": "hunter-extension",
+  "version": "0.1.4",
 
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
