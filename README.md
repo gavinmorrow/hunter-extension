@@ -30,4 +30,4 @@ support it and I'll do my best.
 Click [here][firefox] to install. (You should use firefox!!)
 
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
-[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/hunter-extension.xpi
+[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.3.xpi

@@ -1,6 +1,6 @@
 {
   "addons": {
-    "{}": {
+    "{a58d637c-b5fb-4549-a2f6-ae76b6dd6672}": {
       "version": "0.1.3",
       "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/hunter-extension.xpi",
       "applications": {

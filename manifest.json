@@ -58,6 +58,7 @@
 
   "browser_specific_settings": {
     "gecko": {
+      "id": "{a58d637c-b5fb-4549-a2f6-ae76b6dd6672}",
       "update_url": "https://gavinmorrow.github.io/hunter-extension/updates.json"
     }
   }
