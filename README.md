@@ -4,6 +4,8 @@ This project aims to fix as much of the Hunter website as possible. To report
 problems or request a feature, please email gavinmorrow (at) hunterschools
 (dot) org.
 
+## Features
+
 ---
 
 ## Installation
@@ -28,6 +30,18 @@ support it and I'll do my best.
 ### Firefox
 
 Click [here][firefox] to install. (You should use firefox!!)
+
+---
+
+## Permissions
+
+- It will ask for permissions on `hunterschools.myschoolapp.com`,
+  `app.blackbaud.com`, and `accounts.google.com`.
+  - hunterschools: This is the Hunter website.
+  - app.blackbaud: This is a domain used by Blackbaud to log you in. If you
+    don't use the autologin feature, you can safely disable this.
+  - accounts.google: This is a domain used by Google to log you in. If you
+    don't use the autologin feature, you can safely disable this.
 
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
 [firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.4.xpi
