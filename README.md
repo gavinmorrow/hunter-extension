@@ -16,7 +16,11 @@ problems or request a feature, please email gavinmorrow (at) hunterschools
 ## Installation
 
 If your browser of choice is not supported yet, send me a feature request to
-support it and I'll do my best.
+support it and I'll do my best. Please note that at the moment, this is only
+available for desktop (not mobile).
+
+Safari is also not supported at the moment, although I'm working on it. If you
+use Safari (like me), send me an email and I'll prioritize it!
 
 ### Chrome
 
