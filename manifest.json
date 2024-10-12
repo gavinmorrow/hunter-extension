@@ -25,8 +25,8 @@
         "https://hunterschools.myschoolapp.com/lms-assignment/assignment-center/*"
       ],
       "js": [
-        "browser-polyfill.min.js",
-        "custom-elements.min.js",
+        "polyfill/browser-polyfill/browser-polyfill.min.js",
+        "polyfill/custom-elements/custom-elements.min.js",
         "common.js",
         "Calendar.util.js",
         "student-user-id.js",
@@ -48,8 +48,8 @@
         "https://accounts.google.com/signin/oauth/*"
       ],
       "js": [
-        "browser-polyfill.min.js",
-        "custom-elements.min.js",
+        "polyfill/browser-polyfill/browser-polyfill.min.js",
+        "polyfill/custom-elements/custom-elements.min.js",
         "common.js",
         "login-automatically.js"
       ]
