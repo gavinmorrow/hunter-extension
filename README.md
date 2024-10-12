@@ -55,5 +55,5 @@ Click [here][firefox] to install. (You should use firefox!!)
 The source code for [this project][github] is available on github!
 
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
-[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.4.xpi
+[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.4/65a14653bc7c4e6ab617-0.1.4.xpi
 [github]: https://github.com/gavinmorrow/hunter-extension/
