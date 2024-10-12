@@ -235,5 +235,11 @@ if (!customElements.get("settings-menu")) {
 
 promiseError(async () => {
   await waitForElem("#site-logo");
-  document.body.appendChild(new SettingsMenu());
+
+  // this wrapper is needed bc otherwise the framework blackbaud is using
+  // throws a fit about not being able to access the attributes of
+  // <settings-menu /> (ie throws an error and breaks page functionality).
+  const wrapper = document.createElement("div");
+  wrapper.appendChild(new SettingsMenu());
+  document.body.appendChild(wrapper);
 })();
