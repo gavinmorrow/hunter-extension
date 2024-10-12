@@ -392,6 +392,7 @@ main {
 
     & .calendar-date {
       background-color: oklch(from var(--color-bg-box) calc(l*120%) c h);
+      padding: 0 0.25em;
     }
 
     & ul {
