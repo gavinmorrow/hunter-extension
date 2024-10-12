@@ -1,8 +1,8 @@
 # Hunter Extension
 
-This project aims to fix as much of the Hunter website as possible. To report
-problems or request a feature, please email gavinmorrow (at) hunterschools
-(dot) org.
+This project aims to fix as much of the Hunter website as possible. It does this
+through a browser extension. To report problems or request a feature, please
+email gavinmorrow (at) hunterschools (dot) org.
 
 ## Features
 
