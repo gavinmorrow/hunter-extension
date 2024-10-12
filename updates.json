@@ -1,0 +1,11 @@
+{
+  "addons": {
+    "{}": {
+      "version": "0.1.3",
+      "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/hunter-extension.xpi",
+      "applications": {
+        "gecko": { "strict_min_version": "117" }
+      }
+    }
+  }
+}

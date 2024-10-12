@@ -54,5 +54,11 @@
         "login-automatically.js"
       ]
     }
-  ]
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "update_url": "https://gavinmorrow.github.io/hunter-extension/updates.json"
+    }
+  }
 }
