@@ -6,7 +6,12 @@ problems or request a feature, please email gavinmorrow (at) hunterschools
 
 ## Features
 
----
+- **Custom UI**: Make an actually good assignment center calendar view!!
+- **Login automatically**: Automatically press the various "next" buttons when
+  you want to log in.
+- Automatically deselect "Completed", so you don't need to manually do it (only
+  activated when the custom ui is not active).
+- Other miscellaneous bug and styling fixes.
 
 ## Installation
 
