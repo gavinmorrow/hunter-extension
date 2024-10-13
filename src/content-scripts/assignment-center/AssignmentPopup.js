@@ -96,7 +96,7 @@ class AssignmentPopup extends HTMLElement {
         return "Completed";
       case "Completed":
         if (
-          Calendar.resetDate(this.assignment.details.dueDate).getTime() <
+          Calendar.resetDate(this.assignment.dueDate).getTime() <
           Calendar.resetDate(new Date()).getTime()
         )
           return "Overdue";

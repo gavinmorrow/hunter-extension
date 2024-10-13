@@ -5,24 +5,19 @@
  */
 
 /**
- * @typedef {Object} AssignmentDetails
- * @property {Date} dueDate
- * @property {Date} assignedDate
- * @property {Number?} maxPoints
- * @property {{ name: String, link: Link }?} class
- * @property {String} type
- * @property {boolean} isTask
- */
-
-/**
  * @typedef {Object} Assignment
  * @property {Number} assignmentIndexId
  * @property {Color} color
  * @property {String} title
  * @property {Link} link
  * @property {String?} description an innerHTML string.
- * @property {AssignmentDetails} details
  * @property {Status} status
+ * @property {Date} dueDate
+ * @property {Date} assignedDate
+ * @property {Number?} maxPoints
+ * @property {{ name: String, link: Link }?} class
+ * @property {String} type
+ * @property {boolean} isTask
  */
 
 class AssignmentCenter extends HTMLElement {
@@ -173,12 +168,12 @@ class AssignmentCenter extends HTMLElement {
 
       // get assignments for current day
       const assignments = this.assignments
-        .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
+        .filter((a) => Calendar.datesAreSameDay(a.dueDate, date))
         .sort((a, b) => {
           if (a.status === b.status) {
             // sort by type
-            const aMajor = a.details.type.indexOf("Major") > -1;
-            const bMajor = b.details.type.indexOf("Major") > -1;
+            const aMajor = a.type.indexOf("Major") > -1;
+            const bMajor = b.type.indexOf("Major") > -1;
             if (aMajor && !bMajor) return -1;
             if (aMajor && bMajor) return 0;
             if (!aMajor && bMajor) return 1;
@@ -333,7 +328,7 @@ class AssignmentCenter extends HTMLElement {
       // check if assignments exist on date
       const assignmentsExistOnDate =
         this.assignments.filter((a) =>
-          Calendar.datesAreSameDay(a.details.dueDate, date),
+          Calendar.datesAreSameDay(a.dueDate, date),
         ).length > 0;
       if (assignmentsExistOnDate) return date;
     }

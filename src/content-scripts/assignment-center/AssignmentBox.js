@@ -135,7 +135,7 @@ class AssignmentBox extends HTMLElement {
   }
 
   #isMajor() {
-    return this.assignment.details.type.indexOf("Major") > -1;
+    return this.assignment.type.indexOf("Major") > -1;
   }
 
   #shouldPopupLeft() {

@@ -99,8 +99,8 @@ const parseAssignmentElem = (elem) => {
     color,
     title,
     link,
-    details,
     status,
+    ...details,
   };
 };
 
@@ -161,6 +161,6 @@ const scrapeAssignments = (time) =>
       Array.from(assignments).map(parseAssignmentElem),
     ).toSorted(
       /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
-        a.details.dueDate - b.details.dueDate,
+        a.dueDate - b.dueDate,
     );
   });
