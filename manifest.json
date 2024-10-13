@@ -14,8 +14,8 @@
   "permissions": ["storage"],
 
   "background": {
-    "scripts": ["src/background.js"],
-    "service_worker": "src/service-worker.js",
+    "scripts": ["src/background-scripts/background.js"],
+    "service_worker": "src/background-scripts/service-worker.js",
     "type": "module"
   },
 
@@ -27,16 +27,16 @@
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
-        "src/common.js",
-        "src/Calendar.util.js",
-        "src/student-user-id.js",
-        "src/notify-update.js",
-        "src/settings-menu.js",
-        "src/assignment-center/AssignmentPopup.js",
-        "src/assignment-center/AssignmentBox.js",
-        "src/assignment-center/AssignmentCenter.js",
-        "src/assignment-center/scrape-assignments.js",
-        "src/assignment-center/assignment-center.js"
+        "src/content-scripts/common.js",
+        "src/util/Calendar.util.js",
+        "src/content-scripts/student-user-id.js",
+        "src/content-scripts/notify-update.js",
+        "src/content-scripts/settings-menu.js",
+        "src/content-scripts/assignment-center/AssignmentPopup.js",
+        "src/content-scripts/assignment-center/AssignmentBox.js",
+        "src/content-scripts/assignment-center/AssignmentCenter.js",
+        "src/content-scripts/assignment-center/scrape-assignments.js",
+        "src/content-scripts/assignment-center/assignment-center.js"
       ]
     },
     {
@@ -50,8 +50,8 @@
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
-        "src/common.js",
-        "src/login-automatically.js"
+        "src/content-scripts/common.js",
+        "src/content-scripts/login-automatically.js"
       ]
     }
   ],
