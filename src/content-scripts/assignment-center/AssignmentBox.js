@@ -139,8 +139,8 @@ class AssignmentBox extends HTMLElement {
   }
 
   #shouldPopupLeft() {
-    const rightEdge = this.getBoundingClientRect().right;
-    const percentToEdge = rightEdge / window.innerWidth;
+    const leftEdge = this.getBoundingClientRect().left;
+    const percentToEdge = leftEdge / window.innerWidth;
     return percentToEdge > 0.5;
   }
 
