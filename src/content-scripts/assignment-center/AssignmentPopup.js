@@ -99,7 +99,7 @@ class AssignmentPopup extends HTMLElement {
           Calendar.resetDate(this.assignment.details.dueDate).getTime() <
           Calendar.resetDate(new Date()).getTime()
         )
-          return dbg("Overdue");
+          return "Overdue";
         else return "To do";
       default:
         return null;
