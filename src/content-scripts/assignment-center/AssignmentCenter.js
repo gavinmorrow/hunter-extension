@@ -183,12 +183,13 @@ class AssignmentCenter extends HTMLElement {
         .map((assignment) => {
           // Eventually the description will be updated, just not immediately
           //  since we can't wait that long.
-          AssignmentCenter.#getAssignmentDescription(assignment).then(
-            (description) =>
-              this.#updateAssignment(assignment.assignmentIndexId, {
-                description,
-              }),
-          );
+          AssignmentCenter.#getBlackbaudReprFor(assignment)
+            .then((blackbaudRepr) => ({
+              description: blackbaudRepr?.LongDescription,
+            }))
+            .then((changes) =>
+              this.#updateAssignment(assignment.assignmentIndexId, changes),
+            );
           return assignment;
         });
 
@@ -291,20 +292,18 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /** @param {Assignment} assignment */
-  static async #getAssignmentDescription(assignment) {
-    if (assignment.description != null) return assignment.description;
+  static async #getBlackbaudReprFor(assignment) {
     if (assignment.link == "javascript:void(0)") {
       // TODO: Custom Task support
       console.warn(
-        "Tried to get description for custom task. Custom tasks are not yet supported.",
+        "Tried to get Blackbaud representation for custom task. Custom tasks are not yet supported.",
       );
       return undefined;
     }
 
     const studentUserId = await getStudentUserId();
     const assignmentIndexId = assignment.assignmentIndexId;
-    const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
-    return fullDetails.LongDescription;
+    return fetchAssignment(assignmentIndexId, studentUserId);
   }
 
   /**
