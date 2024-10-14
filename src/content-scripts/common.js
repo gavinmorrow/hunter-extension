@@ -251,4 +251,16 @@ const updateAssignmentStatus = async (assignmentIndexId, status) => {
   );
 };
 
+/**
+ * Make the given element have the given class if *and only if* `predicate` is truthy.
+ * @param {HTMLElement} elem
+ * @param {String} className
+ * @param {boolean} predicate
+ */
+// Not really a predicate, but imo it's close enough.
+const conditionalClass = (elem, className, predicate) => {
+  if (predicate) elem.classList.add(className);
+  else elem.classList.remove(className);
+};
+
 console.log("Ready!");

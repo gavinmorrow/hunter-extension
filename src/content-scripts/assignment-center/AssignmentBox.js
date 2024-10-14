@@ -75,14 +75,9 @@ class AssignmentBox extends HTMLElement {
     // add classes for majors and completed assignments
     const root = this.shadowRoot.getElementById("root");
 
-    if (this.#isMajor()) root.classList.add("type-major");
-    else root.classList.remove("type-major");
-
-    if (this.#shouldCollapse()) root.classList.add("collapse");
-    else root.classList.remove("collapse");
-
-    if (this.#shouldPopupLeft()) root.parentElement.classList.add("popup-left");
-    else root.parentElement.classList.remove("popup-left");
+    conditionalClass(root, "type-major", this.#isMajor());
+    conditionalClass(root, "collapse", this.#shouldCollapse());
+    conditionalClass(root, "popup-left", this.#shouldPopupLeft());
 
     const style = this.shadowRoot.querySelector("style");
     style.textContent = this.#getStylesheet();

@@ -141,8 +141,7 @@ class AssignmentCenter extends HTMLElement {
       );
 
       // add today class
-      if (this.#dateIsSelected(date)) list.parentElement.classList.add("today");
-      else list.parentElement.classList.remove("today");
+      conditionalClass(list.parentElement, "today", this.#dateIsSelected(date));
 
       // get assignments for current day
       const assignments = this.assignments
