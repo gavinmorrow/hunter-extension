@@ -75,14 +75,10 @@ class AssignmentBox extends HTMLElement {
     // add classes for majors and completed assignments
     const root = this.shadowRoot.getElementById("root");
 
-    if (this.#isMajor()) root.classList.add("type-major");
-    else root.classList.remove("type-major");
-
-    if (this.#shouldCollapse()) root.classList.add("collapse");
-    else root.classList.remove("collapse");
-
-    if (this.#shouldPopupLeft()) root.parentElement.classList.add("popup-left");
-    else root.parentElement.classList.remove("popup-left");
+    conditionalClass(root, "type-major", this.#isMajor());
+    conditionalClass(root, "requires-submission", this.#requiresSubmission());
+    conditionalClass(root, "collapse", this.#shouldCollapse());
+    conditionalClass(root, "popup-left", this.#shouldPopupLeft());
 
     const style = this.shadowRoot.querySelector("style");
     style.textContent = this.#getStylesheet();
@@ -131,11 +127,15 @@ class AssignmentBox extends HTMLElement {
   }
 
   #shouldCollapse() {
-    return this.assignment.status === "Completed";
+    return Assignment.isCompleted(this.assignment);
   }
 
   #isMajor() {
-    return this.assignment.details.type.indexOf("Major") > -1;
+    return Assignment.isMajor(this.assignment);
+  }
+
+  #requiresSubmission() {
+    return Assignment.requiresSubmission(this.assignment);
   }
 
   #shouldPopupLeft() {
@@ -150,10 +150,11 @@ article {
   position: relative;
 
   --base-padding: 0.25em;
+  --width-class-color-base: 0.5em;
   --width-class-color: 0.5em;
 
-  --border-width: 2px;
-  --inner-border-width: calc(var(--border-radius) - 2px);
+  --border-width: 0.15em;
+  --inner-border-width: calc(var(--border-radius) - var(--border-width));
   --border-radius: var(--base-padding);
 
   &>div {
@@ -166,9 +167,7 @@ article {
     padding-right: calc(var(--base-padding) + var(--width-class-color));
 
     border-radius: var(--border-radius);
-
-    /* Thanks to <https://css-tricks.com/restricting-a-pseudo-element-to-its-parents-border-box/> */
-    clip-path: inset(0 round 0.25em);
+    --border-radius-class-color: var(--border-radius);
 
     &::before, &::after {
       content: "";
@@ -178,11 +177,15 @@ article {
       bottom: 0;
       width: var(--width-class-color);
     }
-    &::before { left: 0; border-radius: var(--inner-border-width) 0 0 var(--inner-border-width); }
-    &::after { right: 0; border-radius: 0 var(--inner-border-width) var(--inner-border-width) 0; }
+    &::before { left: 0; border-radius: var(--border-radius-class-color) 0 0 var(--border-radius-class-color); }
+    &::after { right: 0; border-radius: 0 var(--border-radius-class-color) var(--border-radius-class-color) 0; }
 
-    &.type-major {
-      border: var(--border-width) solid yellow;
+    &.type-major          { --border-color: yellow; }
+    &.requires-submission { --border-color: oklch(78% 0.17 214); }
+    &.type-major, &.requires-submission {
+      --border-radius-class-color: var(--inner-border-width);
+      --width-class-color: calc(var(--width-class-color-base) - var(--border-width));
+      border: var(--border-width) solid var(--border-color);
     }
 
     &.collapse #title {

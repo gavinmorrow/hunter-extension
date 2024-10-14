@@ -191,8 +191,27 @@ const promiseError = (fn) => async () => {
  * @typedef {Object} BlackbaudAssignment
  * @property {String} LongDescription
  *
- * // lots of other things too but i'm too lazy to list them, add more as needed
- */
+ * @property {1} LtiProviderId Seemingly the id of an external assignment submission(?) service. Unclear why it is always 1.
+ * @property {""|"Turnitin (HS Only)"} LtiProviderName The name for an external assignment submission(?) service.
+ * @property {boolean} DropboxInd Whether or not the Blackbaud file submission is used.
+ * @property {number} DropboxNumFiles The maximum number of files that can be submitted through Blackbaud Dropbox.
+ * @property {BlackbaudSubmissionResult[]} SubmissionResults The files that the user has submitted through Blackbaud Dropbox.
+ *
+ * @property {BlackbaudDownloadItem[]} DownloadItems
+ */ // lots of other things too but i'm too lazy to list them, add more as needed
+/**
+ * @typedef {Object} BlackbaudDownloadItem
+ * @property {String} DownloadUrl The URL of the file. An absolute link for `https://hunterschools.myschoolapp.com/`.
+ * @property {boolean} Expired (Maybe) Whether or not the file is still availble for download??
+ * @property {String} FileName The raw file name as stored on the server.
+ * @property {String} FriendlyFileName A file name intended for viewing by a user. Unclear why both it and `ShortDescription` exist. Prefer `ShortDescription` in most cases.
+ * @property {String} ShortDescription The title of the file to display to the user.
+ */ // lots of other things too but i'm too lazy to list them, add more as needed
+/**
+ * @typedef {Object} BlackbaudSubmissionResult
+ * @property {String} DownloadUrl The URL of the file. An absolute link for `https://hunterschools.myschoolapp.com/`.
+ * @property {String} FileName The file name as submitted by the user.
+ */ // lots of other things too but i'm too lazy to list them, add more as needed
 
 /**
  * Fetch an assignment from the Blackbaud API.
@@ -230,6 +249,18 @@ const updateAssignmentStatus = async (assignmentIndexId, status) => {
       }),
     },
   );
+};
+
+/**
+ * Make the given element have the given class if *and only if* `predicate` is truthy.
+ * @param {HTMLElement} elem
+ * @param {String} className
+ * @param {boolean} predicate
+ */
+// Not really a predicate, but imo it's close enough.
+const conditionalClass = (elem, className, predicate) => {
+  if (predicate) elem.classList.add(className);
+  else elem.classList.remove(className);
 };
 
 console.log("Ready!");

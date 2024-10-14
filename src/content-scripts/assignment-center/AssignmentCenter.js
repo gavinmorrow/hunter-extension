@@ -1,30 +1,3 @@
-/**
- * @typedef {String} Color Either a CSS color in `rgb(<r>,<g>,<b>)` format, or the empty string `""`.
- * @typedef {String} Link
- * @typedef {"To do"|"In progress"|"Completed"|"Graded"|"Missing"|"Overdue"} Status
- */
-
-/**
- * @typedef {Object} AssignmentDetails
- * @property {Date} dueDate
- * @property {Date} assignedDate
- * @property {Number?} maxPoints
- * @property {{ name: String, link: Link }?} class
- * @property {String} type
- * @property {boolean} isTask
- */
-
-/**
- * @typedef {Object} Assignment
- * @property {Number} assignmentIndexId
- * @property {Color} color
- * @property {String} title
- * @property {Link} link
- * @property {String?} description an innerHTML string.
- * @property {AssignmentDetails} details
- * @property {Status} status
- */
-
 class AssignmentCenter extends HTMLElement {
   /**
    * The original Blackbaud assignment center. (An `app-student-assignment-center`.)
@@ -168,33 +141,20 @@ class AssignmentCenter extends HTMLElement {
       );
 
       // add today class
-      if (this.#dateIsSelected(date)) list.parentElement.classList.add("today");
-      else list.parentElement.classList.remove("today");
+      conditionalClass(list.parentElement, "today", this.#dateIsSelected(date));
 
       // get assignments for current day
       const assignments = this.assignments
-        .filter((a) => Calendar.datesAreSameDay(a.details.dueDate, date))
-        .sort((a, b) => {
-          if (a.status === b.status) {
-            // sort by type
-            const aMajor = a.details.type.indexOf("Major") > -1;
-            const bMajor = b.details.type.indexOf("Major") > -1;
-            if (aMajor && !bMajor) return -1;
-            if (aMajor && bMajor) return 0;
-            if (!aMajor && bMajor) return 1;
-          }
-          return AssignmentCenter.#sortStatuses(a.status, b.status);
-        })
-        .map((assignment) => {
+        .filter((a) => Calendar.datesAreSameDay(a.dueDate, date))
+        .sort(Assignment.sort)
+        .map((a) => {
           // Eventually the description will be updated, just not immediately
-          //  since we can't wait that long.
-          AssignmentCenter.#getAssignmentDescription(assignment).then(
-            (description) =>
-              this.#updateAssignment(assignment.assignmentIndexId, {
-                description,
-              }),
-          );
-          return assignment;
+          // since we can't wait that long.
+          // Intentionally not await-ing the Promise.
+          Assignment.getBlackbaudReprFor(a)
+            .then(Assignment.parseBlackbaudRepr)
+            .then(this.#updateAssignment.bind(this, a.assignmentIndexId));
+          return a;
         });
 
       // add new assignment elements
@@ -278,41 +238,6 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /**
-   * @param {Status} a
-   * @param {Status} b
-   * @returns {-1|0|1}
-   */
-  static #sortStatuses(a, b) {
-    // TODO: treat "To do" and "In progress" as equal?
-    const order = [
-      "Missing",
-      "Overdue",
-      "To do",
-      "In progress",
-      "Completed",
-      "Graded",
-    ];
-    return order.indexOf(a) - order.indexOf(b);
-  }
-
-  /** @param {Assignment} assignment */
-  static async #getAssignmentDescription(assignment) {
-    if (assignment.description != null) return assignment.description;
-    if (assignment.link == "javascript:void(0)") {
-      // TODO: Custom Task support
-      console.warn(
-        "Tried to get description for custom task. Custom tasks are not yet supported.",
-      );
-      return undefined;
-    }
-
-    const studentUserId = await getStudentUserId();
-    const assignmentIndexId = assignment.assignmentIndexId;
-    const fullDetails = await fetchAssignment(assignmentIndexId, studentUserId);
-    return fullDetails.LongDescription;
-  }
-
-  /**
    * Check if the date given is the one to be highlighted in the calendar.
    * @param {Date} date
    */
@@ -333,7 +258,7 @@ class AssignmentCenter extends HTMLElement {
       // check if assignments exist on date
       const assignmentsExistOnDate =
         this.assignments.filter((a) =>
-          Calendar.datesAreSameDay(a.details.dueDate, date),
+          Calendar.datesAreSameDay(a.dueDate, date),
         ).length > 0;
       if (assignmentsExistOnDate) return date;
     }
