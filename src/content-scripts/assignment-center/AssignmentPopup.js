@@ -29,10 +29,7 @@ class AssignmentPopup extends HTMLElement {
     // assignment status
     const statusBtn = document.createElement("button");
     statusBtn.id = "status-btn";
-    statusBtn.addEventListener("click", (e) => {
-      this.#setAssignment({ status: this.#nextStatus() });
-      statusBtn.blur();
-    });
+    statusBtn.addEventListener("click", this.#handleChangeStatus.bind(this));
     root.appendChild(statusBtn);
 
     // assignment title
@@ -54,9 +51,23 @@ class AssignmentPopup extends HTMLElement {
 
   #hydrateStatus() {
     const statusBtn = this.shadowRoot.getElementById("status-btn");
-    statusBtn.textContent = "Mark as ";
-    if (this.#nextStatus() == null) statusBtn.hidden = true;
-    else statusBtn.textContent += this.#nextStatus();
+    if (this.assignment.isTask) {
+      statusBtn.hidden = true;
+    } else if (Assignment.requiresSubmission(this.assignment)) {
+      let txt = "Submit";
+      switch (this.assignment.submissionMethod) {
+        case "turnitin":
+          txt += " on Turnitin"; // fallthrough
+        case "unknownLti": // fallthrough
+        case null: // fallthrough
+        default:
+          statusBtn.textContent = txt;
+      }
+    } else {
+      statusBtn.textContent = "Mark as ";
+      if (this.#nextStatus() == null) statusBtn.hidden = true;
+      else statusBtn.textContent += this.#nextStatus();
+    }
   }
 
   #hydrateTitle() {
@@ -77,6 +88,18 @@ class AssignmentPopup extends HTMLElement {
     this.#hydrateStatus();
     this.#hydrateTitle();
     this.#hydrateDescription();
+  }
+
+  /** @param {Event} */
+  #handleChangeStatus(_e) {
+    if (this.assignment.isTask) {
+      alert("Custom tasks are not yet supported.");
+    } else if (Assignment.requiresSubmission(this.assignment)) {
+      window.location.assign(this.assignment.link);
+    } else {
+      this.#setAssignment({ status: this.#nextStatus() });
+      statusBtn.blur();
+    }
   }
 
   #getDesc() {
