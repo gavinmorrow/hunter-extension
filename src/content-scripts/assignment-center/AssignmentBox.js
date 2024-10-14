@@ -76,6 +76,7 @@ class AssignmentBox extends HTMLElement {
     const root = this.shadowRoot.getElementById("root");
 
     conditionalClass(root, "type-major", this.#isMajor());
+    conditionalClass(root, "requires-submission", this.#requiresSubmission());
     conditionalClass(root, "collapse", this.#shouldCollapse());
     conditionalClass(root, "popup-left", this.#shouldPopupLeft());
 
@@ -133,6 +134,10 @@ class AssignmentBox extends HTMLElement {
     return this.assignment.type.indexOf("Major") > -1;
   }
 
+  #requiresSubmission() {
+    return this.assignment.submissionMethod != null;
+  }
+
   #shouldPopupLeft() {
     const rightEdge = this.getBoundingClientRect().right;
     const percentToEdge = rightEdge / window.innerWidth;
@@ -178,6 +183,9 @@ article {
 
     &.type-major {
       border: var(--border-width) solid yellow;
+    }
+    &.requires-submission {
+      border: var(--border-width) solid oklch(78% 0.17 214);
     }
 
     &.collapse #title {
