@@ -24,6 +24,7 @@
 
 const Assignment = {
   /**
+   * Sort two assignments by status (ascending) and then by type (descending).
    * @param {Assignment} a
    * @param {Assignment} b
    * @returns {-1|0|1}
@@ -34,6 +35,8 @@ const Assignment = {
   },
 
   /**
+   * Sort statuses in ascending order.
+   * Missing < Overdue < To do < In progress < Completed < Graded
    * @param {Status} a
    * @param {Status} b
    * @returns {-1|0|1}
@@ -52,6 +55,8 @@ const Assignment = {
   },
 
   /**
+   * Sort assignment types in descending order. Majors are the greatest, and
+   * everything else is equal.
    * @param {String} a
    * @param {String} b
    * @returns {-1|0|1}
