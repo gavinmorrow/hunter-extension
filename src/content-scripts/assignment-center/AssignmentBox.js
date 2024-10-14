@@ -127,15 +127,15 @@ class AssignmentBox extends HTMLElement {
   }
 
   #shouldCollapse() {
-    return this.assignment.status === "Completed";
+    return Assignment.isCompleted(this.assignment);
   }
 
   #isMajor() {
-    return this.assignment.type.indexOf("Major") > -1;
+    return Assignment.isMajor(this.assignment);
   }
 
   #requiresSubmission() {
-    return this.assignment.submissionMethod != null;
+    return Assignment.requiresSubmission(this.assignment);
   }
 
   #shouldPopupLeft() {

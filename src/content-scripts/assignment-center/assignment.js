@@ -65,12 +65,9 @@ const Assignment = {
    * @returns {-1|0|1}
    */
   sortTypes(a, b) {
-    const aIsMajor = a.indexOf("Major") > -1;
-    const bIsMajor = b.indexOf("Major") > -1;
-
     // Sort in descending order
     // `true` is coerced to `1` and `false` is coerced to `0`
-    return bIsMajor - aIsMajor;
+    return Assignment.typeIsMajor(b) - Assignment.typeIsMajor(a);
   },
 
   /** @param {Assignment} assignment */
@@ -111,5 +108,25 @@ const Assignment = {
       console.warn(`Unknown LTI provider: ${ltiProvider}`);
       return "unknownLti";
     }
+  },
+
+  /** @param {Assignment} a */
+  isCompleted(a) {
+    return a.status === "Completed" || a.status === "Graded";
+  },
+
+  /** @param {String} type */
+  typeIsMajor(type) {
+    return type.indexOf("Major") > -1;
+  },
+
+  /** @param {Assignment} a */
+  isMajor(a) {
+    return Assignment.typeIsMajor(a.type);
+  },
+
+  /** @param {Assignment} a */
+  requiresSubmission(a) {
+    return a.submissionMethod != null;
   },
 };
