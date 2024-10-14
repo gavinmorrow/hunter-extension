@@ -78,7 +78,7 @@ class AssignmentBox extends HTMLElement {
     conditionalClass(root, "type-major", this.#isMajor());
     conditionalClass(root, "requires-submission", this.#requiresSubmission());
     conditionalClass(root, "collapse", this.#shouldCollapse());
-    conditionalClass(root, "popup-left", this.#shouldPopupLeft());
+    conditionalClass(root.parentElement, "popup-left", this.#shouldPopupLeft());
 
     const style = this.shadowRoot.querySelector("style");
     style.textContent = this.#getStylesheet();
