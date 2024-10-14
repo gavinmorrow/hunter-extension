@@ -293,7 +293,7 @@ class AssignmentCenter extends HTMLElement {
 
   /** @param {Assignment} assignment */
   static async #getBlackbaudReprFor(assignment) {
-    if (assignment.link == "javascript:void(0)") {
+    if (assignment.isTask) {
       // TODO: Custom Task support
       console.warn(
         "Tried to get Blackbaud representation for custom task. Custom tasks are not yet supported.",
