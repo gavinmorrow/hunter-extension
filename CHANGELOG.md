@@ -4,6 +4,8 @@
 
 _released 00 October 2024_
 
+- Features:
+  - Indicators when online submission is required (blue border + status button)
 - Bug Fixes:
   - Actually respect the `assignmentCenter.enabled` setting.
 - Styling Changes:
