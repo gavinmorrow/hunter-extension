@@ -29,14 +29,7 @@ const Assignment = {
    * @returns {-1|0|1}
    */
   sort(a, b) {
-    if (a.status === b.status) {
-      // sort by type
-      const aMajor = a.type.indexOf("Major") > -1;
-      const bMajor = b.type.indexOf("Major") > -1;
-      if (aMajor && !bMajor) return -1;
-      if (aMajor && bMajor) return 0;
-      if (!aMajor && bMajor) return 1;
-    }
+    if (a.status === b.status) return Assignment.sortTypes(a.type, b.type);
     return Assignment.sortStatuses(a.status, b.status);
   },
 
@@ -56,6 +49,20 @@ const Assignment = {
       "Graded",
     ];
     return order.indexOf(a) - order.indexOf(b);
+  },
+
+  /**
+   * @param {String} a
+   * @param {String} b
+   * @returns {-1|0|1}
+   */
+  sortTypes(a, b) {
+    const aIsMajor = a.indexOf("Major") > -1;
+    const bIsMajor = b.indexOf("Major") > -1;
+
+    // Sort in descending order
+    // `true` is coerced to `1` and `false` is coerced to `0`
+    return bIsMajor - aIsMajor;
   },
 
   /** @param {Assignment} assignment */
