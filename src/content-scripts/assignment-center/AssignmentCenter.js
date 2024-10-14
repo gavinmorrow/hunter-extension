@@ -147,30 +147,15 @@ class AssignmentCenter extends HTMLElement {
       // get assignments for current day
       const assignments = this.assignments
         .filter((a) => Calendar.datesAreSameDay(a.dueDate, date))
-        .sort((a, b) => {
-          if (a.status === b.status) {
-            // sort by type
-            const aMajor = a.type.indexOf("Major") > -1;
-            const bMajor = b.type.indexOf("Major") > -1;
-            if (aMajor && !bMajor) return -1;
-            if (aMajor && bMajor) return 0;
-            if (!aMajor && bMajor) return 1;
-          }
-          return Assignment.sortStatuses(a.status, b.status);
-        })
-        .map((assignment) => {
+        .sort(Assignment.sort)
+        .map((a) => {
           // Eventually the description will be updated, just not immediately
-          //  since we can't wait that long.
-          Assignment.getBlackbaudReprFor(assignment)
-            .then((blackbaudRepr) => ({
-              description: blackbaudRepr?.LongDescription,
-              submissionMethod:
-                blackbaudRepr && Assignment.getSubmissionMethod(blackbaudRepr),
-            }))
-            .then((changes) =>
-              this.#updateAssignment(assignment.assignmentIndexId, changes),
-            );
-          return assignment;
+          // since we can't wait that long.
+          // Intentionally not await-ing the Promise.
+          Assignment.getBlackbaudReprFor(a)
+            .then(Assignment.parseBlackbaudRepr)
+            .then(this.#updateAssignment.bind(this, a.assignmentIndexId));
+          return a;
         });
 
       // add new assignment elements

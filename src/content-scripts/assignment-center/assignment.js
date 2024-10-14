@@ -24,6 +24,23 @@
 
 const Assignment = {
   /**
+   * @param {Assignment} a
+   * @param {Assignment} b
+   * @returns {-1|0|1}
+   */
+  sort(a, b) {
+    if (a.status === b.status) {
+      // sort by type
+      const aMajor = a.type.indexOf("Major") > -1;
+      const bMajor = b.type.indexOf("Major") > -1;
+      if (aMajor && !bMajor) return -1;
+      if (aMajor && bMajor) return 0;
+      if (!aMajor && bMajor) return 1;
+    }
+    return Assignment.sortStatuses(a.status, b.status);
+  },
+
+  /**
    * @param {Status} a
    * @param {Status} b
    * @returns {-1|0|1}
@@ -54,6 +71,18 @@ const Assignment = {
     const studentUserId = await getStudentUserId();
     const assignmentIndexId = assignment.assignmentIndexId;
     return fetchAssignment(assignmentIndexId, studentUserId);
+  },
+
+  /**
+   * @param {BlackbaudAssignment} blackbaudRepr
+   * @returns A list of properties to add to the assignment.
+   */
+  async parseBlackbaudRepr(blackbaudRepr) {
+    return {
+      description: blackbaudRepr?.LongDescription,
+      submissionMethod:
+        blackbaudRepr && Assignment.getSubmissionMethod(blackbaudRepr),
+    };
   },
 
   /** @param {BlackbaudAssignment} blackbaudRepr @returns {SubmissionMethod} */
