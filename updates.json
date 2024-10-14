@@ -6,14 +6,14 @@
           "version": "0.1.3",
           "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.3.xpi",
           "applications": {
-            "gecko": { "strict_min_version": "117" }
+            "gecko": { "strict_min_version": "128" }
           }
         },
         {
           "version": "0.1.4",
           "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.4/65a14653bc7c4e6ab617-0.1.4.xpi",
           "applications": {
-            "gecko": { "strict_min_version": "117" }
+            "gecko": { "strict_min_version": "128" }
           }
         }
       ]
