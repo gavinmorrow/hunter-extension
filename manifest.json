@@ -32,6 +32,7 @@
         "src/content-scripts/student-user-id.js",
         "src/content-scripts/notify-update.js",
         "src/content-scripts/settings-menu.js",
+        "src/content-scripts/assignment-center/assignment.js",
         "src/content-scripts/assignment-center/AssignmentPopup.js",
         "src/content-scripts/assignment-center/AssignmentBox.js",
         "src/content-scripts/assignment-center/AssignmentCenter.js",
