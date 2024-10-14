@@ -95,6 +95,7 @@ class AssignmentPopup extends HTMLElement {
     if (this.assignment.isTask) {
       alert("Custom tasks are not yet supported.");
     } else if (Assignment.requiresSubmission(this.assignment)) {
+      // FIXME: can't mark as complete if there is a submission
       window.location.assign(this.assignment.link);
     } else {
       this.#setAssignment({ status: this.#nextStatus() });
