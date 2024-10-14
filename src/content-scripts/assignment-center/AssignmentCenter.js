@@ -2,6 +2,7 @@
  * @typedef {String} Color Either a CSS color in `rgb(<r>,<g>,<b>)` format, or the empty string `""`.
  * @typedef {String} Link
  * @typedef {"To do"|"In progress"|"Completed"|"Graded"|"Missing"|"Overdue"} Status
+ * @typedef {null|"bbDropbox"|"turnitin"|"unknownLti"} SubmissionMethod
  */
 
 /**
@@ -18,6 +19,7 @@
  * @property {{ name: String, link: Link }?} class
  * @property {String} type
  * @property {boolean} isTask
+ * @property {SubmissionMethod?} submissionMethod
  */
 
 class AssignmentCenter extends HTMLElement {
@@ -186,6 +188,9 @@ class AssignmentCenter extends HTMLElement {
           AssignmentCenter.#getBlackbaudReprFor(assignment)
             .then((blackbaudRepr) => ({
               description: blackbaudRepr?.LongDescription,
+              submissionMethod:
+                blackbaudRepr &&
+                AssignmentCenter.#getSubmissionMethod(blackbaudRepr),
             }))
             .then((changes) =>
               this.#updateAssignment(assignment.assignmentIndexId, changes),
@@ -304,6 +309,19 @@ class AssignmentCenter extends HTMLElement {
     const studentUserId = await getStudentUserId();
     const assignmentIndexId = assignment.assignmentIndexId;
     return fetchAssignment(assignmentIndexId, studentUserId);
+  }
+
+  /** @param {BlackbaudAssignment} blackbaudRepr @returns {SubmissionMethod} */
+  static #getSubmissionMethod(blackbaudRepr) {
+    const ltiProvider = blackbaudRepr.LtiProviderName.toLowerCase();
+    if (ltiProvider.includes("turnitin")) return "turnitin";
+    else if (ltiProvider === "") {
+      if (blackbaudRepr.DropboxInd) return "bbDropbox";
+      else return null;
+    } else {
+      console.warn(`Unknown LTI provider: ${ltiProvider}`);
+      return "unknownLti";
+    }
   }
 
   /**
