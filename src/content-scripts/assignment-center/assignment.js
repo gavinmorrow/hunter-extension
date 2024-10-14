@@ -30,8 +30,11 @@ const Assignment = {
    * @returns {-1|0|1}
    */
   sort(a, b) {
-    if (a.status === b.status) return Assignment.sortTypes(a.type, b.type);
-    return Assignment.sortStatuses(a.status, b.status);
+    // If statuses are equal, it will be 0 and || will select the other branch
+    return (
+      Assignment.sortStatuses(a.status, b.status) ||
+      Assignment.sortTypes(a.type, b.type)
+    );
   },
 
   /**
