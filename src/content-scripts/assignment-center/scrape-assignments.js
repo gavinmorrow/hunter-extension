@@ -56,6 +56,16 @@ const parseFullDetailsElem = (detailsElem) => {
   };
 };
 
+/** @param {String} link */
+const parseForAssignmentIndexId = (link) => {
+  const id = Number(
+    link.match(
+      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
+    )?.groups.id,
+  );
+  return Number.isNaN(id) ? null : id;
+};
+
 /**
  * @param {HTMLElement} elem
  * @returns {Assignment}
@@ -82,11 +92,7 @@ const parseAssignmentElem = (elem) => {
   const { textContent: title, href: link } = elem.querySelector(
     "div.middle-block app-assignment-title-link a",
   );
-  const assignmentIndexId = Number(
-    link.match(
-      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
-    )?.groups.id,
-  );
+  const assignmentIndexId = parseForAssignmentIndexId(link);
   const details = parseFullDetailsElem(
     elem.querySelector("div.middle-block div.assignment-details"),
   );
