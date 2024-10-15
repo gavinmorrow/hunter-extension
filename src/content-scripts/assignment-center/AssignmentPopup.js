@@ -31,6 +31,10 @@ class AssignmentPopup extends HTMLElement {
     statusBtn.id = "status-btn";
     statusBtn.addEventListener("click", this.#handleChangeStatus.bind(this));
     root.appendChild(statusBtn);
+    const submitBtn = document.createElement("button");
+    submitBtn.id = "submit-btn";
+    submitBtn.addEventListener("click", this.#handleSubmit.bind(this));
+    root.appendChild(submitBtn);
 
     // assignment title
     const titleElem = document.createElement("h2");
@@ -53,7 +57,21 @@ class AssignmentPopup extends HTMLElement {
     const statusBtn = this.shadowRoot.getElementById("status-btn");
     if (this.assignment.isTask) {
       statusBtn.hidden = true;
-    } else if (Assignment.requiresSubmission(this.assignment)) {
+    } else {
+      statusBtn.textContent = "Mark as ";
+      if (this.#nextStatus() == null) statusBtn.hidden = true;
+      else statusBtn.textContent += this.#nextStatus();
+    }
+  }
+
+  #hydrateSubmitBtn() {
+    const submitBtn = this.shadowRoot.getElementById("submit-btn");
+    if (
+      this.assignment.isTask ||
+      !Assignment.requiresSubmission(this.assignment)
+    ) {
+      submitBtn.hidden = true;
+    } else {
       let txt = "Submit";
       switch (this.assignment.submissionMethod) {
         case "turnitin":
@@ -61,12 +79,9 @@ class AssignmentPopup extends HTMLElement {
         case "unknownLti": // fallthrough
         case null: // fallthrough
         default:
-          statusBtn.textContent = txt;
+          submitBtn.textContent = txt;
+          submitBtn.hidden = false;
       }
-    } else {
-      statusBtn.textContent = "Mark as ";
-      if (this.#nextStatus() == null) statusBtn.hidden = true;
-      else statusBtn.textContent += this.#nextStatus();
     }
   }
 
@@ -86,6 +101,7 @@ class AssignmentPopup extends HTMLElement {
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.#hydrateStatus();
+    this.#hydrateSubmitBtn();
     this.#hydrateTitle();
     this.#hydrateDescription();
   }
@@ -94,12 +110,19 @@ class AssignmentPopup extends HTMLElement {
   #handleChangeStatus(_e) {
     if (this.assignment.isTask) {
       alert("Custom tasks are not yet supported.");
-    } else if (Assignment.requiresSubmission(this.assignment)) {
-      // FIXME: can't mark as complete if there is a submission
-      window.location.assign(this.assignment.link);
     } else {
       this.#setAssignment({ status: this.#nextStatus() });
+      const statusBtn = this.shadowRoot.getElementById("status-btn");
       statusBtn.blur();
+    }
+  }
+
+  /** @param {Event} */
+  #handleSubmit(_e) {
+    if (this.assignment.isTask) {
+      alert("Custom tasks are not yet supported.");
+    } else {
+      window.location.assign(this.assignment.link);
     }
   }
 
