@@ -80,6 +80,7 @@ const hideLowerNavbar = featureFlag(
     // the spacer determines the amount of space the full header takes up
     const spacerElem = await waitForElem("#site-top-spacer");
     if (spacerElem == null) return;
+    // FIXME: sometimes --sky-viewport-top is 0px
     spacerElem.style.height = "var(--sky-viewport-top)";
   },
 );
@@ -186,20 +187,25 @@ const modifyView = async (view) => {
   }
 };
 
-promiseError(async () => {
-  // needs to go first, bc everything else will fail if it is broken
-  await assignmentCenterBroken();
+promiseError(
+  featureFlag(
+    (s) => s.assignmentCenter.enabled,
+    async () => {
+      // needs to go first, bc everything else will fail if it is broken
+      await assignmentCenterBroken();
 
-  // this should run regardless of whether or not the custom UI is enabled
-  await hideLowerNavbar();
+      // this should run regardless of whether or not the custom UI is enabled
+      await hideLowerNavbar();
 
-  if ((await settings()).assignmentCenter.customUi.enabled) {
-    await createCustomUi();
-  } else {
-    // These are seperate bc filters don't get reset on view change
-    await modifyFilters();
+      if ((await settings()).assignmentCenter.customUi.enabled) {
+        await createCustomUi();
+      } else {
+        // These are seperate bc filters don't get reset on view change
+        await modifyFilters();
 
-    views.onChange(modifyView);
-    await modifyView(await views.currentView());
-  }
-})();
+        views.onChange(modifyView);
+        await modifyView(await views.currentView());
+      }
+    },
+  ),
+)();

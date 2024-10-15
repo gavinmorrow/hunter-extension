@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "hunter-extension",
-  "version": "0.1.4",
+  "version": "0.1.5",
 
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
@@ -14,8 +14,8 @@
   "permissions": ["storage"],
 
   "background": {
-    "scripts": ["background.js"],
-    "service_worker": "service-worker.js",
+    "scripts": ["src/background-scripts/background.js"],
+    "service_worker": "src/background-scripts/service-worker.js",
     "type": "module"
   },
 
@@ -27,16 +27,17 @@
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
-        "common.js",
-        "Calendar.util.js",
-        "student-user-id.js",
-        "notify-update.js",
-        "settings-menu.js",
-        "assignment-center/AssignmentPopup.js",
-        "assignment-center/AssignmentBox.js",
-        "assignment-center/AssignmentCenter.js",
-        "assignment-center/scrape-assignments.js",
-        "assignment-center/assignment-center.js"
+        "src/content-scripts/common.js",
+        "src/util/Calendar.util.js",
+        "src/content-scripts/student-user-id.js",
+        "src/content-scripts/notify-update.js",
+        "src/content-scripts/settings-menu.js",
+        "src/content-scripts/assignment-center/assignment.js",
+        "src/content-scripts/assignment-center/AssignmentPopup.js",
+        "src/content-scripts/assignment-center/AssignmentBox.js",
+        "src/content-scripts/assignment-center/AssignmentCenter.js",
+        "src/content-scripts/assignment-center/scrape-assignments.js",
+        "src/content-scripts/assignment-center/assignment-center.js"
       ]
     },
     {
@@ -50,8 +51,8 @@
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
-        "common.js",
-        "login-automatically.js"
+        "src/content-scripts/common.js",
+        "src/content-scripts/login-automatically.js"
       ]
     }
   ],

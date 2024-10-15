@@ -29,11 +29,12 @@ class AssignmentPopup extends HTMLElement {
     // assignment status
     const statusBtn = document.createElement("button");
     statusBtn.id = "status-btn";
-    statusBtn.addEventListener("click", (e) => {
-      this.#setAssignment({ status: this.#nextStatus() });
-      statusBtn.blur();
-    });
+    statusBtn.addEventListener("click", this.#handleChangeStatus.bind(this));
     root.appendChild(statusBtn);
+    const submitBtn = document.createElement("button");
+    submitBtn.id = "submit-btn";
+    submitBtn.addEventListener("click", this.#handleSubmit.bind(this));
+    root.appendChild(submitBtn);
 
     // assignment title
     const titleElem = document.createElement("h2");
@@ -54,9 +55,34 @@ class AssignmentPopup extends HTMLElement {
 
   #hydrateStatus() {
     const statusBtn = this.shadowRoot.getElementById("status-btn");
-    statusBtn.textContent = "Mark as ";
-    if (this.#nextStatus() == null) statusBtn.hidden = true;
-    else statusBtn.textContent += this.#nextStatus();
+    if (this.assignment.isTask) {
+      statusBtn.hidden = true;
+    } else {
+      statusBtn.textContent = "Mark as ";
+      if (this.#nextStatus() == null) statusBtn.hidden = true;
+      else statusBtn.textContent += this.#nextStatus();
+    }
+  }
+
+  #hydrateSubmitBtn() {
+    const submitBtn = this.shadowRoot.getElementById("submit-btn");
+    if (
+      this.assignment.isTask ||
+      !Assignment.requiresSubmission(this.assignment)
+    ) {
+      submitBtn.hidden = true;
+    } else {
+      let txt = "Submit";
+      switch (this.assignment.submissionMethod) {
+        case "turnitin":
+          txt += " on Turnitin"; // fallthrough
+        case "unknownLti": // fallthrough
+        case null: // fallthrough
+        default:
+          submitBtn.textContent = txt;
+          submitBtn.hidden = false;
+      }
+    }
   }
 
   #hydrateTitle() {
@@ -75,11 +101,36 @@ class AssignmentPopup extends HTMLElement {
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.#hydrateStatus();
+    this.#hydrateSubmitBtn();
     this.#hydrateTitle();
     this.#hydrateDescription();
   }
 
+  /** @param {Event} */
+  #handleChangeStatus(_e) {
+    if (this.assignment.isTask) {
+      alert("Custom tasks are not yet supported.");
+    } else {
+      this.#setAssignment({ status: this.#nextStatus() });
+      const statusBtn = this.shadowRoot.getElementById("status-btn");
+      statusBtn.blur();
+    }
+  }
+
+  /** @param {Event} */
+  #handleSubmit(_e) {
+    if (this.assignment.isTask) {
+      alert("Custom tasks are not yet supported.");
+    } else {
+      window.location.assign(this.assignment.link);
+    }
+  }
+
   #getDesc() {
+    // TODO: support custom tasks
+    if (this.assignment.isTask)
+      return "<i><strong>WARNING: CUSTOM TASKS ARE NOT YET SUPPORTED!!</strong> If you want support, email <a href='mailto:gavinmorrow@hunterschools.org'>gavinmorrow@hunterschools.org</a></i>";
+
     const rawDesc = this.assignment.description;
     if (rawDesc === null || rawDesc === undefined) return "<i>Loading...</i>";
     else if (rawDesc === "") return "<i>No description</i>";
@@ -96,10 +147,10 @@ class AssignmentPopup extends HTMLElement {
         return "Completed";
       case "Completed":
         if (
-          Calendar.resetDate(this.assignment.details.dueDate).getTime() <
+          Calendar.resetDate(this.assignment.dueDate).getTime() <
           Calendar.resetDate(new Date()).getTime()
         )
-          return dbg("Overdue");
+          return "Overdue";
         else return "To do";
       default:
         return null;
