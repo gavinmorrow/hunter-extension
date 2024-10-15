@@ -2,7 +2,7 @@
 
 ## v0.1.5
 
-_released 00 October 2024_
+_released 15 October 2024_
 
 - Features:
   - Indicators when online submission is required (blue border + submit button)
