@@ -224,15 +224,15 @@ const fetchAssignment = async (assignmentIndexId, studentUserId) =>
     `https://hunterschools.myschoolapp.com/api/assignment2/UserAssignmentDetailsGetAllStudentData?assignmentIndexId=${assignmentIndexId}&studentUserId=${studentUserId}&personaId=2`,
   ).then((r) => r.json());
 
+const statusNumMap = {
+  Missing: 2,
+  Overdue: 2,
+  "To do": -1,
+  "In progress": 0, // just mark it same as todo
+  Completed: 1,
+  Graded: 1,
+};
 const updateAssignmentStatus = async (assignmentIndexId, status) => {
-  const statusNumMap = {
-    Missing: 2,
-    Overdue: 2,
-    "To do": -1,
-    "In progress": 0, // just mark it same as todo
-    Completed: 1,
-    Graded: 1,
-  };
   const assignmentStatus = statusNumMap[status];
   console.log("Setting status to", assignmentStatus, "for", assignmentIndexId);
 

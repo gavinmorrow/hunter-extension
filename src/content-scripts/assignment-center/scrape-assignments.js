@@ -158,6 +158,49 @@ const deduplicateAssignments = (assignments) =>
       .values(),
   );
 
+const Task = {
+  async populateAllIn(assignments) {
+    const allAssignmentData = await fetch(
+      "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
+    ).then((res) => res.json());
+    let tasks = allAssignmentData.DueToday.concat(
+      allAssignmentData.DueTomorrow,
+      allAssignmentData.DueThisWeek,
+      allAssignmentData.DueNextWeek,
+      allAssignmentData.DueAfterNextWeek,
+      allAssignmentData.PastThisWeek,
+      allAssignmentData.PastLastWeek,
+      allAssignmentData.PastBeforeLastWeek,
+    )
+      .filter((a) => a.UserTaskId !== 0)
+      .map(Task.parse);
+    return assignments.filter((a) => !a.isTask).concat(tasks);
+  },
+
+  parse(t) {
+    return {
+      userTaskId: t.UserTaskId,
+      color: undefined, // TODO
+      title: t.ShortDescription,
+      link: null,
+      description: null,
+      status: Object.keys(statusNumMap).find(
+        (k) => statusNumMap[k] === t.TaskStatus,
+      ),
+      dueDate: parseBlackbaudDate(t.DateDue),
+      assignedDate: parseBlackbaudDate(t.DateAssigned),
+      maxPoint: null,
+      class: {
+        name: t.GroupName,
+        link: `https://hunterschools.myschoolapp.com/app/student#academicclass/${t.SectionId}/0/bulletinboard`,
+      },
+      type: "My task",
+      isTask: true,
+      submissionMethod: null,
+    };
+  },
+};
+
 /**
  * @param {"Active"|"Past"} time
  * @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date.
@@ -171,7 +214,9 @@ const scrapeAssignments = (time) =>
 
     // parse -> deduplicate -> sort
     return deduplicateAssignments(
-      Array.from(assignments).map(parseAssignmentElem),
+      await Task.populateAllIn(
+        Array.from(assignments).map(parseAssignmentElem),
+      ),
     ).toSorted(
       /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
         a.dueDate - b.dueDate,
