@@ -87,7 +87,7 @@ const parseAssignmentElem = (elem) => {
     .textContent.trim();
 
   return {
-    assignmentIndexId,
+    id: assignmentIndexId,
     color,
     title,
     link,
@@ -133,10 +133,7 @@ const deduplicateAssignments = (assignments) =>
     assignments
       // Use a Map, bc it already has deduplicating features in it.
       // I don't use an object bc Map is kind of designed for this.
-      .reduce(
-        (map, a) => map.set(a.assignmentIndexId ?? a.userTaskId, a),
-        new Map(),
-      )
+      .reduce((map, a) => map.set(a.id, a), new Map())
       .values(),
   );
 
@@ -161,7 +158,7 @@ const Task = {
 
   parse(t) {
     return {
-      userTaskId: t.UserTaskId,
+      id: t.UserTaskId,
       color: undefined, // TODO
       title: t.ShortDescription,
       link: null,

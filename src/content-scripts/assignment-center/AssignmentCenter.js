@@ -154,26 +154,19 @@ class AssignmentCenter extends HTMLElement {
             // Intentionally not await-ing the Promise.
             Assignment.getBlackbaudReprFor(a)
               .then(Assignment.parseBlackbaudRepr)
-              .then(this.#updateAssignment.bind(this, a.assignmentIndexId));
+              .then(this.#updateAssignment.bind(this, a.id));
           }
           return a;
         });
 
       // add new assignment elements
       assignments
-        .filter(
-          (a) =>
-            this.#findAssignmentBoxFor(a.assignmentIndexId ?? a.userTaskId) ==
-            null,
-        )
+        .filter((a) => this.#findAssignmentBoxFor(a.id) == null)
         .map(
           (a) =>
             new AssignmentBox(
               a,
-              this.#updateAssignment.bind(
-                this,
-                a.assignmentIndexId ?? a.userTaskId,
-              ),
+              this.#updateAssignment.bind(this, a.id),
               this.settings,
             ),
         )
@@ -189,7 +182,7 @@ class AssignmentCenter extends HTMLElement {
         .map(
           /** @returns {[Assignment, AssignmentBox]} */ (a) => [
             a,
-            this.#findAssignmentBoxFor(a.assignmentIndexId ?? a.userTaskId),
+            this.#findAssignmentBoxFor(a.id),
           ],
         )
         .filter(([_, box]) => box != null)
@@ -223,9 +216,7 @@ class AssignmentCenter extends HTMLElement {
   /** @param {Number} id @param {Assignment} changes */
   #updateAssignment(id, changes, isTask) {
     // update internal object
-    const index = this.assignments.findIndex(
-      (a) => (a.assignmentIndexId ?? a.userTaskId) === id,
-    );
+    const index = this.assignments.findIndex((a) => a.id === id);
     if (index === -1) return;
     this.assignments[index] = { ...this.assignments[index], ...changes };
 
@@ -243,12 +234,10 @@ class AssignmentCenter extends HTMLElement {
     assignmentBox.updateAssignment(this.assignments[index]);
   }
 
-  /** @param {number} assignmentIndexId @returns {AssignmentBox} */
-  #findAssignmentBoxFor(assignmentIndexId) {
+  /** @param {number} id @returns {AssignmentBox} */
+  #findAssignmentBoxFor(id) {
     return Array.from(this.shadowRoot.querySelectorAll("assignment-box")).find(
-      (box) =>
-        (box.assignment.assignmentIndexId ?? box.assignment.userTaskId) ===
-        assignmentIndexId,
+      (box) => box.assignment.id === id,
     );
   }
 

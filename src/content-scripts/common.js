@@ -254,7 +254,7 @@ const updateAssignmentStatus = async (assignmentIndexId, status) => {
 };
 const updateTaskStatus = async (task) => {
   const statusNum = statusNumMap[task.status];
-  console.log(`Setting status to ${statusNum} for task ${task.userTaskId}`);
+  console.log(`Setting status to ${statusNum} for task ${task.id}`);
 
   return fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
     method: "POST",
@@ -268,7 +268,7 @@ const updateTaskStatus = async (task) => {
       ShortDescription: task.title,
       TaskStatus: statusNum,
       UserId: await getStudentUserId(),
-      UserTaskId: task.userTaskId,
+      UserTaskId: task.id,
     }),
   });
 };

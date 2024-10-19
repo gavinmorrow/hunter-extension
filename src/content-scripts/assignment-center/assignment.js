@@ -7,7 +7,7 @@
 
 /**
  * @typedef {Object} Assignment
- * @property {Number} assignmentIndexId
+ * @property {Number} id
  * @property {Color} color
  * @property {String} title
  * @property {Link} link
@@ -81,8 +81,7 @@ const Assignment = {
     }
 
     const studentUserId = await getStudentUserId();
-    const assignmentIndexId = assignment.assignmentIndexId;
-    return fetchAssignment(assignmentIndexId, studentUserId);
+    return fetchAssignment(assignment.id, studentUserId);
   },
 
   /**
