@@ -146,11 +146,32 @@ const deduplicateAssignments = (assignments) =>
       .values(),
   );
 
+const [getClassColors, _updateClassColorsCache] = memo(
+  /** @returns {Promise<Map<number, string>>} */
+  async () =>
+    fetch(
+      "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet/",
+    )
+      .then(
+        /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
+        (r) => r.json(),
+      )
+      .then((r) => r.SectionColors)
+      .then((colors) =>
+        colors.reduce(
+          (map, { LeadSectionId, HexColor }) =>
+            map.set(LeadSectionId, HexColor),
+          new Map(),
+        ),
+      ),
+);
+
 const Task = {
   async populateAllIn(assignments) {
     const allAssignmentData = await fetch(
       "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
     ).then((res) => res.json());
+    const colors = await getClassColors();
     let tasks = allAssignmentData.DueToday.concat(
       allAssignmentData.DueTomorrow,
       allAssignmentData.DueThisWeek,
@@ -161,14 +182,15 @@ const Task = {
       allAssignmentData.PastBeforeLastWeek,
     )
       .filter((a) => a.UserTaskId !== 0)
-      .map(Task.parse);
+      .map(Task.parse)
+      .map((t) => ({ ...t, color: colors.get(t.class.id) }));
     return assignments.filter((a) => !a.isTask).concat(tasks);
   },
 
   parse(t) {
     return {
       id: t.UserTaskId,
-      color: undefined, // TODO
+      color: undefined,
       title: t.ShortDescription,
       link: null,
       description: null,
