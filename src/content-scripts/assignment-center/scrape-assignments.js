@@ -22,7 +22,16 @@ const parseForAssignmentIndexId = (link) => {
  */
 const parseFullDetailsElem = (detailsElem) => {
   const details = detailsElem.textContent;
-  const parts = details.split("|").map((part) => part.trim());
+  let parts = details.split("|").map((part) => part.trim());
+
+  let isExtraCredit = false;
+  // If parts includes extra credit, mark that down and remove it
+  // (so the rest of the code works right)
+  const isPartExtraCredit = (p) => p.toLowerCase().includes("extra credit");
+  if (parts.find(isPartExtraCredit)) {
+    isExtraCredit = true;
+    parts = parts.filter((p) => !isPartExtraCredit(p));
+  }
 
   // invalid length
   if (parts.length !== 4 && parts.length !== 5 && parts.length !== 6) {
@@ -55,6 +64,7 @@ const parseFullDetailsElem = (detailsElem) => {
     dueDate,
     assignedDate,
     maxPoints,
+    isExtraCredit,
     class: class_,
     type,
     isTask,
@@ -88,6 +98,9 @@ const parseAssignmentElem = (elem) => {
     "div.middle-block app-assignment-title-link a",
   );
   const assignmentIndexId = parseForAssignmentIndexId(link);
+  elem
+    .querySelector("div.middle-block div.assignment-details")
+    .append("| Extra credit");
   const details = parseFullDetailsElem(
     elem.querySelector("div.middle-block div.assignment-details"),
   );
@@ -200,6 +213,7 @@ const Task = {
       dueDate: BlackbaudDate.parse(t.DateDue),
       assignedDate: BlackbaudDate.parse(t.DateAssigned),
       maxPoints: null,
+      isExtraCredit: false,
       class: {
         name: t.GroupName,
         id: t.SectionId,

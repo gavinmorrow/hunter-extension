@@ -16,6 +16,7 @@
  * @property {Date} dueDate
  * @property {Date} assignedDate
  * @property {Number?} maxPoints
+ * @property {boolean} isExtraCredit
  * @property {{ name: String, link: Link }?} class
  * @property {String} type
  * @property {boolean} isTask
