@@ -234,7 +234,9 @@ const statusNumMap = {
 };
 const updateAssignmentStatus = async (assignmentIndexId, status) => {
   const assignmentStatus = statusNumMap[status];
-  console.log("Setting status to", assignmentStatus, "for", assignmentIndexId);
+  console.log(
+    `Setting status to ${assignmentStatus} for assignment ${assignmentIndexId}`,
+  );
 
   return fetch(
     `https://hunterschools.myschoolapp.com/api/assignment2/assignmentstatusupdate`,
@@ -249,6 +251,26 @@ const updateAssignmentStatus = async (assignmentIndexId, status) => {
       }),
     },
   );
+};
+const updateTaskStatus = async (task) => {
+  const statusNum = statusNumMap[task.status];
+  console.log(`Setting status to ${statusNum} for task ${task.userTaskId}`);
+
+  return fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      AssignedDate: BlackbaudDate.from(task.assignedDate),
+      DueDate: BlackbaudDate.from(task.dueDate),
+      SectionId: task.class.id,
+      ShortDescription: task.title,
+      TaskStatus: statusNum,
+      UserId: await getStudentUserId(),
+      UserTaskId: task.userTaskId,
+    }),
+  });
 };
 
 /**
