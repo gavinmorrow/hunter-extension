@@ -1,18 +1,4 @@
 /**
- * Parse a blackbaud date string into a javascript `Date`.
- * @param {String} str A date in the format `mm/dd/yyyy hh:mm AM`.
- * @returns {Date}
- */
-const parseBlackbaudDate = (str) => {
-  const [date, time, amPm] = str.split(" ");
-  const [month, day, year] = date.split("/").map(Number);
-  const [hour12, min] = time.split(":").map(Number);
-  const hour24 = Calendar.hour12ToHour24(hour12, amPm);
-
-  return new Date(year, month - 1, day, hour24, min);
-};
-
-/**
  * @param {HTMLElement} detailsElem
  * @returns {AssignmentDetails}
  */
@@ -35,7 +21,7 @@ const parseFullDetailsElem = (detailsElem) => {
     // The strings start with either "Due: " or "Assigned: ", followed by a
     // date. To parse the date, they need to be removed.
     .map((str) => str.replace("Due: ", "").replace("Assigned: ", ""))
-    .map(parseBlackbaudDate);
+    .map(BlackbaudDate.parse);
   const maxPoints = hasPoints ? parseInt(parts[2]) : null;
   // *maybe* the third element
   const class_ = isTask
@@ -183,8 +169,8 @@ const Task = {
       status: Object.keys(statusNumMap).find(
         (k) => statusNumMap[k] === t.TaskStatus,
       ),
-      dueDate: parseBlackbaudDate(t.DateDue),
-      assignedDate: parseBlackbaudDate(t.DateAssigned),
+      dueDate: BlackbaudDate.parse(t.DateDue),
+      assignedDate: BlackbaudDate.parse(t.DateAssigned),
       maxPoint: null,
       class: {
         name: t.GroupName,
