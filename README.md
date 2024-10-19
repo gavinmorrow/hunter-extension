@@ -1,6 +1,6 @@
 # Hunter Extension
 
-_v0.1.5_
+_v0.2.0_
 
 This project aims to fix as much of the Hunter website as possible. It does this
 through a browser extension. To report problems or request a feature, please
@@ -57,5 +57,5 @@ Click [here][firefox] to install. (You should use firefox!!)
 The source code for [this project][github] is available on github!
 
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
-[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.5/65a14653bc7c4e6ab617.xpi
+[firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.0/65a14653bc7c4e6ab617.xpi
 [github]: https://github.com/gavinmorrow/hunter-extension/
