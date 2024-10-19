@@ -257,27 +257,31 @@ const updateTaskStatus = async (task) => {
   console.log(`Setting status to ${statusNum} for task ${task.id}`);
 
   return fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      AssignedDate: BlackbaudDate.from(task.assignedDate),
-      DueDate: BlackbaudDate.from(task.dueDate),
-      SectionId: task.class.id,
-      ShortDescription: task.title,
-      TaskStatus: statusNum,
-      UserId: await getStudentUserId(),
-      UserTaskId: task.id,
+      userTask: {
+        AssignedDate: BlackbaudDate.from(task.assignedDate),
+        DueDate: BlackbaudDate.from(task.dueDate),
+        SectionId: task.class.id === 0 ? null : String(task.class.id),
+        ShortDescription: task.title,
+        TaskStatus: statusNum,
+        UserId: await getStudentUserId(),
+        UserTaskId: task.id,
+      },
     }),
   });
 };
-const deleteTask = async (id) =>
-  fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+const deleteTask = async (id) => {
+  console.log(`Deleting task ${id}`);
+  return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id }),
   });
+};
 
 /**
  * Make the given element have the given class if *and only if* `predicate` is truthy.
