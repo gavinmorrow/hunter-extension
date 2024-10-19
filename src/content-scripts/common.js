@@ -10,7 +10,7 @@ const dbg = (a) => {
  * [Memoize](https://en.wikipedia.org/wiki/Memoization) a function.
  * @template T
  * @param {() => Promise<T>|() => T} fn
- * @returns {() => Promise<T>}
+ * @returns {[() => Promise<T>, (c: T) => void]}
  */
 const memo = (fn) => {
   let cache = null;
