@@ -30,17 +30,20 @@ use Safari (like me), send me an email and I'll prioritize it!
 2. Under `Assets`, download the `hunter-extension-<version>.zip` file.
 3. Open that file in File Explorer/Finder/etc and extract/open it.
 4. In Chrome, go to `chrome://extensions`.
-5. Click the toggle that says `Developer mode` in the top right corner.
-6. Click the `Load unpacked` button.
-7. For both Windows and macOS: In the file picker, go to `Downloads`, then
+5. If updating, remove the old version of the extension.
+6. Click the toggle that says `Developer mode` in the top right corner.
+7. Click the `Load unpacked` button.
+8. For both Windows and macOS: In the file picker, go to `Downloads`, then
    double-click on `hunter-extension-<version>`.
-8. Then, if you are on Windows, single-click `hunter-extension-<version>`.
-9. Click `Select` (bottom right corner).
-10. Go to the hunter website!
+9. Then, if you are on Windows, single-click `hunter-extension-<version>`.
+10. Click `Select` (bottom right corner).
+11. Go to the hunter website!
 
 ### Firefox
 
 Click [here][firefox] to install. (You should use firefox!!)
+
+To update, see the [Mozilla help page].
 
 ## Permissions
 
@@ -58,4 +61,5 @@ The source code for [this project][github] is available on github!
 
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
 [firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.0/65a14653bc7c4e6ab617.xpi
+[Mozilla help page]: https://support.mozilla.org/en-US/kb/how-update-add-ons
 [github]: https://github.com/gavinmorrow/hunter-extension/
