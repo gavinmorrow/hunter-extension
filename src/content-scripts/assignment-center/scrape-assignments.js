@@ -168,7 +168,7 @@ const Task = {
       ),
       dueDate: BlackbaudDate.parse(t.DateDue),
       assignedDate: BlackbaudDate.parse(t.DateAssigned),
-      maxPoint: null,
+      maxPoints: null,
       class: {
         name: t.GroupName,
         link: `https://hunterschools.myschoolapp.com/app/student#academicclass/${t.SectionId}/0/bulletinboard`,
