@@ -148,12 +148,14 @@ class AssignmentCenter extends HTMLElement {
         .filter((a) => Calendar.datesAreSameDay(a.dueDate, date))
         .sort(Assignment.sort)
         .map((a) => {
-          // Eventually the description will be updated, just not immediately
-          // since we can't wait that long.
-          // Intentionally not await-ing the Promise.
-          Assignment.getBlackbaudReprFor(a)
-            .then(Assignment.parseBlackbaudRepr)
-            .then(this.#updateAssignment.bind(this, a.assignmentIndexId));
+          if (!a.isTask) {
+            // Eventually the description will be updated, just not immediately
+            // since we can't wait that long.
+            // Intentionally not await-ing the Promise.
+            Assignment.getBlackbaudReprFor(a)
+              .then(Assignment.parseBlackbaudRepr)
+              .then(this.#updateAssignment.bind(this, a.assignmentIndexId));
+          }
           return a;
         });
 
