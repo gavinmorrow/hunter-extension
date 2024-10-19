@@ -272,6 +272,12 @@ const updateTaskStatus = async (task) => {
     }),
   });
 };
+const deleteTask = async (id) =>
+  fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  });
 
 /**
  * Make the given element have the given class if *and only if* `predicate` is truthy.

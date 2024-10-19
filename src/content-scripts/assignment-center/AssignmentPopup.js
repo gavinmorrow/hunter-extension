@@ -35,6 +35,10 @@ class AssignmentPopup extends HTMLElement {
     submitBtn.id = "submit-btn";
     submitBtn.addEventListener("click", this.#handleSubmit.bind(this));
     root.appendChild(submitBtn);
+    const deleteBtn = document.createElement("button");
+    deleteBtn.id = "delete-btn";
+    deleteBtn.addEventListener("click", this.#handleDelete.bind(this));
+    root.appendChild(deleteBtn);
 
     // assignment title
     const titleElem = document.createElement("h2");
@@ -81,6 +85,12 @@ class AssignmentPopup extends HTMLElement {
     }
   }
 
+  #hydrateDeleteBtn() {
+    const deleteBtn = this.shadowRoot.getElementById("delete-btn");
+    if (!this.assignment.isTask) deleteBtn.hidden = true;
+    deleteBtn.textContent = "Delete task";
+  }
+
   #hydrateTitle() {
     const titleElem = this.shadowRoot.getElementById("title");
     titleElem.textContent = this.assignment.title;
@@ -98,13 +108,14 @@ class AssignmentPopup extends HTMLElement {
     this.assignment = assignment;
     this.#hydrateStatus();
     this.#hydrateSubmitBtn();
+    this.#hydrateDeleteBtn();
     this.#hydrateTitle();
     this.#hydrateDescription();
   }
 
   /** @param {Event} */
   #handleChangeStatus(_e) {
-    this.#setAssignment({ status: this.#nextStatus() }, this.assignment.isTask);
+    this.#setAssignment({ status: this.#nextStatus() });
     const statusBtn = this.shadowRoot.getElementById("status-btn");
     statusBtn.blur();
   }
@@ -115,6 +126,17 @@ class AssignmentPopup extends HTMLElement {
       alert("Cannot submit to a custom task.");
     } else {
       window.location.assign(this.assignment.link);
+    }
+  }
+
+  /** @param {Event} */
+  #handleDelete(_e) {
+    if (this.assignment.isTask) {
+      this.#setAssignment(null);
+    } else {
+      alert(
+        "Sorry, you're gonna have to do it. (You can't delete an assignment.)",
+      );
     }
   }
 

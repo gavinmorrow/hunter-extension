@@ -154,7 +154,7 @@ class AssignmentCenter extends HTMLElement {
             // Intentionally not await-ing the Promise.
             Assignment.getBlackbaudReprFor(a)
               .then(Assignment.parseBlackbaudRepr)
-              .then(this.#updateAssignment.bind(this, a.id));
+              .then(this.#updateAssignment.bind(this, a.id, a.isTask));
           }
           return a;
         });
@@ -166,7 +166,7 @@ class AssignmentCenter extends HTMLElement {
           (a) =>
             new AssignmentBox(
               a,
-              this.#updateAssignment.bind(this, a.id),
+              this.#updateAssignment.bind(this, a.id, a.isTask),
               this.settings,
             ),
         )
@@ -213,25 +213,39 @@ class AssignmentCenter extends HTMLElement {
     this.#hydrateCalendar();
   }
 
-  /** @param {Number} id @param {Assignment} changes */
-  #updateAssignment(id, changes, isTask) {
+  /** @param {Number} id @param {boolean} isTask @param {Assignment?} changes */
+  #updateAssignment(id, isTask, changes) {
     // update internal object
     const index = this.assignments.findIndex((a) => a.id === id);
     if (index === -1) return;
     this.assignments[index] = { ...this.assignments[index], ...changes };
 
     // check for if the status in the backend needs to be updated
-    if (changes.status != undefined) {
+    if (changes?.status != undefined) {
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
       if (isTask) updateTaskStatus(this.assignments[index]);
       else updateAssignmentStatus(id, changes.status, isTask);
     }
 
-    // update the element corresponding to it
-    /** @type {AssignmentBox} */
-    const assignmentBox = this.#findAssignmentBoxFor(id);
-    assignmentBox.updateAssignment(this.assignments[index]);
+    // check if task needs to be deleted
+    if (isTask && changes === null) {
+      console.log("here!");
+      // This ignores a promise. It's okay, because we're not depending on the
+      // result.
+      deleteTask(id);
+
+      // remove the entry in this.assignments for it
+      this.assignments.splice(index, 1);
+
+      // remove the element corresponding to it
+      this.#findAssignmentBoxFor(id).remove();
+    } else {
+      // otherwise, update the element corresponding to it
+      /** @type {AssignmentBox} */
+      const assignmentBox = this.#findAssignmentBoxFor(id);
+      assignmentBox.updateAssignment(this.assignments[index]);
+    }
   }
 
   /** @param {number} id @returns {AssignmentBox} */
