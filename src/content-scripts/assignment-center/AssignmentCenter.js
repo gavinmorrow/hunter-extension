@@ -161,12 +161,19 @@ class AssignmentCenter extends HTMLElement {
 
       // add new assignment elements
       assignments
-        .filter((a) => this.#findAssignmentBoxFor(a.assignmentIndexId) == null)
+        .filter(
+          (a) =>
+            this.#findAssignmentBoxFor(a.assignmentIndexId ?? a.userTaskId) ==
+            null,
+        )
         .map(
           (a) =>
             new AssignmentBox(
               a,
-              this.#updateAssignment.bind(this, a.assignmentIndexId),
+              this.#updateAssignment.bind(
+                this,
+                a.assignmentIndexId ?? a.userTaskId,
+              ),
               this.settings,
             ),
         )
@@ -182,7 +189,7 @@ class AssignmentCenter extends HTMLElement {
         .map(
           /** @returns {[Assignment, AssignmentBox]} */ (a) => [
             a,
-            this.#findAssignmentBoxFor(a.assignmentIndexId),
+            this.#findAssignmentBoxFor(a.assignmentIndexId ?? a.userTaskId),
           ],
         )
         .filter(([_, box]) => box != null)
@@ -235,7 +242,9 @@ class AssignmentCenter extends HTMLElement {
   /** @param {number} assignmentIndexId @returns {AssignmentBox} */
   #findAssignmentBoxFor(assignmentIndexId) {
     return Array.from(this.shadowRoot.querySelectorAll("assignment-box")).find(
-      (box) => box.assignment.assignmentIndexId === assignmentIndexId,
+      (box) =>
+        (box.assignment.assignmentIndexId ?? box.assignment.userTaskId) ===
+        assignmentIndexId,
     );
   }
 

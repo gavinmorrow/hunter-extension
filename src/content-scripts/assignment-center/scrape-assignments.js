@@ -148,11 +148,7 @@ const deduplicateAssignments = (assignments) =>
       // Use a Map, bc it already has deduplicating features in it.
       // I don't use an object bc Map is kind of designed for this.
       .reduce(
-        (map, a) =>
-          a.isTask
-            ? /* Use Symbol so that they're all unique */
-              map.set(Symbol(a.title), a)
-            : map.set(a.assignmentIndexId, a),
+        (map, a) => map.set(a.assignmentIndexId ?? a.userTaskId, a),
         new Map(),
       )
       .values(),
