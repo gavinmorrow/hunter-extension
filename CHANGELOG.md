@@ -2,11 +2,13 @@
 
 ## v0.2.0
 
-_released 00 October 2024_
+_released 19 October 2024_
 
 - Features:
   - **Custom tasks are now supported!!!** If you find any bugs with them, please
     report them to me asap.
+- Bug Fixes:
+  - Don't crash if there's an assignment marked as extra credit.
 
 ## v0.1.5
 
