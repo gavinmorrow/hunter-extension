@@ -230,7 +230,6 @@ class AssignmentCenter extends HTMLElement {
 
     // check if task needs to be deleted
     if (isTask && changes === null) {
-      console.log("here!");
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
       deleteTask(id);
