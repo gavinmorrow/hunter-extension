@@ -1,3 +1,21 @@
+/** @param {String} link */
+const parseForSectionId = (link) => {
+  const id = Number(
+    link.match(/app\/student#academicclass\/(?<id>\d+)/)?.groups.id,
+  );
+  return Number.isNaN(id) ? null : id;
+};
+
+/** @param {String} link */
+const parseForAssignmentIndexId = (link) => {
+  const id = Number(
+    link.match(
+      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
+    )?.groups.id,
+  );
+  return Number.isNaN(id) ? null : id;
+};
+
 /**
  * @param {HTMLElement} detailsElem
  * @returns {AssignmentDetails}
@@ -27,6 +45,7 @@ const parseFullDetailsElem = (detailsElem) => {
   const class_ = isTask
     ? null
     : { name: parts[2], link: detailsElem.querySelector("button a").href };
+  if (class_?.link) class_.id = parseForSectionId(class_.link);
   // the last two elements (type is second-to-last).
   // _assignmentOrTask is the literal string "Assignment" or "My tasks",
   // which isn't very useful for anything, so it is ignored.
@@ -40,16 +59,6 @@ const parseFullDetailsElem = (detailsElem) => {
     type,
     isTask,
   };
-};
-
-/** @param {String} link */
-const parseForAssignmentIndexId = (link) => {
-  const id = Number(
-    link.match(
-      /lms-assignment\/assignment\/assignment-student-view\/(?<id>\d+)/,
-    )?.groups.id,
-  );
-  return Number.isNaN(id) ? null : id;
 };
 
 /**
@@ -171,6 +180,7 @@ const Task = {
       maxPoints: null,
       class: {
         name: t.GroupName,
+        id: t.SectionId,
         link: `https://hunterschools.myschoolapp.com/app/student#academicclass/${t.SectionId}/0/bulletinboard`,
       },
       type: "My task",
