@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.0
+
+_released 00 October 2024_
+
+- Features:
+  - **Custom tasks are now supported!!!** If you find any bugs with them, please
+    report them to me asap.
+
 ## v0.1.5
 
 _released 15 October 2024_
