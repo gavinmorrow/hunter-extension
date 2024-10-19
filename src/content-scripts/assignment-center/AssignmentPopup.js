@@ -55,13 +55,9 @@ class AssignmentPopup extends HTMLElement {
 
   #hydrateStatus() {
     const statusBtn = this.shadowRoot.getElementById("status-btn");
-    if (this.assignment.isTask) {
-      statusBtn.hidden = true;
-    } else {
-      statusBtn.textContent = "Mark as ";
-      if (this.#nextStatus() == null) statusBtn.hidden = true;
-      else statusBtn.textContent += this.#nextStatus();
-    }
+    statusBtn.textContent = "Mark as ";
+    if (this.#nextStatus() == null) statusBtn.hidden = true;
+    else statusBtn.textContent += this.#nextStatus();
   }
 
   #hydrateSubmitBtn() {
@@ -108,19 +104,15 @@ class AssignmentPopup extends HTMLElement {
 
   /** @param {Event} */
   #handleChangeStatus(_e) {
-    if (this.assignment.isTask) {
-      alert("Custom tasks are not yet supported.");
-    } else {
-      this.#setAssignment({ status: this.#nextStatus() });
-      const statusBtn = this.shadowRoot.getElementById("status-btn");
-      statusBtn.blur();
-    }
+    this.#setAssignment({ status: this.#nextStatus() }, this.assignment.isTask);
+    const statusBtn = this.shadowRoot.getElementById("status-btn");
+    statusBtn.blur();
   }
 
   /** @param {Event} */
   #handleSubmit(_e) {
     if (this.assignment.isTask) {
-      alert("Custom tasks are not yet supported.");
+      alert("Cannot submit to a custom task.");
     } else {
       window.location.assign(this.assignment.link);
     }

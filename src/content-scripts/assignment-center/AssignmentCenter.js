@@ -221,17 +221,21 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /** @param {Number} id @param {Assignment} changes */
-  #updateAssignment(id, changes) {
+  #updateAssignment(id, changes, isTask) {
     // update internal object
-    const index = this.assignments.findIndex((a) => a.assignmentIndexId === id);
+    const index = this.assignments.findIndex(
+      (a) => (a.assignmentIndexId ?? a.userTaskId) === id,
+    );
     if (index === -1) return;
     this.assignments[index] = { ...this.assignments[index], ...changes };
 
     // check for if the status in the backend needs to be updated
-    if (changes.status != undefined)
+    if (changes.status != undefined) {
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
-      updateAssignmentStatus(id, changes.status);
+      if (isTask) updateTaskStatus(this.assignments[index]);
+      else updateAssignmentStatus(id, changes.status, isTask);
+    }
 
     // update the element corresponding to it
     /** @type {AssignmentBox} */
