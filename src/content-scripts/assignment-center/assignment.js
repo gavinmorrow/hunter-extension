@@ -73,9 +73,8 @@ const Assignment = {
   /** @param {Assignment} assignment */
   async getBlackbaudReprFor(assignment) {
     if (assignment.isTask) {
-      // TODO: Custom Task support
       console.warn(
-        "Tried to get Blackbaud representation for custom task. Custom tasks are not yet supported.",
+        "Tried to get Blackbaud representation for custom task. Custom tasks do not have a Blackbaud representation.",
       );
       return undefined;
     }

@@ -119,9 +119,7 @@ class AssignmentPopup extends HTMLElement {
   }
 
   #getDesc() {
-    // TODO: support custom tasks
-    if (this.assignment.isTask)
-      return "<i><strong>WARNING: CUSTOM TASKS ARE NOT YET SUPPORTED!!</strong> If you want support, email <a href='mailto:gavinmorrow@hunterschools.org'>gavinmorrow@hunterschools.org</a></i>";
+    if (this.assignment.isTask) return "<i>Custom task</i>";
 
     const rawDesc = this.assignment.description;
     if (rawDesc === null || rawDesc === undefined) return "<i>Loading...</i>";
