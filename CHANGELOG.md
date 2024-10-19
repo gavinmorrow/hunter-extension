@@ -5,8 +5,8 @@
 _released 19 October 2024_
 
 - Features:
-  - **Custom tasks are now supported!!!** If you find any bugs with them, please
-    report them to me asap.
+  - 🎆 **Custom tasks are now supported!!!** 🎉 If you find any bugs with them,
+    please report them to me asap.
 - Bug Fixes:
   - Don't crash if there's an assignment marked as extra credit.
 
