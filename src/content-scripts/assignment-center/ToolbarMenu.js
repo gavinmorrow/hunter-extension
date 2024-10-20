@@ -16,6 +16,13 @@ class ToolbarMenu extends HTMLElement {
     root.id = "root";
 
     const settings = new SettingsMenu();
+
+    // Use a slot so that it gets the styling
+    const showBtn = document.createElement("button");
+    showBtn.textContent = "Settings";
+    showBtn.slot = "show-modal";
+    settings.appendChild(showBtn);
+
     root.appendChild(settings);
 
     const newTask = document.createElement("button");
@@ -40,6 +47,7 @@ class ToolbarMenu extends HTMLElement {
 
   display: flex;
   flex-direction: row;
+  gap: 0.25em;
 
   /* FIXME: if both assignment-center and this use margin, then it will
    * collapse automatically. except then we need a container for styles.
@@ -47,12 +55,18 @@ class ToolbarMenu extends HTMLElement {
    */
   padding: 1em;
   padding-bottom: 0;
-}
 
-#root > * {
-  background-color: var(--color-bg-btn);
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
+  & button, & a {
+    background-color: var(--color-bg-btn);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+
+    padding: 0.25em;
+
+    &:hover, &:focus {
+      background-color: oklch(from var(--color-bg-btn) calc(l*200%) c h);
+    }
+  }
 }
 `;
   }

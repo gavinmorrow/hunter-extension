@@ -74,14 +74,19 @@ class SettingsMenu extends HTMLElement {
     modal.append(...this.#createModalElements());
     shadow.appendChild(modal);
 
+    const btnSlot = document.createElement("slot");
+    btnSlot.name = "show-modal";
+    shadow.appendChild(btnSlot);
+
+    // Add default button
     const settingsBtn = document.createElement("button");
-    settingsBtn.id = "settings-btn";
     settingsBtn.textContent = "Settings";
-    settingsBtn.addEventListener("click", (e) => modal.showModal());
-    shadow.appendChild(settingsBtn);
+    btnSlot.appendChild(settingsBtn);
   }
   async connectedCallback() {
     this.#hydrateStyles();
+
+    this.#hydrateToggleModalBtn();
 
     // It's okay to leave the Promise hanging here, bc we don't need its
     // result. We're just doing it for the side effects.
@@ -185,6 +190,15 @@ class SettingsMenu extends HTMLElement {
     return await Promise.all(
       Object.entries(settingsOptions).map(hydrate.bind(this, [])),
     );
+  }
+
+  #hydrateToggleModalBtn() {
+    /** @type {HTMLSlotElement} */
+    const slot = this.shadowRoot.querySelector("slot[name='show-modal']");
+    const [btn] = slot.assignedElements({ flatten: true });
+
+    const modal = this.shadowRoot.getElementById("modal");
+    btn.addEventListener("click", (e) => modal.showModal());
   }
 
   #hydrateStyles() {
