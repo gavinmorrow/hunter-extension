@@ -106,6 +106,7 @@ const createCustomUi = async () => {
   const oldElem = await waitForElem("app-student-assignment-center");
 
   try {
+    const wrapper = document.createElement("div");
     // construct our own elements
     const toolbarMenu = new ToolbarMenu();
     const assignmentCenter = new AssignmentCenter(
@@ -113,7 +114,8 @@ const createCustomUi = async () => {
       [],
       await settings(),
     );
-    oldElem.parentElement.append(toolbarMenu, assignmentCenter);
+    wrapper.append(toolbarMenu, assignmentCenter);
+    oldElem.parentElement.appendChild(wrapper);
 
     // construct close button
     const closeBtn = document.createElement("button");

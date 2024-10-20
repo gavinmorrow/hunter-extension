@@ -1,6 +1,11 @@
 const DEFAULT_TIMEOUT = 10000;
 const DEFAULT_INTERVAL = 16;
 
+/**
+ * @template T
+ * @param {T} a
+ * @returns {T}
+ */
 const dbg = (a) => {
   console.log(a);
   return a;

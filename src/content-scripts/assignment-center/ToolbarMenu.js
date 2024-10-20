@@ -8,6 +8,10 @@ class ToolbarMenu extends HTMLElement {
   #createDom() {
     const shadow = this.attachShadow({ mode: "open" });
 
+    // Prevent blackbaud from throwing a fit in the console
+    shadow.addEventListener("click", (e) => e.stopPropagation());
+    shadow.addEventListener("mousedown", (e) => e.stopPropagation());
+
     const style = document.createElement("style");
     style.textContent = this.#getStylesheet();
     shadow.appendChild(style);
