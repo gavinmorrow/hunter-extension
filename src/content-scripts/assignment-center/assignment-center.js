@@ -108,27 +108,14 @@ const createCustomUi = async () => {
   try {
     const wrapper = document.createElement("div");
     // construct our own elements
-    const toolbarMenu = new ToolbarMenu();
     const assignmentCenter = new AssignmentCenter(
       oldElem,
       [],
       await settings(),
     );
+    const toolbarMenu = new ToolbarMenu({ oldElem, assignmentCenter });
     wrapper.append(toolbarMenu, assignmentCenter);
-    oldElem.parentElement.appendChild(wrapper);
-
-    // construct close button
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "Toggle custom UI";
-    closeBtn.style.position = "fixed";
-    closeBtn.style.zIndex = "1000000000";
-    closeBtn.style.top = "0";
-    closeBtn.style.left = "0";
-    closeBtn.addEventListener("click", (_e) => {
-      oldElem.hidden = !oldElem.hidden;
-      assignmentCenter.hidden = !assignmentCenter.hidden;
-    });
-    oldElem.parentElement.appendChild(closeBtn);
+    oldElem.parentElement.prepend(wrapper);
 
     // hide theirs
     oldElem.hidden = true;

@@ -1,6 +1,8 @@
 class ToolbarMenu extends HTMLElement {
-  constructor() {
+  constructor(elems) {
     super();
+
+    this.elems = elems;
 
     this.#createDom();
   }
@@ -28,6 +30,19 @@ class ToolbarMenu extends HTMLElement {
     settings.appendChild(showBtn);
 
     root.appendChild(settings);
+
+    // construct close button
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "Toggle custom UI";
+    // closeBtn.style.position = "fixed";
+    // closeBtn.style.zIndex = "1000000000";
+    // closeBtn.style.top = "0";
+    // closeBtn.style.left = "0";
+    closeBtn.addEventListener("click", (_e) => {
+      this.elems.oldElem.hidden = !this.elems.oldElem.hidden;
+      this.elems.assignmentCenter.hidden = !this.elems.assignmentCenter.hidden;
+    });
+    root.appendChild(closeBtn);
 
     const newTask = document.createElement("button");
     newTask.textContent = "New task";
@@ -67,7 +82,7 @@ class ToolbarMenu extends HTMLElement {
 
     padding: 0.25em;
 
-    &:hover, &:focus {
+    &:hover {
       background-color: oklch(from var(--color-bg-btn) calc(l*200%) c h);
     }
   }
