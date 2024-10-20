@@ -82,7 +82,7 @@ class ToolbarMenu extends HTMLElement {
 
     padding: 0.25em;
 
-    &:hover {
+    &:hover, &:focus-visible {
       background-color: oklch(from var(--color-bg-btn) calc(l*200%) c h);
     }
   }
