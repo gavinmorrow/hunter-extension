@@ -185,10 +185,6 @@ class AssignmentPopup extends HTMLElement {
   padding: var(--len-padding);
   border-radius: var(--len-padding);
 
-  & #desc > p:first-of-type {
-    margin-top: 0;
-  }
-
   & #title {
     font-size: medium;
     margin: 0;
@@ -197,6 +193,9 @@ class AssignmentPopup extends HTMLElement {
   }
   & #desc > p:first-of-type {
     margin-top: 0;
+  }
+  & #desc > p:last-of-type {
+    margin-bottom: 0;
   }
 }
 
