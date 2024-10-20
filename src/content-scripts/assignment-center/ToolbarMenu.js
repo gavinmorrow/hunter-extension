@@ -34,10 +34,6 @@ class ToolbarMenu extends HTMLElement {
     // construct close button
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "Toggle custom UI";
-    // closeBtn.style.position = "fixed";
-    // closeBtn.style.zIndex = "1000000000";
-    // closeBtn.style.top = "0";
-    // closeBtn.style.left = "0";
     closeBtn.addEventListener("click", (_e) => {
       this.elems.oldElem.hidden = !this.elems.oldElem.hidden;
       this.elems.assignmentCenter.hidden = !this.elems.assignmentCenter.hidden;
