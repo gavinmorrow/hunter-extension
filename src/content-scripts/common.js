@@ -287,6 +287,25 @@ const deleteTask = async (id) => {
     body: JSON.stringify({ id }),
   });
 };
+/** @param {BlackbaudTask} task */
+const createTask = async (task) => {
+  console.log(`Creating task ${task.title}`);
+  const id = fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(task),
+  }).then((r) => r.text());
+  return id;
+};
+/** @param {BlackbaudTask} task */
+const updateTask = async (task) => {
+  console.log(`Updating task ${task.id}`);
+  return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(task),
+  });
+};
 
 /**
  * Make the given element have the given class if *and only if* `predicate` is truthy.

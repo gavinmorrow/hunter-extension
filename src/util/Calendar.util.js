@@ -139,6 +139,57 @@ const Calendar = {
     const offsetFromSunday = 0 - dayOfWeek;
     return Calendar.offsetFromDay(date, offsetFromSunday);
   },
+
+  /**
+   * Convert a date to yyyy-mm-dd format.
+   * @param {Date} date
+   * @returns {String}
+   */
+  asInputValue(date) {
+    const year = String(date.getFullYear()).padStart(4, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  },
+  /**
+   * Convert a yyyy-mm-dd string to a Date object.
+   * @param {String} value
+   * @returns {Date}
+   */
+  fromInputValue(value) {
+    const [year, month, day] = value.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    date.setFullYear(year);
+    return date;
+  },
+  /** Date as mm/dd/yyyy */
+  asBlackbaudDate(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${month}/${day}/${year}`;
+  },
+
+  /**
+   * Convert a 24 hour time to 12 hour time.
+   * @param {Number} hour24
+   * @returns {[Number, "AM"|"PM"]}
+   */
+  to12HourTime(hour24) {
+    const hour12 = hour24 % 12 || 12;
+    const amPm = hour24 < 12 ? "AM" : "PM";
+    return [hour12, amPm];
+  },
+  /**
+   * Convert an input time to a Blackbaud time.
+   * @param {String} hour24InputValue hh:mm 24-hour time
+   * @returns {String} hh:mm AM/PM 12-hour time
+   */
+  to12HourTimeInputValue(hour24InputValue) {
+    const [hour24, min] = hour24InputValue.split(":").map(Number);
+    const [hour12, amPm] = Calendar.to12HourTime(hour24);
+    return `${hour12}:${String(min).padStart(2, "0")} ${amPm}`;
+  },
 };
 
 const _assert = (...os) => {
@@ -224,6 +275,51 @@ const _calendarUnitTests = [
       { eq: [nextDay.getDate(), 1] },
       { eq: [nextDay.getMonth(), 2] },
     );
+  },
+
+  function asInputValue() {
+    const date = new Date(2009, 3, 22);
+    const res = Calendar.asInputValue(date);
+    return _assert({ eq: [res, "2009-04-22"] });
+  },
+  function asInputValueSmallYear() {
+    const date = new Date(42, 11, 7);
+    date.setFullYear(42);
+    const res = Calendar.asInputValue(date);
+    return _assert({ eq: [res, "0042-12-07"] });
+  },
+  function fromInputValue() {
+    const res = Calendar.fromInputValue("2009-04-22");
+    const expected = new Date(2009, 3, 22);
+    return _assert({ eq: [res.getTime(), expected.getTime()] });
+  },
+  function fromInputValueSmallYear() {
+    const res = Calendar.fromInputValue("9-10-3");
+    const expected = new Date(9, 9, 3);
+    expected.setFullYear(9);
+    return _assert({ eq: [res.getTime(), expected.getTime()] });
+  },
+  function roundtripInputValue() {
+    const date = new Date(2009, 3, 22);
+    const res = Calendar.fromInputValue(Calendar.asInputValue(date));
+    return _assert({ eq: [res.getTime(), date.getTime()] });
+  },
+
+  function to12HourTimeMorning() {
+    const res = Calendar.to12HourTime(9);
+    return _assert({ eq: [res.join(" "), "9 AM"] });
+  },
+  function to12HourTimeAfternoon() {
+    const res = Calendar.to12HourTime(13);
+    return _assert({ eq: [res.join(" "), "1 PM"] });
+  },
+  function to12HourTimeMidnight() {
+    const res = Calendar.to12HourTime(0);
+    return _assert({ eq: [res.join(" "), "12 AM"] });
+  },
+  function to12HourTimeNoon() {
+    const res = Calendar.to12HourTime(12);
+    return _assert({ eq: [res.join(" "), "12 PM"] });
   },
 ];
 function _calendarUnitTestsRunAll() {

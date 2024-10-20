@@ -30,7 +30,6 @@ class ToolbarMenu extends HTMLElement {
     settings.appendChild(showBtn);
 
     root.appendChild(settings);
-
     // construct close button
     const closeBtn = document.createElement("button");
     closeBtn.textContent = "Toggle custom UI";
@@ -40,9 +39,12 @@ class ToolbarMenu extends HTMLElement {
     });
     root.appendChild(closeBtn);
 
-    const newTask = document.createElement("button");
-    newTask.textContent = "New task";
-    // root.appendChild(newTask);
+    const taskEditor = new TaskEditor();
+    const newTaskBtn = document.createElement("button");
+    newTaskBtn.textContent = "New task";
+    newTaskBtn.slot = "show-modal";
+    taskEditor.appendChild(newTaskBtn);
+    root.appendChild(taskEditor);
 
     shadow.appendChild(root);
   }
