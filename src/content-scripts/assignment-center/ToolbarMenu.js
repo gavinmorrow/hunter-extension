@@ -42,7 +42,7 @@ class ToolbarMenu extends HTMLElement {
 
     const newTask = document.createElement("button");
     newTask.textContent = "New task";
-    root.appendChild(newTask);
+    // root.appendChild(newTask);
 
     shadow.appendChild(root);
   }
