@@ -89,8 +89,15 @@ class TaskEditor extends HTMLElement {
     btn?.addEventListener("click", () => modal.showModal());
   }
 
-  #hydrateClassSelect() {
-    // todo
+  async #hydrateClassSelect() {
+    const classSelect = this.shadowRoot.getElementById("class-select");
+    const classes = await getClasses();
+    for (const [id, name] of classes.entries()) {
+      const option = document.createElement("option");
+      option.value = id;
+      option.textContent = name;
+      classSelect.appendChild(option);
+    }
   }
 
   #hydrateFormSubmit() {

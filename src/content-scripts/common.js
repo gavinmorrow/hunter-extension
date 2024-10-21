@@ -307,6 +307,44 @@ const updateTask = async (task) => {
   });
 };
 
+const [getClassColors, _updateClassColorsCache] = memo(
+  /** @returns {Promise<Map<number, string>>} */
+  async () =>
+    fetch(
+      "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet/",
+    )
+      .then(
+        /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
+        (r) => r.json(),
+      )
+      .then((r) => r.SectionColors)
+      .then((colors) =>
+        colors.reduce(
+          (map, { LeadSectionId, HexColor }) =>
+            map.set(LeadSectionId, HexColor),
+          new Map(),
+        ),
+      ),
+);
+
+const [getClasses, _updateClassesCache] = memo(
+  /** @returns {Promise<Map<number, string>>} */
+  async () =>
+    fetch(
+      "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
+    )
+      .then(
+        /** @returns {{ Sections: { LeadSectionId: number, GroupName: string }[] }} */
+        (r) => r.json(),
+      )
+      .then(({ Sections: sections }) =>
+        sections.reduce(
+          (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
+          new Map(),
+        ),
+      ),
+);
+
 /**
  * Make the given element have the given class if *and only if* `predicate` is truthy.
  * @param {HTMLElement} elem

@@ -159,26 +159,6 @@ const deduplicateAssignments = (assignments) =>
       .values(),
   );
 
-const [getClassColors, _updateClassColorsCache] = memo(
-  /** @returns {Promise<Map<number, string>>} */
-  async () =>
-    fetch(
-      "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet/",
-    )
-      .then(
-        /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
-        (r) => r.json(),
-      )
-      .then((r) => r.SectionColors)
-      .then((colors) =>
-        colors.reduce(
-          (map, { LeadSectionId, HexColor }) =>
-            map.set(LeadSectionId, HexColor),
-          new Map(),
-        ),
-      ),
-);
-
 /**
  * @param {"Active"|"Past"} time
  * @returns {Promise<Assignment[]>} A promise of an array of Assignments sorted by due date.
