@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.2
+
+_release 00 October 2024_
+
+- Features:
+  - You can now create and edit custom tasks!
+  - Adds a central toolbar for actions (settings, toggle custom ui, new task)
+- Bug Fixes:
+  - Fixes a bug where sometimes Blackbaud autologin wouldn't work.
+
 ## v0.2.0
 
 _released 19 October 2024_
