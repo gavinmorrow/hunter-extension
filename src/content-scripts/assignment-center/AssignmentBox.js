@@ -5,6 +5,9 @@ class AssignmentBox extends HTMLElement {
   /** @type {(changes: Assignment) => void} */
   #setAssignment;
 
+  /** @type {(task: BlackbaudTask) => void} */
+  #setTask;
+
   /** @type {Settings} */
   settings;
 
@@ -14,12 +17,14 @@ class AssignmentBox extends HTMLElement {
   /**
    * @param {Assignment} assignment
    * @param {(changes: Assignment) => void} setAssignment
+   * @param {(task: BlackbaudTask) => void} setTask
    * @param {Settings} settings
    */
-  constructor(assignment, setAssignment, settings) {
+  constructor(assignment, setAssignment, setTask, settings) {
     super();
     this.assignment = assignment;
     this.#setAssignment = setAssignment;
+    this.#setTask = setTask;
     this.settings = settings;
     this.popup = new AssignmentPopup(
       this.assignment,
@@ -38,15 +43,34 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
+    const taskEditor = new TaskEditor(
+      this.assignment.id,
+      async (task) => {
+        await updateTask(task);
+        this.#setTask(task);
+      },
+      this.assignment,
+    );
+    const taskEditorBtn = document.createElement("button");
+    taskEditorBtn.textContent = "Edit";
+    taskEditorBtn.slot = "show-modal";
+    taskEditorBtn.hidden = true;
+    taskEditor.appendChild(taskEditorBtn);
+    wrapper.appendChild(taskEditor);
+
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and
     // <https://css-tricks.com/block-links-the-search-for-a-perfect-solution/>.
     root.style.cursor = "pointer";
     root.addEventListener("click", (e) => {
-      const link = root.querySelector("#title a");
-      if (e.target === link || document.getSelection().toString() !== "")
-        return;
-      else link.click();
+      if (this.assignment.isTask) {
+        taskEditorBtn.click();
+      } else {
+        const link = root.querySelector("#title a");
+        if (e.target === link || document.getSelection().toString() !== "")
+          return;
+        else link.click();
+      }
     });
 
     // add the element for assignment title

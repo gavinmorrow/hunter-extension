@@ -299,7 +299,7 @@ const createTask = async (task) => {
 };
 /** @param {BlackbaudTask} task */
 const updateTask = async (task) => {
-  console.log(`Updating task ${task.id}`);
+  console.log(`Updating task ${task.UserTaskId}`);
   return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

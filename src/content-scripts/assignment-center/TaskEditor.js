@@ -33,13 +33,17 @@ class TaskEditor extends HTMLElement {
   /** @type {number?} */
   taskId;
 
+  /** @type {Assignment?} */
+  assignment;
+
   /** @type {(task: BlackbaudTask) => Promise<void>} */
   #addTask;
 
-  /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void> addTask} */
-  constructor(taskId, addTask) {
+  /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void>} addTask @param {Assignment?} assignment */
+  constructor(taskId, addTask, assignment) {
     super();
     this.taskId = taskId;
+    this.assignment = assignment;
     this.#addTask = addTask;
 
     const shadow = this.attachShadow({ mode: "open" });
@@ -52,7 +56,7 @@ class TaskEditor extends HTMLElement {
     <input type="hidden" name="id" value="${taskId ?? ""}">
     <label>
       Title
-      <input required autofocus type="text" name="title" placeholder="${randomPlaceholder()}">
+      <input required autofocus type="text" name="title" placeholder="${randomPlaceholder()}" value="${this.assignment?.title ?? ""}">
     </label>
     <label>
       Class
@@ -62,11 +66,7 @@ class TaskEditor extends HTMLElement {
     </label>
     <label>
       Due Date
-      <input required type="date" name="dueDate" value="${Calendar.asInputValue(tomorrow)}">
-    </label>
-    <label>
-      Due Time
-      <input required type="time" name="dueTime" value="08:08">
+      <input required type="date" name="dueDate" value="${Calendar.asInputValue(this.assignment?.dueDate ?? tomorrow)}">
     </label>
     <input type="submit" value="Save">
     <input type="submit" value="Cancel">
@@ -96,6 +96,7 @@ class TaskEditor extends HTMLElement {
       const option = document.createElement("option");
       option.value = id;
       option.textContent = name;
+      if (this.assignment?.class.name === name) option.selected = true;
       classSelect.appendChild(option);
     }
   }
@@ -113,7 +114,7 @@ class TaskEditor extends HTMLElement {
         const taskRaw = Object.fromEntries(Array.from(formData));
         const dueDate = `${Calendar.asBlackbaudDate(
           Calendar.fromInputValue(taskRaw.dueDate),
-        )} ${Calendar.to12HourTimeInputValue(taskRaw.dueTime)}`;
+        )} 8:08 AM`;
         const task = {
           // Use the same value b/c that's how Blackbaud does it
           AssignedDate: dueDate,

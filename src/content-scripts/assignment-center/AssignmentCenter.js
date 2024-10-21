@@ -168,6 +168,7 @@ class AssignmentCenter extends HTMLElement {
             new AssignmentBox(
               a,
               this.#updateAssignment.bind(this, a.id, a.isTask),
+              this.#addTask.bind(this),
               this.settings,
             ),
         )
