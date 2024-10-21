@@ -38,6 +38,7 @@
         "src/content-scripts/assignment-center/assignment.js",
         "src/content-scripts/assignment-center/AssignmentPopup.js",
         "src/content-scripts/assignment-center/AssignmentBox.js",
+        "src/content-scripts/assignment-center/Task.js",
         "src/content-scripts/assignment-center/AssignmentCenter.js",
         "src/content-scripts/assignment-center/scrape-assignments.js",
         "src/content-scripts/assignment-center/assignment-center.js"

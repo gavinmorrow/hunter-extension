@@ -39,6 +39,7 @@ class AssignmentCenter extends HTMLElement {
     this.settings = settings;
 
     this.addAssignments = this.#addAssignments.bind(this);
+    this.addTask = this.#addTask.bind(this);
 
     // create DOM
     // Create a shadow root
@@ -210,6 +211,25 @@ class AssignmentCenter extends HTMLElement {
   /** @param {Assignment[]} newAssignments */
   #addAssignments(newAssignments) {
     this.assignments = this.assignments.concat(newAssignments);
+    this.#hydrateCalendar();
+  }
+
+  // TODO: refactor
+  /** @param {BlackbaudTask} task */
+  async #addTask(task) {
+    let id = task.UserTaskId;
+    if (task.UserTaskId == undefined || task.UserTaskId === "")
+      id = (await createTask(task)) ?? id;
+    else await updateTask(task);
+
+    if (id == undefined) {
+      console.error("Task could not be saved.");
+      return;
+    }
+
+    console.log(`Task ${id} saved.`);
+
+    this.assignments = await Task.populateAllIn(this.assignments);
     this.#hydrateCalendar();
   }
 

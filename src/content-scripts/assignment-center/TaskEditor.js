@@ -34,13 +34,13 @@ class TaskEditor extends HTMLElement {
   taskId;
 
   /** @type {(task: BlackbaudTask) => Promise<void>} */
-  #setTask;
+  #addTask;
 
-  /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void> setTask} */
-  constructor(taskId, setTask) {
+  /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void> addTask} */
+  constructor(taskId, addTask) {
     super();
     this.taskId = taskId;
-    this.#setTask = setTask;
+    this.#addTask = addTask;
 
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `\
@@ -93,12 +93,6 @@ class TaskEditor extends HTMLElement {
     // todo
   }
 
-  // AssignedDate	"10/21/2024 9:00 AM"
-  // DueDate	"10/21/2024 9:00 AM"
-  // ShortDescription	"hello world"
-  // TaskStatus	-1
-  // UserId	7083094
-
   #hydrateFormSubmit() {
     /** @type {HTMLFormElement} */
     const form = this.shadowRoot.getElementById("task-form");
@@ -122,12 +116,7 @@ class TaskEditor extends HTMLElement {
           UserId: Number(await getStudentUserId()),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),
         };
-        // await this.#setTask(task);
-        let id = task.UserTaskId;
-        if (task.UserTaskId == undefined || task.UserTaskId === "")
-          id = (await createTask(task)) ?? id;
-        else await updateTask(task);
-        console.log(`Task ${id} saved.`);
+        await this.#addTask(task);
       }
 
       form.reset();
