@@ -2,7 +2,7 @@
 
 ## v0.2.2
 
-_release 00 October 2024_
+_release 21 October 2024_
 
 - Features:
   - You can now create and edit custom tasks!
