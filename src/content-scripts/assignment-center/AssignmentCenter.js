@@ -160,6 +160,32 @@ class AssignmentCenter extends HTMLElement {
           return a;
         });
 
+      // update old assignment elements
+      assignments
+        .map(
+          /** @returns {[Assignment, AssignmentBox]} */ (a) => [
+            a,
+            this.#findAssignmentBoxFor(a.id),
+          ],
+        )
+        .filter(([_, box]) => box != null)
+        .forEach(([a, box]) => {
+          // reparent in case the date changed
+          const newParent = this.shadowRoot.getElementById(
+            AssignmentCenter.#idForAssignmentList(
+              Calendar.resetDate(a.dueDate),
+            ),
+          );
+          // parent is <li>, parent of that is <ul>
+          const boxLi = box.parentElement;
+          if (boxLi.parentElement.id !== newParent?.id) {
+            // FIXME: doesn't do proper sort order
+            newParent.appendChild(boxLi);
+          }
+
+          box.updateAssignment(a);
+        });
+
       // add new assignment elements
       assignments
         .filter((a) => this.#findAssignmentBoxFor(a.id) == null)
@@ -178,17 +204,6 @@ class AssignmentCenter extends HTMLElement {
           return li;
         })
         .forEach((li) => list.appendChild(li));
-
-      // update old assignment elements
-      assignments
-        .map(
-          /** @returns {[Assignment, AssignmentBox]} */ (a) => [
-            a,
-            this.#findAssignmentBoxFor(a.id),
-          ],
-        )
-        .filter(([_, box]) => box != null)
-        .forEach(([a, box]) => box.updateAssignment(a));
 
       // show the day in calendar (really applies to just weekends, but is a
       // no-op for weekdays so it's okay)
