@@ -7,6 +7,7 @@ _released 00 October 2024_
 - Bug Fixes:
   - Clicking on the link in a custom task will no longer redirect you to a
     non-existent page, instead it will show you the editor.
+  - Editing a task will no longer reset it to "Todo" status.
 
 ## v0.2.2
 

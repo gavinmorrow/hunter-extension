@@ -39,12 +39,16 @@ class TaskEditor extends HTMLElement {
   /** @type {(task: BlackbaudTask) => Promise<void>} */
   #addTask;
 
+  /** @type {(assignment: Assignment) => void} */
+  updateAssignment;
+
   /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void>} addTask @param {Assignment?} assignment */
   constructor(taskId, addTask, assignment) {
     super();
     this.taskId = taskId;
     this.assignment = assignment;
     this.#addTask = addTask;
+    this.updateAssignment = this.#updateAssignment.bind(this);
 
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `\
@@ -53,10 +57,10 @@ class TaskEditor extends HTMLElement {
 </style>
 <dialog id="modal">
   <form id="task-form" method="dialog">
-    <input type="hidden" name="id" value="${taskId ?? ""}">
+    <input id="id" type="hidden"name="id">
     <label>
       Title
-      <input required autofocus type="text" name="title" placeholder="${randomPlaceholder()}" value="${this.assignment?.title ?? ""}">
+      <input required autofocus id="title" type="text" name="title">
     </label>
     <label>
       Class
@@ -66,7 +70,7 @@ class TaskEditor extends HTMLElement {
     </label>
     <label>
       Due Date
-      <input required type="date" name="dueDate" value="${Calendar.asInputValue(this.assignment?.dueDate ?? tomorrow)}">
+      <input required id="dueDate" type="date" name="dueDate">
     </label>
     <input type="submit" value="Save">
     <input type="submit" value="Cancel">
@@ -82,11 +86,30 @@ class TaskEditor extends HTMLElement {
     this.#hydrateFormSubmit();
   }
 
+  #updateAssignment(assignment) {
+    this.assignment = assignment;
+  }
+
   #hydrateShowModal() {
     const slot = this.shadowRoot.querySelector("slot[name='show-modal']");
     const [btn] = slot.assignedElements();
     const modal = this.shadowRoot.getElementById("modal");
-    btn?.addEventListener("click", () => modal.showModal());
+    btn?.addEventListener("click", () => {
+      const id = this.shadowRoot.getElementById("id");
+      id.value = this.taskId ?? "";
+
+      /** @type {HTMLInputElement} */
+      const title = this.shadowRoot.getElementById("title");
+      title.placeholder = randomPlaceholder();
+      title.value = this.assignment?.title ?? "";
+
+      const dueDate = this.shadowRoot.getElementById("dueDate");
+      dueDate.value = Calendar.asInputValue(
+        this.assignment?.dueDate ?? tomorrow,
+      );
+
+      modal.showModal();
+    });
   }
 
   async #hydrateClassSelect() {
@@ -120,7 +143,7 @@ class TaskEditor extends HTMLElement {
           AssignedDate: dueDate,
           DueDate: dueDate,
           ShortDescription: taskRaw.title,
-          TaskStatus: -1,
+          TaskStatus: statusNumMap[dbg(this.assignment?.status)] ?? -1,
           UserId: Number(await getStudentUserId()),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),
         };

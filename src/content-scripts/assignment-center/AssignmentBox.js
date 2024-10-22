@@ -14,6 +14,9 @@ class AssignmentBox extends HTMLElement {
   /** @type {AssignmentPopup} */
   popup;
 
+  /** @type {TaskEditor} */
+  taskEditor;
+
   /**
    * @param {Assignment} assignment
    * @param {(changes: Assignment) => void} setAssignment
@@ -43,7 +46,7 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    const taskEditor = new TaskEditor(
+    this.taskEditor = new TaskEditor(
       this.assignment.id,
       async (task) => {
         await updateTask(task);
@@ -55,8 +58,8 @@ class AssignmentBox extends HTMLElement {
     taskEditorBtn.textContent = "Edit";
     taskEditorBtn.slot = "show-modal";
     taskEditorBtn.hidden = true;
-    taskEditor.appendChild(taskEditorBtn);
-    wrapper.appendChild(taskEditor);
+    this.taskEditor.appendChild(taskEditorBtn);
+    wrapper.appendChild(this.taskEditor);
 
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and
@@ -90,6 +93,7 @@ class AssignmentBox extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
+    this.taskEditor.updateAssignment(assignment);
     this.#hydrateStyles();
     this.#hydrateTitleElem();
     this.popup.updateAssignment(assignment);
