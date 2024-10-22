@@ -1,8 +1,16 @@
 # Changelog
 
+## v0.2.3
+
+_released 00 October 2024_
+
+- Bug Fixes:
+  - Clicking on the link in a custom task will no longer redirect you to a
+    non-existent page, instead it will show you the editor.
+
 ## v0.2.2
 
-_release 21 October 2024_
+_released 21 October 2024_
 
 - Features:
   - You can now create and edit custom tasks!
