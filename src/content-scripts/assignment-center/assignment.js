@@ -2,7 +2,7 @@
  * @typedef {String} Color Either a CSS color in `rgb(<r>,<g>,<b>)` format, or the empty string `""`.
  * @typedef {String} Link
  * @typedef {"To do"|"In progress"|"Completed"|"Graded"|"Missing"|"Overdue"} Status
- * @typedef {null|"bbDropbox"|"turnitin"|"unknownLti"} SubmissionMethod
+ * @typedef {null|"bbDropbox"|"turnitin"|"googleAssignments"|"unknownLti"} SubmissionMethod
  */
 
 /**
@@ -100,6 +100,8 @@ const Assignment = {
   getSubmissionMethod(blackbaudRepr) {
     const ltiProvider = blackbaudRepr.LtiProviderName.toLowerCase();
     if (ltiProvider.includes("turnitin")) return "turnitin";
+    else if (ltiProvider.includes("google assignments"))
+      return "googleAssignments";
     else if (ltiProvider === "") {
       if (blackbaudRepr.DropboxInd) return "bbDropbox";
       else return null;

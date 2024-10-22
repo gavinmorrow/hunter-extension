@@ -73,15 +73,18 @@ class AssignmentPopup extends HTMLElement {
       submitBtn.hidden = true;
     } else {
       let txt = "Submit";
+      // special cases for submission methods
       switch (this.assignment.submissionMethod) {
         case "turnitin":
-          txt += " on Turnitin"; // fallthrough
-        case "unknownLti": // fallthrough
-        case null: // fallthrough
-        default:
-          submitBtn.textContent = txt;
-          submitBtn.hidden = false;
+          txt += " on Turnitin";
+          break;
+        case "googleAssignments":
+          txt += " on Google Assignments";
+          break;
       }
+
+      submitBtn.textContent = txt;
+      submitBtn.hidden = false;
     }
   }
 
