@@ -88,7 +88,7 @@ class TaskEditor extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
-    this.#hydrateClassSelect();
+    this.#refreshClassSelectSelectedOption();
   }
 
   #hydrateShowModal() {
@@ -117,13 +117,19 @@ class TaskEditor extends HTMLElement {
     const classSelect = this.shadowRoot.getElementById("class-select");
     const classes = await getClasses();
     for (const [id, name] of classes.entries()) {
-      const option =
-        classSelect.querySelector(`option[value="${id}"]`) ??
-        document.createElement("option");
+      const option = document.createElement("option");
       option.value = id;
       option.textContent = name;
-      if (this.assignment?.class.name === name) option.selected = true;
       classSelect.appendChild(option);
+    }
+    this.#refreshClassSelectSelectedOption();
+  }
+
+  #refreshClassSelectSelectedOption() {
+    const classSelect = this.shadowRoot.getElementById("class-select");
+    for (const option of classSelect.querySelectorAll("option")) {
+      const shouldSelect = option.value === String(this.assignment?.class.id);
+      option.selected = shouldSelect;
     }
   }
 
