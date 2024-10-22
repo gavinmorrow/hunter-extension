@@ -257,6 +257,11 @@ const updateAssignmentStatus = async (assignmentIndexId, status) => {
     },
   );
 };
+
+const nullifyIfZeroTaskSectionId = (task) => ({
+  ...task,
+  SectionId: Number(task.SectionId ?? 0) === 0 ? null : String(task.SectionId),
+});
 const updateTaskStatus = async (task) => {
   const statusNum = statusNumMap[task.status];
   console.log(`Setting status to ${statusNum} for task ${task.id}`);
@@ -266,17 +271,19 @@ const updateTaskStatus = async (task) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      userTask: {
-        AssignedDate: BlackbaudDate.from(task.assignedDate),
-        DueDate: BlackbaudDate.from(task.dueDate),
-        SectionId: task.class.id === 0 ? null : String(task.class.id),
-        ShortDescription: task.title,
-        TaskStatus: statusNum,
-        UserId: await getStudentUserId(),
-        UserTaskId: task.id,
-      },
-    }),
+    body: JSON.stringify(
+      nullifyIfZeroTaskSectionId({
+        userTask: {
+          AssignedDate: BlackbaudDate.from(task.assignedDate),
+          DueDate: BlackbaudDate.from(task.dueDate),
+          SectionId: task.class.id,
+          ShortDescription: task.title,
+          TaskStatus: statusNum,
+          UserId: await getStudentUserId(),
+          UserTaskId: task.id,
+        },
+      }),
+    ),
   });
 };
 const deleteTask = async (id) => {
@@ -293,7 +300,7 @@ const createTask = async (task) => {
   const id = fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(task),
+    body: JSON.stringify(nullifyIfZeroTaskSectionId(task)),
   }).then((r) => r.text());
   return id;
 };
@@ -303,7 +310,7 @@ const updateTask = async (task) => {
   return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(task),
+    body: JSON.stringify(nullifyIfZeroTaskSectionId(task)),
   });
 };
 
