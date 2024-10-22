@@ -121,7 +121,8 @@ class AssignmentBox extends HTMLElement {
     titleElem.textContent = this.assignment.title;
     if (this.#shouldCollapse()) titleElem.title = this.assignment.title;
 
-    titleElem.href = this.assignment.link;
+    // tasks don't have links
+    if (!this.assignment.isTask) titleElem.href = this.assignment.link;
   }
 
   #assignmentClassColor() {
