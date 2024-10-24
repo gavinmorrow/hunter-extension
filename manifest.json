@@ -8,7 +8,7 @@
     "https://app.blackbaud.com/signin/*",
     "https://accounts.google.com/o/oauth2/*",
     "https://accounts.google.com/v3/signin/challenge/pwd?*",
-    "https://accounts.google.com/signin/oauth/*"
+    "https://accounts.google.com/signin/oauth*"
   ],
 
   "permissions": ["storage"],
@@ -50,7 +50,7 @@
         "https://app.blackbaud.com/signin*",
         "https://accounts.google.com/o/oauth2/*",
         "https://accounts.google.com/v3/signin/challenge/pwd?*",
-        "https://accounts.google.com/signin/oauth/*"
+        "https://accounts.google.com/signin/oauth*"
       ],
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
