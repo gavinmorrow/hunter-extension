@@ -134,6 +134,63 @@ class AssignmentCenter extends HTMLElement {
   }
 
   #hydrateCalendar() {
+    for (const assignment of this.assignments) {
+      const date = Calendar.resetDate(assignment.dueDate);
+      const list = this.shadowRoot.getElementById(
+        AssignmentCenter.#idForAssignmentList(date),
+      );
+
+      // skip if the date isn't being shown in the calendar
+      if (list == null) continue;
+      // otherwise make sure the date is shown. really applies to just weekends,
+      // but is a no-op for weekdays so it's always okay.
+      else this.#showDay(date.getDay());
+
+      let box = this.#findAssignmentBoxFor(assignment.id);
+      if (box == null) {
+        box = new AssignmentBox(
+          assignment,
+          this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
+          this.#addTask.bind(this),
+          this.settings,
+        );
+        // give the box a parent
+        document.createElement("li").appendChild(box);
+      } else {
+        // If the box already exists, update the assignment
+        // TODO: Don't completely rerender everything
+        box.updateAssignment(assignment);
+      }
+
+      if (list != box.parentElement) {
+        // Append the containing <li>, not the box itself
+        list.appendChild(box.parentElement);
+      }
+
+      if (!assignment.isTask) {
+        // Eventually the description will be updated, just not immediately
+        // since we can't wait that long.
+        // Intentionally not await-ing the Promise.
+        Assignment.getBlackbaudReprFor(assignment)
+          .then(Assignment.parseBlackbaudRepr)
+          .then(
+            this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
+          );
+      }
+    }
+
+    // remove today class from old today
+    const today = this.shadowRoot.querySelector(".today");
+    today?.classList.remove("today");
+
+    // add today class to new today
+    const todayList = this.shadowRoot.getElementById(
+      AssignmentCenter.#idForAssignmentList(this.#findSelectedDate()),
+    );
+    todayList?.parentElement.classList.add("today");
+  }
+
+  #hydrateCalendar_() {
     AssignmentCenter.#allCalendarDates().map((date) => {
       const list = this.shadowRoot.getElementById(
         AssignmentCenter.#idForAssignmentList(date),
