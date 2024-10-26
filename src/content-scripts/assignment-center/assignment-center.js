@@ -108,11 +108,7 @@ const createCustomUi = async () => {
   try {
     const wrapper = document.createElement("div");
     // construct our own elements
-    const assignmentCenter = new AssignmentCenter(
-      oldElem,
-      [],
-      await settings(),
-    );
+    const assignmentCenter = new AssignmentCenter([], await settings());
     const toolbarMenu = new ToolbarMenu({ oldElem, assignmentCenter });
     wrapper.append(toolbarMenu, assignmentCenter);
     oldElem.parentElement.prepend(wrapper);

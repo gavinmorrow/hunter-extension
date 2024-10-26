@@ -1,10 +1,4 @@
 class AssignmentCenter extends HTMLElement {
-  /**
-   * The original Blackbaud assignment center. (An `app-student-assignment-center`.)
-   * @type {HTMLElement}
-   */
-  oldElem;
-
   /** @type {Assignment[]} */
   assignments;
 
@@ -26,13 +20,11 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /**
-   * @param {HTMLElement} oldElem The original Blackbaud assignment center. (An `app-student-assignment-center`.)
    * @param {Assignment[]} assignments
    * @param {Settings} settings The extension settings. Passed in here so that it can be non-async.
    */
-  constructor(oldElem, assignments, settings) {
+  constructor(assignments, settings) {
     super();
-    this.oldElem = oldElem;
     this.assignments = assignments;
     this.settings = settings;
 
