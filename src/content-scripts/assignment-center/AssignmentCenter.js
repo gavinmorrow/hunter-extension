@@ -283,14 +283,6 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /**
-   * Check if the date given is the one to be highlighted in the calendar.
-   * @param {Date} date
-   */
-  #dateIsSelected(date) {
-    return Calendar.datesAreSameDay(date, this.#findSelectedDate());
-  }
-
-  /**
    * Finds the date that should be selected in the calendar.
    * @param {number} start How many days from today to start counting. Defaults to `1`.
    */
