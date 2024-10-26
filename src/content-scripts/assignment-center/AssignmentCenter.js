@@ -162,7 +162,7 @@ class AssignmentCenter extends HTMLElement {
         box.updateAssignment(assignment);
       }
 
-      if (list != box.parentElement) {
+      if (!list.contains(box.parentElement)) {
         // Append the containing <li>, not the box itself
         list.appendChild(box.parentElement);
       }
