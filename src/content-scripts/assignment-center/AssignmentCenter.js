@@ -11,8 +11,6 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Settings} */
   settings;
 
-  // The `calendar` param is needed bc at the time of calling it, the
-  // `#main-calendar` element isn't necessarily created yet.
   /**
    * Show a day of the week in the calendar (ie a column in the grid).
    * @param {HTMLElement} calendar The `#main-calendar` element.
