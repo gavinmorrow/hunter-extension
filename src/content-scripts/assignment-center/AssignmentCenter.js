@@ -146,39 +146,53 @@ class AssignmentCenter extends HTMLElement {
       // but is a no-op for weekdays so it's always okay.
       else this.#showDay(date.getDay());
 
-      let box = this.#findAssignmentBoxFor(assignment.id);
-      if (box == null) {
-        box = new AssignmentBox(
-          assignment,
-          this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
-          this.#addTask.bind(this),
-          this.settings,
-        );
-        // give the box a parent
-        document.createElement("li").appendChild(box);
-      } else {
-        // If the box already exists, update the assignment
-        // TODO: Don't completely rerender everything
-        box.updateAssignment(assignment);
-      }
+      let box =
+        this.#findAssignmentBoxFor(assignment.id) ??
+        this.#createAssignmentBox(assignment);
+      // TODO: Don't completely rerender everything
+      box.updateAssignment(assignment);
 
       if (!list.contains(box.parentElement)) {
         // Append the containing <li>, not the box itself
         list.appendChild(box.parentElement);
       }
 
-      if (!assignment.isTask) {
-        // Eventually the description will be updated, just not immediately
-        // since we can't wait that long.
-        // Intentionally not await-ing the Promise.
-        Assignment.getBlackbaudReprFor(assignment)
-          .then(Assignment.parseBlackbaudRepr)
-          .then(
-            this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
-          );
-      }
+      // Eventually the description will be updated, just not immediately
+      // since we can't wait that long.
+      // Only do it for assignments bc tasks don't have descriptions.
+      if (!assignment.isTask) this.#asyncAddDescriptionToAssignment(assignment);
     }
 
+    this.#updateTodayElem();
+  }
+
+  /**
+   * Create an <assignment-box> inside of a <li> for the given assignment.
+   * @param {Assignment} assignment
+   * @returns {AssignmentBox}
+   */
+  #createAssignmentBox(assignment) {
+    const box = new AssignmentBox(
+      assignment,
+      this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
+      this.#addTask.bind(this),
+      this.settings,
+    );
+    document.createElement("li").appendChild(box);
+    return box;
+  }
+
+  /** @param {assignment} @returns {void} */
+  #asyncAddDescriptionToAssignment(assignment) {
+    // Intentionally not await-ing the Promise.
+    Assignment.getBlackbaudReprFor(assignment)
+      .then(Assignment.parseBlackbaudRepr)
+      .then(
+        this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
+      );
+  }
+
+  #updateTodayElem() {
     // remove today class from old today
     const today = this.shadowRoot.querySelector(".today");
     today?.classList.remove("today");
