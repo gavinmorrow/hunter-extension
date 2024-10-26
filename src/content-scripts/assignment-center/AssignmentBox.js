@@ -2,12 +2,6 @@ class AssignmentBox extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  /** @type {(changes: Assignment) => void} */
-  #setAssignment;
-
-  /** @type {(task: BlackbaudTask) => void} */
-  #setTask;
-
   /** @type {Settings} */
   settings;
 
@@ -19,20 +13,13 @@ class AssignmentBox extends HTMLElement {
 
   /**
    * @param {Assignment} assignment
-   * @param {(changes: Assignment) => void} setAssignment
-   * @param {(task: BlackbaudTask) => void} setTask
    * @param {Settings} settings
    */
-  constructor(assignment, setAssignment, setTask, settings) {
+  constructor(assignment, settings) {
     super();
     this.assignment = assignment;
-    this.#setAssignment = setAssignment;
-    this.#setTask = setTask;
     this.settings = settings;
-    this.popup = new AssignmentPopup(
-      this.assignment,
-      this.#setAssignment.bind(this),
-    );
+    this.popup = new AssignmentPopup(this.assignment);
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM
@@ -46,14 +33,7 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    this.taskEditor = new TaskEditor(
-      this.assignment.id,
-      async (task) => {
-        await updateTask(task);
-        this.#setTask(task);
-      },
-      this.assignment,
-    );
+    this.taskEditor = new TaskEditor(this.assignment.id, this.assignment);
     const taskEditorBtn = document.createElement("button");
     taskEditorBtn.textContent = "Edit";
     taskEditorBtn.slot = "show-modal";

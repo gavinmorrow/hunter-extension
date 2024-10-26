@@ -36,18 +36,16 @@ class TaskEditor extends HTMLElement {
   /** @type {Assignment?} */
   assignment;
 
-  /** @type {(task: BlackbaudTask) => Promise<void>} */
-  #addTask;
-
   /** @type {(assignment: Assignment) => void} */
   updateAssignment;
 
-  /** @param {number?} taskId @param {(task: BlackbaudTask) => Promise<void>} addTask @param {Assignment?} assignment */
-  constructor(taskId, addTask, assignment) {
+  constructor(
+    /** @type {number?} */ taskId,
+    /** @type {Assignment?} */ assignment,
+  ) {
     super();
     this.taskId = taskId;
     this.assignment = assignment;
-    this.#addTask = addTask;
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     const shadow = this.attachShadow({ mode: "open" });
@@ -157,11 +155,20 @@ class TaskEditor extends HTMLElement {
           UserId: Number(await getStudentUserId()),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),
         };
-        await this.#addTask(task);
+        this.#addTask(task);
       }
 
       form.reset();
     });
+  }
+
+  /**
+   * Dispatch an event to add a task.
+   * @param {BlackbaudTask} task
+   */
+  #addTask(task) {
+    const event = new CreateTaskEvent(task);
+    this.dispatchEvent(event);
   }
 
   #getStylesheet() {

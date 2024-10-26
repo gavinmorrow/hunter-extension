@@ -2,17 +2,9 @@ class AssignmentPopup extends HTMLElement {
   /** @type {Assignment} */
   assignment;
 
-  /** @type {(changes: Assignment) => void} */
-  #setAssignment;
-
-  /**
-   * @param {Assignment} assignment
-   * @param {(changes: Assignment) => void} setAssignment
-   */
-  constructor(assignment, setAssignment) {
+  constructor(/** @type {Assignment} */ assignment) {
     super();
     this.assignment = assignment;
-    this.#setAssignment = setAssignment;
 
     this.updateAssignment = this.#updateAssignment.bind(this);
 
@@ -114,6 +106,19 @@ class AssignmentPopup extends HTMLElement {
     this.#hydrateDeleteBtn();
     this.#hydrateTitle();
     this.#hydrateDescription();
+  }
+
+  /**
+   * Dispatch an event to change the assignment.
+   * @param {Assignment} changes
+   */
+  #setAssignment(changes) {
+    const event = new ChangeAssignmentEvent(
+      this.assignment.id,
+      this.assignment.isTask,
+      changes,
+    );
+    this.dispatchEvent(event);
   }
 
   /** @param {Event} */

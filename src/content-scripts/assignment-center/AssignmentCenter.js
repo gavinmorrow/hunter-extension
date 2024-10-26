@@ -31,6 +31,15 @@ class AssignmentCenter extends HTMLElement {
     this.addAssignments = this.#addAssignments.bind(this);
     this.addTask = this.#addTask.bind(this);
 
+    this.addEventListener("change-assignment", (e) => {
+      this.#updateAssignment(e.id, e.isTask, e.changes);
+      e.stopPropagation();
+    });
+    this.addEventListener("create-task", (e) => {
+      this.#addTask(e.task);
+      e.stopPropagation();
+    });
+
     // create DOM
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
@@ -164,12 +173,7 @@ class AssignmentCenter extends HTMLElement {
    * @returns {AssignmentBox}
    */
   #createAssignmentBox(assignment) {
-    const box = new AssignmentBox(
-      assignment,
-      this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
-      this.#addTask.bind(this),
-      this.settings,
-    );
+    const box = new AssignmentBox(assignment, this.settings);
     document.createElement("li").appendChild(box);
     return box;
   }
