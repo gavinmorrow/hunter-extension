@@ -39,11 +39,7 @@ class ToolbarMenu extends HTMLElement {
     });
     root.appendChild(closeBtn);
 
-    const taskEditor = new TaskEditor(
-      null,
-      // TODO: refactor. Also is the bind needed here?
-      this.elems.assignmentCenter.addTask.bind(this.elems.assignmentCenter),
-    );
+    const taskEditor = new TaskEditor(null);
     const newTaskBtn = document.createElement("button");
     newTaskBtn.textContent = "New task";
     newTaskBtn.slot = "show-modal";

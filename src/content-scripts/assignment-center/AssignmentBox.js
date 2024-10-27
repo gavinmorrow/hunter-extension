@@ -33,7 +33,7 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    this.taskEditor = new TaskEditor(this.assignment.id, this.assignment);
+    this.taskEditor = new TaskEditor(this.assignment);
     const taskEditorBtn = document.createElement("button");
     taskEditorBtn.textContent = "Edit";
     taskEditorBtn.slot = "show-modal";

@@ -30,22 +30,15 @@ const tomorrow = Calendar.offsetFromDay(new Date(), 1);
  */
 
 class TaskEditor extends HTMLElement {
-  /** @type {number?} */
-  taskId;
-
   /** @type {Assignment?} */
-  assignment;
+  #task;
 
   /** @type {(assignment: Assignment) => void} */
   updateAssignment;
 
-  constructor(
-    /** @type {number?} */ taskId,
-    /** @type {Assignment?} */ assignment,
-  ) {
+  constructor(/** @type {Assignment?} */ task) {
     super();
-    this.taskId = taskId;
-    this.assignment = assignment;
+    this.#task = task;
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     const shadow = this.attachShadow({ mode: "open" });
@@ -55,7 +48,7 @@ class TaskEditor extends HTMLElement {
 </style>
 <dialog id="modal">
   <form id="task-form" method="dialog">
-    <input id="id" type="hidden"name="id">
+    <input id="id" type="hidden" name="id">
     <label>
       Title
       <input required autofocus id="title" type="text" name="title">
@@ -80,7 +73,7 @@ class TaskEditor extends HTMLElement {
 
   connectedCallback() {
     this.#hydrateShowModal();
-    this.#hydrateClassSelect();
+    this.#addClassesToSelect();
     this.#hydrateFormSubmit();
   }
 
@@ -95,23 +88,21 @@ class TaskEditor extends HTMLElement {
     const modal = this.shadowRoot.getElementById("modal");
     btn?.addEventListener("click", () => {
       const id = this.shadowRoot.getElementById("id");
-      id.value = this.taskId ?? "";
+      id.value = this.#task?.id ?? "";
 
       /** @type {HTMLInputElement} */
       const title = this.shadowRoot.getElementById("title");
       title.placeholder = randomPlaceholder();
-      title.value = this.assignment?.title ?? "";
+      title.value = this.#task?.title ?? "";
 
       const dueDate = this.shadowRoot.getElementById("dueDate");
-      dueDate.value = Calendar.asInputValue(
-        this.assignment?.dueDate ?? tomorrow,
-      );
+      dueDate.value = Calendar.asInputValue(this.#task?.dueDate ?? tomorrow);
 
       modal.showModal();
     });
   }
 
-  async #hydrateClassSelect() {
+  async #addClassesToSelect() {
     const classSelect = this.shadowRoot.getElementById("class-select");
     const classes = await getClasses();
     for (const [id, name] of classes.entries()) {
@@ -126,7 +117,7 @@ class TaskEditor extends HTMLElement {
   #refreshClassSelectSelectedOption() {
     const classSelect = this.shadowRoot.getElementById("class-select");
     for (const option of classSelect.querySelectorAll("option")) {
-      const shouldSelect = option.value === String(this.assignment?.class.id);
+      const shouldSelect = option.value === String(this.#task?.class.id);
       option.selected = shouldSelect;
     }
   }
@@ -150,8 +141,8 @@ class TaskEditor extends HTMLElement {
           AssignedDate: dueDate,
           DueDate: dueDate,
           ShortDescription: taskRaw.title,
-          TaskStatus: statusNumMap[this.assignment?.status] ?? -1,
-          SectionId: taskRaw.class,
+          TaskStatus: statusNumMap[this.#task?.status] ?? -1,
+          SectionId: taskRaw.class, // should this be a number?
           UserId: Number(await getStudentUserId()),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),
         };
