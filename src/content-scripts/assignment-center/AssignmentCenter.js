@@ -75,7 +75,6 @@ class AssignmentCenter extends HTMLElement {
     // **Be careful when doing custom date manipulation.**
     AssignmentCenter.#allCalendarDates()
       .map(this.#createCalendarBox)
-      .filter((e) => e != null)
       .forEach((list) => grid.appendChild(list));
 
     return grid;
