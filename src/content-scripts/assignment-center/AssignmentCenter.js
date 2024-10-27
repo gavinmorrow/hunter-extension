@@ -66,72 +66,68 @@ class AssignmentCenter extends HTMLElement {
     grid.id = "main-calendar";
 
     // create top row
-    Array(7)
-      .fill(0)
-      .map((_, i) => {
-        switch (i) {
-          case 0:
-            return "Sunday";
-          case 1:
-            return "Monday";
-          case 2:
-            return "Tuesday";
-          case 3:
-            return "Wednesday";
-          case 4:
-            return "Thursday";
-          case 5:
-            return "Friday";
-          case 6:
-            return "Saturday";
-        }
-      })
-      .map((day) => {
-        const box = document.createElement("div");
-        box.classList.add("calendar-header-box");
-        if (day === "Sunday" || day === "Saturday")
-          box.classList.add(day.toLowerCase());
-        box.textContent = day;
-        return box;
-      })
+    ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+      .map(this.#createCalendarHeader)
       .forEach((elem) => grid.appendChild(elem));
 
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
-    const today = Calendar.resetDate(new Date());
     AssignmentCenter.#allCalendarDates()
-      .map((date) => {
-        const box = document.createElement("div");
-        box.classList.add("calendar-box");
-
-        // add class for weekends
-        const day = date.getDay();
-        if (day === 0) box.classList.add("sunday");
-        if (day === 6) box.classList.add("saturday");
-
-        if (date.getTime() < today.getTime()) box.classList.add("past");
-
-        const dateElem = document.createElement("p");
-        dateElem.classList.add("calendar-date");
-        if (date.getDate() === 1)
-          dateElem.textContent =
-            date.toLocaleString("default", {
-              month: "short",
-            }) + " ";
-        dateElem.textContent += date.getDate();
-        box.appendChild(dateElem);
-
-        const list = document.createElement("ul");
-        list.id = AssignmentCenter.#idForAssignmentList(date);
-        box.appendChild(list);
-
-        return box;
-      })
+      .map(this.#createCalendarBox)
       .filter((e) => e != null)
       .forEach((list) => grid.appendChild(list));
 
     return grid;
+  }
+
+  #createCalendarHeader(
+    /** @type {"Sunday"|"Monday"|"Tuesday"|"Wednesday"|"Thursday"|"Friday"|"Saturday"} */ day,
+  ) {
+    const box = document.createElement("div");
+    box.classList.add("calendar-header-box");
+    box.textContent = day;
+
+    if (day === "Sunday" || day === "Saturday") {
+      box.classList.add(day.toLowerCase());
+    }
+
+    return box;
+  }
+
+  #createCalendarBox(/** @type {Date} */ date) {
+    const box = document.createElement("div");
+    box.classList.add("calendar-box");
+
+    // add class for weekends
+    const day = date.getDay();
+    if (day === 0) box.classList.add("sunday");
+    if (day === 6) box.classList.add("saturday");
+
+    const today = Calendar.resetDate(new Date());
+    if (date.getTime() < today.getTime()) box.classList.add("past");
+
+    const dateElem = this.#createCalendarBoxDate(date);
+    box.appendChild(dateElem);
+
+    const list = document.createElement("ul");
+    list.id = AssignmentCenter.#idForAssignmentList(date);
+    box.appendChild(list);
+
+    return box;
+  }
+
+  #createCalendarBoxDate(/** @type {Date} */ date) {
+    const dateElem = document.createElement("p");
+    dateElem.classList.add("calendar-date");
+    if (date.getDate() === 1) {
+      dateElem.textContent =
+        date.toLocaleString("default", {
+          month: "short",
+        }) + " ";
+    }
+    dateElem.textContent += date.getDate();
+    return dateElem;
   }
 
   #hydrateCalendar() {
