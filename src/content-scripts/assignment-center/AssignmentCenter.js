@@ -74,7 +74,7 @@ class AssignmentCenter extends HTMLElement {
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
     AssignmentCenter.#allCalendarDates()
-      .map(this.#createCalendarBox)
+      .map(this.#createCalendarBox.bind(this))
       .forEach((list) => grid.appendChild(list));
 
     return grid;
@@ -269,7 +269,7 @@ class AssignmentCenter extends HTMLElement {
   /** @param {number} id @returns {AssignmentBox} */
   #findAssignmentBoxFor(id) {
     return Array.from(this.shadowRoot.querySelectorAll("assignment-box")).find(
-      (box) => box.assignment.id === id,
+      (/** @type {AssignmentBox} */ box) => box.assignment.id === id,
     );
   }
 

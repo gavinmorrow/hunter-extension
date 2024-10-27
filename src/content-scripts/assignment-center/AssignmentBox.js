@@ -3,13 +3,13 @@ class AssignmentBox extends HTMLElement {
   assignment;
 
   /** @type {Settings} */
-  settings;
+  #settings;
 
   /** @type {AssignmentPopup} */
-  popup;
+  #popup;
 
   /** @type {TaskEditor} */
-  taskEditor;
+  #taskEditor;
 
   /**
    * @param {Assignment} assignment
@@ -18,8 +18,8 @@ class AssignmentBox extends HTMLElement {
   constructor(assignment, settings) {
     super();
     this.assignment = assignment;
-    this.settings = settings;
-    this.popup = new AssignmentPopup(this.assignment);
+    this.#settings = settings;
+    this.#popup = new AssignmentPopup(this.assignment);
     this.updateAssignment = this.#updateAssignment.bind(this);
 
     // create DOM
@@ -62,7 +62,7 @@ class AssignmentBox extends HTMLElement {
     wrapper.appendChild(root);
 
     // add popup
-    wrapper.appendChild(this.popup);
+    wrapper.appendChild(this.#popup);
 
     shadow.appendChild(wrapper);
   }
@@ -73,10 +73,10 @@ class AssignmentBox extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
-    this.taskEditor.updateAssignment(assignment);
+    this.#taskEditor.updateAssignment(assignment);
     this.#hydrateStyles();
     this.#hydrateTitleElem();
-    this.popup.updateAssignment(assignment);
+    this.#popup.updateAssignment(assignment);
   }
 
   #hydrateStyles() {
@@ -130,7 +130,7 @@ class AssignmentBox extends HTMLElement {
       }
     };
     const status = camelCaseStatus(this.assignment.status);
-    const colors = this.settings.assignmentCenter.customUi.statusColors;
+    const colors = this.#settings.assignmentCenter.customUi.statusColors;
 
     return colors[status] ?? "oklch(from var(--color-bg-box) calc(l*150%) c h)";
   }
