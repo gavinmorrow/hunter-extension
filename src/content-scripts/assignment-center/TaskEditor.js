@@ -36,10 +36,14 @@ class TaskEditor extends HTMLElement {
   /** @type {(assignment: Assignment) => void} */
   updateAssignment;
 
+  /** @type {() => void} */
+  showModal;
+
   constructor(/** @type {Assignment?} */ task) {
     super();
     this.#task = task;
     this.updateAssignment = this.#updateAssignment.bind(this);
+    this.showModal = this.#showModal.bind(this);
 
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `\
@@ -67,12 +71,10 @@ class TaskEditor extends HTMLElement {
     <input type="submit" value="Cancel">
   </form>
 </dialog>
-<slot name="show-modal"></slot>
 `;
   }
 
   connectedCallback() {
-    this.#hydrateShowModal();
     this.#addClassesToSelect();
     this.#hydrateFormSubmit();
   }
@@ -82,24 +84,8 @@ class TaskEditor extends HTMLElement {
     this.#refreshClassSelectSelectedOption();
   }
 
-  #hydrateShowModal() {
-    const slot = this.shadowRoot.querySelector("slot[name='show-modal']");
-    const [btn] = slot.assignedElements();
-    const modal = this.shadowRoot.getElementById("modal");
-    btn?.addEventListener("click", () => {
-      const id = this.shadowRoot.getElementById("id");
-      id.value = this.#task?.id ?? "";
-
-      /** @type {HTMLInputElement} */
-      const title = this.shadowRoot.getElementById("title");
-      title.placeholder = randomPlaceholder();
-      title.value = this.#task?.title ?? "";
-
-      const dueDate = this.shadowRoot.getElementById("dueDate");
-      dueDate.value = Calendar.asInputValue(this.#task?.dueDate ?? tomorrow);
-
-      modal.showModal();
-    });
+  #showModal() {
+    this.shadowRoot.getElementById("modal").showModal();
   }
 
   async #addClassesToSelect() {
