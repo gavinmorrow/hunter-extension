@@ -142,24 +142,51 @@ class AssignmentCenter extends HTMLElement {
       // but is a no-op for weekdays so it's always okay.
       else this.#showDay(date.getDay());
 
-      let box =
-        this.#findAssignmentBoxFor(assignment.id) ??
-        this.#createAssignmentBox(assignment);
-      // TODO: Don't completely rerender everything
-      box.updateAssignment(assignment);
+      let box = this.#findAssignmentBoxFor(assignment.id);
+      if (box != null) {
+        // TODO: Don't completely rerender everything
+        box.updateAssignment(assignment);
+      } else {
+        this.#insertAssignmentBox(list, assignment);
 
-      if (!list.contains(box.parentElement)) {
-        // Append the containing <li>, not the box itself
-        list.appendChild(box.parentElement);
+        // Eventually the description will be updated, just not immediately
+        // since we can't wait that long.
+        // Only do it for assignments bc tasks don't have descriptions.
+        if (!assignment.isTask)
+          this.#asyncAddDescriptionToAssignment(assignment);
       }
-
-      // Eventually the description will be updated, just not immediately
-      // since we can't wait that long.
-      // Only do it for assignments bc tasks don't have descriptions.
-      if (!assignment.isTask) this.#asyncAddDescriptionToAssignment(assignment);
     }
 
     this.#updateTodayElem();
+  }
+
+  /**
+   * Insert an assignment into a list of assignments,
+   * in the correct place for the list to remain properly sorted.
+   * @param {HTMLUListElement} list
+   * @param {Assignment} assignment
+   */
+  #insertAssignmentBox(list, assignment) {
+    const newBox = this.#createAssignmentBox(assignment);
+
+    /**
+     * The final, sorted order of assignment boxes in the list.
+     * (*After* the new box is inserted.)
+     * @type {AssignmentBox[]}
+     */
+    const idealBoxes = Array.from(list.querySelectorAll("li assignment-box"))
+      .concat(newBox)
+      .toSorted((a, b) => Assignment.sort(a.assignment, b.assignment));
+
+    // find index to insert
+    const index = idealBoxes.findIndex(
+      (box) => box.assignment.id === assignment.id,
+    );
+
+    /** @type {AssignmentBox?} */
+    const nextBox = idealBoxes[index + 1];
+    // this works bc when `nextBox` is null it's the same as `list.append`.
+    list.insertBefore(newBox.parentElement, nextBox?.parentElement);
   }
 
   /**
@@ -266,7 +293,7 @@ class AssignmentCenter extends HTMLElement {
     }
   }
 
-  /** @param {number} id @returns {AssignmentBox} */
+  /** @param {number} id @returns {AssignmentBox?} */
   #findAssignmentBoxFor(id) {
     return Array.from(this.shadowRoot.querySelectorAll("assignment-box")).find(
       (/** @type {AssignmentBox} */ box) => box.assignment.id === id,
