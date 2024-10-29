@@ -33,6 +33,8 @@
         "src/content-scripts/student-user-id.js",
         "src/content-scripts/notify-update.js",
         "src/content-scripts/settings-menu.js",
+        "src/content-scripts/assignment-center/events/ChangeAssignmentEvent.js",
+        "src/content-scripts/assignment-center/events/CreateTaskEvent.js",
         "src/content-scripts/assignment-center/TaskEditor.js",
         "src/content-scripts/assignment-center/ToolbarMenu.js",
         "src/content-scripts/assignment-center/assignment.js",

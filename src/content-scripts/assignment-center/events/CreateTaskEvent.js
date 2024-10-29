@@ -8,7 +8,7 @@ class CreateTaskEvent extends Event {
   task;
 
   constructor(/** @type {BlackbaudTask */ task) {
-    super("create-task");
+    super("create-task", { bubbles: true, composed: true });
     this.task = task;
   }
 }

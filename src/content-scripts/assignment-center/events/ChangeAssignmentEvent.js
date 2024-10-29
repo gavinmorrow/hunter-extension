@@ -19,7 +19,7 @@ class ChangeAssignmentEvent extends Event {
     /** @type {boolean} */ isTask,
     /** @type {Assignment} */ changes,
   ) {
-    super("change-assignment");
+    super("change-assignment", { bubbles: true, composed: true });
     this.id = id;
     this.isTask = isTask;
     this.changes = changes;
