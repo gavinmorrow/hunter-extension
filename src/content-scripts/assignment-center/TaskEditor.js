@@ -78,12 +78,13 @@ class TaskEditor extends HTMLElement {
     this.#addClassesToSelect();
     this.#hydrateFormSubmit();
 
-    this.#updateAssignment(this.assignment);
+    this.#updateAssignment(this.#task);
   }
 
   #updateAssignment(assignment) {
-    this.assignment = assignment;
+    this.#task = assignment;
 
+    this.#refreshId();
     this.#refreshTitle();
     this.#refreshClassSelectSelectedOption();
     this.#refreshDueDate();
@@ -105,14 +106,17 @@ class TaskEditor extends HTMLElement {
     this.#refreshClassSelectSelectedOption();
   }
 
+  #refreshId() {
+    this.shadowRoot.getElementById("id").value = this.#task?.id ?? "";
+  }
+
   #refreshTitle() {
-    this.shadowRoot.getElementById("title").value =
-      this.assignment?.title ?? "";
+    this.shadowRoot.getElementById("title").value = this.#task?.title ?? "";
   }
 
   #refreshDueDate() {
     this.shadowRoot.getElementById("dueDate").value = Calendar.asInputValue(
-      this.assignment?.dueDate ?? tomorrow,
+      this.#task?.dueDate ?? tomorrow,
     );
   }
 

@@ -28,6 +28,7 @@
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
         "src/content-scripts/common.js",
+        "src/util/objectDiff.js",
         "src/util/Calendar.util.js",
         "src/util/BlackbaudDate.js",
         "src/content-scripts/student-user-id.js",

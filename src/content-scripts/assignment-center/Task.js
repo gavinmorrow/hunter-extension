@@ -3,19 +3,20 @@ const Task = {
     const allAssignmentData = await fetch(
       "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
     ).then((res) => res.json());
-    const colors = await getClassColors();
-    let tasks = allAssignmentData.DueToday.concat(
-      allAssignmentData.DueTomorrow,
-      allAssignmentData.DueThisWeek,
-      allAssignmentData.DueNextWeek,
-      allAssignmentData.DueAfterNextWeek,
-      allAssignmentData.PastThisWeek,
-      allAssignmentData.PastLastWeek,
-      allAssignmentData.PastBeforeLastWeek,
-    )
-      .filter((a) => a.UserTaskId !== 0)
-      .map(Task.parse)
-      .map((t) => ({ ...t, color: colors.get(t.class.id) }));
+    const tasks = await Promise.all(
+      allAssignmentData.DueToday.concat(
+        allAssignmentData.DueTomorrow,
+        allAssignmentData.DueThisWeek,
+        allAssignmentData.DueNextWeek,
+        allAssignmentData.DueAfterNextWeek,
+        allAssignmentData.PastThisWeek,
+        allAssignmentData.PastLastWeek,
+        allAssignmentData.PastBeforeLastWeek,
+      )
+        .filter((a) => a.UserTaskId !== 0)
+        .map(Task.parse)
+        .map(Task.addColor),
+    );
     return assignments.filter((a) => !a.isTask).concat(tasks);
   },
 
@@ -29,8 +30,10 @@ const Task = {
       status: Object.keys(statusNumMap).find(
         (k) => statusNumMap[k] === t.TaskStatus,
       ),
-      dueDate: BlackbaudDate.parse(t.DateDue),
-      assignedDate: BlackbaudDate.parse(t.DateAssigned),
+      // duplicated to handle both bc I can't figure out which one blackbaud
+      // uses. It might be both???
+      dueDate: BlackbaudDate.parse(t.DueDate ?? t.DateDue),
+      assignedDate: BlackbaudDate.parse(t.AssignedDate ?? t.DateAssigned),
       maxPoints: null,
       isExtraCredit: false,
       class: {
@@ -42,5 +45,11 @@ const Task = {
       isTask: true,
       submissionMethod: null,
     };
+  },
+
+  // A seperate function so that `parse` can be non-async.
+  async addColor(t) {
+    const colors = await getClassColors();
+    return { ...t, color: dbg(colors.get(Number(t.class.id))) };
   },
 };

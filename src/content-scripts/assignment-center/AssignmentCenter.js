@@ -243,20 +243,30 @@ class AssignmentCenter extends HTMLElement {
   // TODO: refactor
   /** @param {BlackbaudTask} task */
   async #addTask(task) {
-    let id = task.UserTaskId;
-    if (task.UserTaskId == undefined || task.UserTaskId === "")
-      id = (await createTask(task)) ?? id;
-    else await updateTask(task);
+    if (task.UserTaskId == undefined || task.UserTaskId === "") {
+      const id = await createTask(task);
 
-    if (id == undefined) {
-      console.error("Task could not be saved.");
-      return;
+      if (id == null) {
+        console.error("Task could not be saved.");
+        return;
+      }
+
+      console.log(`Task ${id} saved.`);
+
+      this.assignments = await Task.populateAllIn(this.assignments);
+      this.#hydrateCalendar();
+      return id;
+    } else {
+      await updateTask(task);
+
+      // find diff in stored task and task
+      const storedTask = this.assignments.find((a) => a.id == task.UserTaskId);
+      const parsedTask = await Task.addColor(Task.parse(task));
+      const diff = findDiff(storedTask, parsedTask);
+
+      // update stored task
+      this.#updateAssignment(task.id, true, diff);
     }
-
-    console.log(`Task ${id} saved.`);
-
-    this.assignments = await Task.populateAllIn(this.assignments);
-    this.#hydrateCalendar();
   }
 
   /** @param {Number} id @param {boolean} isTask @param {Assignment?} changes */
@@ -264,7 +274,7 @@ class AssignmentCenter extends HTMLElement {
     // update internal object
     const index = this.assignments.findIndex((a) => a.id === id);
     if (index === -1) return;
-    this.assignments[index] = { ...this.assignments[index], ...changes };
+    this.assignments[index] = applyDiff(this.assignments[index], changes);
 
     // check for if the status in the backend needs to be updated
     if (changes?.status != undefined) {

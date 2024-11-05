@@ -300,6 +300,12 @@ const createTask = async (task) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(nullifyIfZeroTaskSectionId(task)),
   }).then((r) => r.text());
+  if (/\D/.test(await id)) {
+    console.error(
+      `Invalid response to create task: "${id}". (Expected an id, ie number.)`,
+    );
+    return null;
+  }
   return id;
 };
 /** @param {BlackbaudTask} task */
