@@ -273,15 +273,13 @@ const updateTaskStatus = async (task) => {
     },
     body: JSON.stringify(
       nullifyIfZeroTaskSectionId({
-        userTask: {
-          AssignedDate: BlackbaudDate.from(task.assignedDate),
-          DueDate: BlackbaudDate.from(task.dueDate),
-          SectionId: task.class.id,
-          ShortDescription: task.title,
-          TaskStatus: statusNum,
-          UserId: await getStudentUserId(),
-          UserTaskId: task.id,
-        },
+        AssignedDate: BlackbaudDate.from(task.assignedDate),
+        DueDate: BlackbaudDate.from(task.dueDate),
+        SectionId: task.class.id,
+        ShortDescription: task.title,
+        TaskStatus: statusNum,
+        UserId: await getStudentUserId(),
+        UserTaskId: task.id,
       }),
     ),
   });

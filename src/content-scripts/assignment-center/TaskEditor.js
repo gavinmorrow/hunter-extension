@@ -144,8 +144,8 @@ class TaskEditor extends HTMLElement {
           DueDate: dueDate,
           ShortDescription: taskRaw.title,
           TaskStatus: statusNumMap[this.#task?.status] ?? -1,
-          SectionId: taskRaw.class, // should this be a number?
-          UserId: Number(await getStudentUserId()),
+          SectionId: taskRaw.class,
+          UserId: await getStudentUserId(),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),
         };
         this.#addTask(task);
