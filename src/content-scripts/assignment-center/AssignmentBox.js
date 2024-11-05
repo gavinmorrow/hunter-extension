@@ -33,13 +33,8 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    this.taskEditor = new TaskEditor(this.assignment);
-    const taskEditorBtn = document.createElement("button");
-    taskEditorBtn.textContent = "Edit";
-    taskEditorBtn.slot = "show-modal";
-    taskEditorBtn.hidden = true;
-    this.taskEditor.appendChild(taskEditorBtn);
-    wrapper.appendChild(this.taskEditor);
+    this.#taskEditor = new TaskEditor(this.assignment);
+    wrapper.appendChild(this.#taskEditor);
 
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and
@@ -47,7 +42,7 @@ class AssignmentBox extends HTMLElement {
     root.style.cursor = "pointer";
     root.addEventListener("click", (e) => {
       if (this.assignment.isTask) {
-        taskEditorBtn.click();
+        this.#taskEditor.showModal();
       } else {
         const link = root.querySelector("#title a");
         if (e.target === link || document.getSelection().toString() !== "")

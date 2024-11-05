@@ -39,14 +39,29 @@ class ToolbarMenu extends HTMLElement {
     });
     root.appendChild(closeBtn);
 
+    // task editor
+    root.append(...this.#createTaskEditor());
+
+    shadow.appendChild(root);
+  }
+
+  #createTaskEditor() {
     const taskEditor = new TaskEditor(null);
+    taskEditor.addEventListener(
+      "create-task",
+      // FIXME: duplicate of code in AssignmentCenter.js
+      (/** @type {CreateTaskEvent} */ e) => {
+        this.elems.assignmentCenter.addTask(e.task);
+        e.stopPropagation();
+      },
+    );
+
     const newTaskBtn = document.createElement("button");
     newTaskBtn.textContent = "New task";
     newTaskBtn.slot = "show-modal";
-    taskEditor.appendChild(newTaskBtn);
-    root.appendChild(taskEditor);
+    newTaskBtn.addEventListener("click", (_) => taskEditor.showModal());
 
-    shadow.appendChild(root);
+    return [newTaskBtn, taskEditor];
   }
 
   connectedCallback() {}
