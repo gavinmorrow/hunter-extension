@@ -50,6 +50,6 @@ const Task = {
   // A seperate function so that `parse` can be non-async.
   async addColor(t) {
     const colors = await getClassColors();
-    return { ...t, color: dbg(colors.get(Number(t.class.id))) };
+    return { ...t, color: colors.get(Number(t.class.id)) };
   },
 };

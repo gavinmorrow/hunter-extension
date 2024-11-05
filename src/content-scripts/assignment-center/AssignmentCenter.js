@@ -265,7 +265,8 @@ class AssignmentCenter extends HTMLElement {
       const diff = findDiff(storedTask, parsedTask);
 
       // update stored task
-      this.#updateAssignment(task.id, true, diff);
+      console.log(`Updating UI for task ${parsedTask.id}`);
+      this.#updateAssignment(parsedTask.id, true, diff);
     }
   }
 
