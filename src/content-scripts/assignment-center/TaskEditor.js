@@ -67,8 +67,8 @@ class TaskEditor extends HTMLElement {
       Due Date
       <input required id="dueDate" type="date" name="dueDate">
     </label>
-    <input type="submit" value="Save">
-    <input type="submit" value="Cancel">
+    <button type="submit" id="save">Save</button>
+    <button type="button" id="cancel">Cancel</button>
   </form>
 </dialog>
 `;
@@ -77,6 +77,7 @@ class TaskEditor extends HTMLElement {
   connectedCallback() {
     this.#addClassesToSelect();
     this.#hydrateFormSubmit();
+    this.#hydrateCancel();
 
     this.#updateAssignment(this.#task);
   }
@@ -162,6 +163,14 @@ class TaskEditor extends HTMLElement {
 
       form.reset();
     });
+  }
+
+  #hydrateCancel() {
+    this.shadowRoot
+      .getElementById("cancel")
+      .addEventListener("click", (e) =>
+        this.shadowRoot.getElementById("modal").close("Cancel"),
+      );
   }
 
   /**
