@@ -68,7 +68,7 @@ class TaskEditor extends HTMLElement {
       <input required id="dueDate" type="date" name="dueDate">
     </label>
     <div id="btns">
-      <button type="submit" id="save">Save</button>
+      <button type="submit" id="save" value="Save">Save</button>
       <button type="button" id="cancel">Cancel</button>
     </div>
   </form>
