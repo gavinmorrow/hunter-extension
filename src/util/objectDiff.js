@@ -1,3 +1,5 @@
+const isObject = (o) => o?.toString() === "[object Object]";
+
 /**
  * Find the difference in two objects.
  * @template {Object} T
@@ -8,7 +10,7 @@ const findDiff = (a, b) => {
   const diff = {};
   for (const key of Object.keys(a)) {
     if (a[key] !== b[key]) {
-      if (typeof a[key] === "object" && typeof b[key] === "object") {
+      if (isObject(a[key]) && isObject(b[key])) {
         const nestedDiff = findDiff(a[key], b[key]);
         if (Object.keys(nestedDiff).length > 0) {
           diff[key] = nestedDiff;
@@ -28,7 +30,7 @@ const applyDiff = (o, diff) => {
   if (diff == null) return clone;
 
   for (const key of Object.keys(diff)) {
-    if (typeof diff[key] === "object") {
+    if (isObject(diff[key])) {
       clone[key] = applyDiff(clone[key], diff[key]);
     } else clone[key] = diff[key];
   }

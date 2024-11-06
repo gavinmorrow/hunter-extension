@@ -291,13 +291,28 @@ class AssignmentCenter extends HTMLElement {
       // result.
       deleteTask(id);
 
-      // remove the entry in this.assignments for it
-      this.assignments.splice(index, 1);
-
       // remove the element corresponding to it
       this.#findAssignmentBoxFor(id).remove();
     } else {
       // otherwise, update the element corresponding to it
+
+      // handle the due date changing (ie w/ tasks)
+      if (Object.hasOwn(changes, "dueDate")) {
+        const list = this.shadowRoot.getElementById(
+          AssignmentCenter.#idForAssignmentList(
+            Calendar.resetDate(changes.dueDate),
+          ),
+        );
+
+        // just remove the old element
+        this.#findAssignmentBoxFor(id).remove();
+        // reparent, if the day is being shown
+        if (list != null) {
+          this.#insertAssignmentBox(list, this.assignments[index]);
+        }
+      }
+
+      // update the element
       /** @type {AssignmentBox} */
       const assignmentBox = this.#findAssignmentBoxFor(id);
       assignmentBox.updateAssignment(this.assignments[index]);

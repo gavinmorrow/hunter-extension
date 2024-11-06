@@ -22,7 +22,7 @@ const Task = {
 
   parse(t) {
     return {
-      id: t.UserTaskId,
+      id: Number(t.UserTaskId),
       color: undefined,
       title: t.ShortDescription,
       link: null,
@@ -38,7 +38,7 @@ const Task = {
       isExtraCredit: false,
       class: {
         name: t.GroupName,
-        id: t.SectionId,
+        id: Number(t.SectionId),
         link: `https://hunterschools.myschoolapp.com/app/student#academicclass/${t.SectionId}/0/bulletinboard`,
       },
       type: "My task",
