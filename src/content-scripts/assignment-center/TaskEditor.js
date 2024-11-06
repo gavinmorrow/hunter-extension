@@ -67,8 +67,10 @@ class TaskEditor extends HTMLElement {
       Due Date
       <input required id="dueDate" type="date" name="dueDate">
     </label>
-    <button type="submit" id="save">Save</button>
-    <button type="button" id="cancel">Cancel</button>
+    <div id="btns">
+      <button type="submit" id="save">Save</button>
+      <button type="button" id="cancel">Cancel</button>
+    </div>
   </form>
 </dialog>
 `;
@@ -199,6 +201,20 @@ input, select {
 label {
   display: block;
 }
+
+#btns {
+  display: flex;
+  gap: 0.5ch;
+}
+
+button {
+  border: none;
+  flex-grow: 1;
+}
+
+#save       { background-color: oklch(80% 0.1 283); }
+#save:hover { background-color: oklch(75% 0.1 283); }
+#save:focus { background-color: oklch(70% 0.1 283); }
 `;
   }
 }
