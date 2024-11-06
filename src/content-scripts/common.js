@@ -294,7 +294,7 @@ const deleteTask = async (id) => {
 };
 /** @param {BlackbaudTask} task */
 const createTask = async (task) => {
-  console.log(`Creating task ${task.title}`);
+  console.log(`Creating task ${task.ShortDescription}`);
   const id = fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
