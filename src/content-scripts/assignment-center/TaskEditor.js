@@ -163,7 +163,10 @@ class TaskEditor extends HTMLElement {
         this.#addTask(task);
       }
 
-      form.reset();
+      // If the task isn't null, resetting will make the editor blank the next
+      // time it's opened (when it should be showing the task)
+      // ie only reset for the new task form
+      if (this.#task == null) form.reset();
     });
   }
 
