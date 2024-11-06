@@ -173,9 +173,14 @@ class TaskEditor extends HTMLElement {
     return `\
 input, select {
   border: 1px solid transparent;
+  max-width: 100%;
 }
 :invalid {
   border-color: red;
+}
+
+#title, #class-select {
+  width: 40ch;
 }
 
 label {
