@@ -91,6 +91,7 @@ class TaskEditor extends HTMLElement {
   }
 
   #showModal() {
+    this.shadowRoot.getElementById("title").placeholder = randomPlaceholder();
     this.shadowRoot.getElementById("modal").showModal();
   }
 
