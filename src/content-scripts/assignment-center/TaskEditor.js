@@ -91,6 +91,10 @@ class TaskEditor extends HTMLElement {
   }
 
   #showModal() {
+    // I'm not sure why it's not, but the date input gets reset to blank after
+    // closing the new task dialog and reopening it. So refresh it here.
+    this.#refreshDueDate();
+
     this.shadowRoot.getElementById("title").placeholder = randomPlaceholder();
     this.shadowRoot.getElementById("modal").showModal();
   }
