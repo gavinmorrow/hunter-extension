@@ -43,6 +43,4 @@ echo "Zipped into ~/Desktop/hunter-extension.zip"
 
 ### Github release ###
 echo "Starting Github release"
-release_notes=$(cat ./CHANGELOG.md)
-echo "v$1\n$release_notes"
-gh release create "v$1" --generate-notes -n "$release_notes"
+gh release create "v$1" --generate-notes -F ./CHANGELOG.md
