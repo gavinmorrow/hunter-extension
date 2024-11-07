@@ -2,12 +2,16 @@
 
 ## v0.2.3
 
-_released 00 October 2024_
+_released 00 November 2024_
 
+- Features:
+  - Supports Google Assignments as an LTI provider. This doesn't actually change
+    any functionality, but means that it will say "Submit on Google Assignments"
+    instead of just "Submit".
 - Bug Fixes:
-  - Clicking on the link in a custom task will no longer redirect you to a
-    non-existent page, instead it will show you the editor.
-  - Editing a task will no longer reset it to "Todo" status.
+  - Fixes task support being so buggy to the point of being unusable. I rushed
+    it out and didn't test it enough, sorry about that.
+  - Fixes google autologin not always working.
 
 ## v0.2.2
 
