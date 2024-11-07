@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Sane error handling
+# See <https://stackoverflow.com/a/821419/15920018>
+set -Eeuo pipefail
+
+echo "Releasing hunter-extension v$1..."
+
+
+# Move jj bookmarks
+jj bookmark set dev main -r @
+
+# Push to git
+git switch dev && git push
+git switch main && git push
+
+
+### MDN release ###
+echo "Starting MDN release..."
+web-ext sign --api-key=$MDN_AMO_API_KEY --api-secret=$MDN_AMO_API_SECRET --channel=unlisted
+
+
+### Chrome release ###
+echo "Starting Chrome release..."
+
+# Copy everything to temp dir
+rm -rf ~/Desktop/hunter-extension
+cp -r ./ ~/Desktop/hunter-extension
+echo "Copied files to ~/Desktop/hunter-extension"
+
+# Remove unwanted files/dirs
+cd ~/Desktop/hunter-extension
+rm -rf ./.git
+rm -rf ./.jj
+rm -rf ./web-ext-artifacts
+rm -rf ./.amo-upload-uuid
+echo "Removed git, jj, and amo files/dirs."
+
+# zip it
+# See ditto man page (this is very similar to Finder compress function)
+ditto -c -k --sequesterRsrc --keepParent . ~/Desktop/hunter-extension.zip
+rm -rf ~/Desktop/hunter-extension
+echo "Zipped into ~/Desktop/hunter-extension.zip"
+
+### Github release ###
+echo "Starting Github release"
+release_notes=$(cat ./CHANGELOG.md)
+gh release create "v$1" --generate-notes -n "$release_notes"
