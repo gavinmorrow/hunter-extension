@@ -6,7 +6,7 @@ const PLACEHOLDERS = [
   "Submit a new funny placeholder",
   'Look up how to pronounce "indict"',
   "Figure out what Blackbaud broke",
-  "Go to Sing's (or is it Signh's?)",
+  "Go to Sing's (or is it Singh's?)",
   "Be held 5min late after 9th period",
   "Cram before 3rd period Spanish",
   "Ignore the term paper due tomorrow",
