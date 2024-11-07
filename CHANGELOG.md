@@ -10,7 +10,7 @@ _released 00 November 2024_
     instead of just "Submit".
 - Bug Fixes:
   - Fixes task support being so buggy to the point of being unusable. I rushed
-    it out and didn't test it enough, sorry about that.
+    it out and didn't test it enough, sorry. Tell me if I missed anything!
   - Fixes google autologin not always working.
 
 ## v0.2.2
