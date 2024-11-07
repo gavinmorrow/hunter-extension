@@ -295,12 +295,15 @@ const deleteTask = async (id) => {
 /** @param {BlackbaudTask} task */
 const createTask = async (task) => {
   console.log(`Creating task ${task.ShortDescription}`);
-  const id = fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(nullifyIfZeroTaskSectionId(task)),
-  }).then((r) => r.text());
-  if (/\D/.test(await id)) {
+  const id = await fetch(
+    "https://hunterschools.myschoolapp.com/api/UserTask/Edit/",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(nullifyIfZeroTaskSectionId(task)),
+    },
+  ).then((r) => r.text());
+  if (/\D/.test(id)) {
     console.error(
       `Invalid response to create task: "${id}". (Expected an id, ie number.)`,
     );
