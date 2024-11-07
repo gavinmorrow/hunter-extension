@@ -12,6 +12,7 @@ _released 00 November 2024_
   - Fixes task support being so buggy to the point of being unusable. I rushed
     it out and didn't test it enough, sorry. Tell me if I missed anything!
   - Fixes google autologin not always working.
+  - Prevents styling from breaking when the Dark Reader extension is used.
 
 ## v0.2.2
 
