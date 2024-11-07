@@ -12,7 +12,7 @@ class AssignmentPopup extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
 
     const style = document.createElement("style");
-    style.textContent = this.#getStylesheet();
+    style.textContent = AssignmentPopup.#stylesheet;
     shadow.appendChild(style);
 
     const root = document.createElement("article");
@@ -177,8 +177,7 @@ class AssignmentPopup extends HTMLElement {
     }
   }
 
-  #getStylesheet() {
-    return `\
+  static #stylesheet = `\
 #popup-root {
   --color-bg: oklch(from var(--color-bg-box) calc(l*150%) c h / 88%);
   --len-padding: calc(var(--base-padding) + var(--width-class-color));
@@ -212,7 +211,6 @@ a {
   color: oklch(64% 0.2 262);
 }
 `;
-  }
 }
 
 if (!customElements.get("assignment-popup")) {

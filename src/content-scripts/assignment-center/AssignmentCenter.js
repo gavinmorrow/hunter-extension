@@ -49,7 +49,7 @@ class AssignmentCenter extends HTMLElement {
     shadow.addEventListener("mousedown", (e) => e.stopPropagation());
 
     const style = document.createElement("style");
-    style.textContent = this.#getStylesheet();
+    style.textContent = AssignmentCenter.#stylesheet;
     shadow.appendChild(style);
 
     const root = document.createElement("main");
@@ -345,8 +345,7 @@ class AssignmentCenter extends HTMLElement {
     }
   }
 
-  #getStylesheet() {
-    return `\
+  static #stylesheet = `\
 main {
   --color-text: #eee;
   --color-text-link: #fff;
@@ -436,7 +435,6 @@ main {
   }
 }
 `;
-  }
 }
 
 if (!customElements.get("assignment-center")) {

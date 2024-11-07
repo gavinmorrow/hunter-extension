@@ -15,7 +15,7 @@ class ToolbarMenu extends HTMLElement {
     shadow.addEventListener("mousedown", (e) => e.stopPropagation());
 
     const style = document.createElement("style");
-    style.textContent = this.#getStylesheet();
+    style.textContent = ToolbarMenu.#stylesheet;
     shadow.appendChild(style);
 
     const root = document.createElement("nav");
@@ -66,8 +66,7 @@ class ToolbarMenu extends HTMLElement {
 
   connectedCallback() {}
 
-  #getStylesheet() {
-    return `\
+  static #stylesheet = `\
 #root {
   --color-text: #eee;
   --color-border: #333;
@@ -101,7 +100,6 @@ class ToolbarMenu extends HTMLElement {
   }
 }
 `;
-  }
 }
 if (!customElements.get("toolbar-menu")) {
   customElements.define("toolbar-menu", ToolbarMenu);

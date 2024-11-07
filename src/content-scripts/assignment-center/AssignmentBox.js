@@ -84,7 +84,9 @@ class AssignmentBox extends HTMLElement {
     conditionalClass(root.parentElement, "popup-left", this.#shouldPopupLeft());
 
     const style = this.shadowRoot.querySelector("style");
-    style.textContent = this.#getStylesheet();
+    style.textContent = AssignmentBox.#stylesheet;
+
+    this.#refreshColors();
   }
 
   #createTitleElem() {
@@ -102,6 +104,13 @@ class AssignmentBox extends HTMLElement {
 
     // tasks don't have links
     if (!this.assignment.isTask) titleElem.href = this.assignment.link;
+  }
+
+  #refreshColors() {
+    const style = this.shadowRoot.querySelector("article").style;
+
+    style.setProperty("--color-status", this.#assignmentStatusColor());
+    style.setProperty("--color-class", this.#assignmentClassColor());
   }
 
   #assignmentClassColor() {
@@ -148,8 +157,7 @@ class AssignmentBox extends HTMLElement {
     return percentToEdge > 0.5;
   }
 
-  #getStylesheet() {
-    return `\
+  static #stylesheet = `\
 article {
   position: relative;
 
@@ -161,9 +169,12 @@ article {
   --inner-border-width: calc(var(--border-radius) - var(--border-width));
   --border-radius: var(--base-padding);
 
+  --color-status: oklch(from var(--color-bg-box) calc(l*150%) c h);
+  --color-class: oklch(from var(--color-bg-box) calc(l*200%) c h);
+
   &>div {
     position: relative;
-    background-color: ${this.#assignmentStatusColor()};
+    background-color: var(--color-status);
     box-sizing: border-box;
 
     padding: var(--base-padding);
@@ -175,7 +186,7 @@ article {
 
     &::before, &::after {
       content: "";
-      background-color: ${this.#assignmentClassColor()};
+      background-color: var(--color-class);
       position: absolute;
       top: 0;
       bottom: 0;
@@ -200,7 +211,7 @@ article {
   }
 
   &:focus-within>div, &:hover>div {
-    background-color: oklch(from ${this.#assignmentStatusColor()} calc(l + 0.07) c h);
+    background-color: oklch(from var(--color-status) calc(l + 0.07) c h);
   }
 
   &:not(:hover, :focus-within) assignment-popup {
@@ -234,7 +245,6 @@ a {
   }
 }
 `;
-  }
 }
 
 if (!customElements.get("assignment-box")) {

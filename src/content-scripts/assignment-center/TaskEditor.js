@@ -48,7 +48,7 @@ class TaskEditor extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     shadow.innerHTML = `\
 <style>
-  ${this.#getStylesheet()}
+  ${TaskEditor.#stylesheet}
 </style>
 <dialog id="modal">
   <form id="task-form" method="dialog">
@@ -187,8 +187,7 @@ class TaskEditor extends HTMLElement {
     this.dispatchEvent(event);
   }
 
-  #getStylesheet() {
-    return `\
+  static #stylesheet = `\
 input, select {
   border: 1px solid transparent;
   max-width: 100%;
@@ -219,7 +218,6 @@ button {
 #save:hover { background-color: oklch(75% 0.1 283); }
 #save:focus { background-color: oklch(70% 0.1 283); }
 `;
-  }
 }
 
 if (!customElements.get("task-editor")) {
