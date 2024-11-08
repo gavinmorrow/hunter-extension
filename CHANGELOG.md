@@ -2,7 +2,7 @@
 
 ## v0.2.3
 
-_released 00 November 2024_
+_released 07 November 2024_
 
 - Features:
   - Supports Google Assignments as an LTI provider. This doesn't actually change
