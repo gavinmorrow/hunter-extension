@@ -32,7 +32,8 @@ echo "Copied files to ~/Desktop/hunter-extension"
 rm -rf ~/Desktop/hunter-extension/.git
 rm -rf ~/Desktop/hunter-extension/.jj
 rm -rf ~/Desktop/hunter-extension/web-ext-artifacts
-rm -rf ~/Desktop/hunter-extension/.amo-upload-uuid
+rm -f ~/Desktop/hunter-extension/.amo-upload-uuid
+rm -f ~/Desktop/hunter-extension/publish-release
 echo "Removed git, jj, and amo files/dirs."
 
 # zip it
