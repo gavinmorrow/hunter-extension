@@ -32,8 +32,8 @@ echo "Copied files to ~/Desktop/hunter-extension"
 rm -rf ~/Desktop/hunter-extension/.git
 rm -rf ~/Desktop/hunter-extension/.jj
 rm -rf ~/Desktop/hunter-extension/web-ext-artifacts
-rm -f ~/Desktop/hunter-extension/.amo-upload-uuid
-rm -f ~/Desktop/hunter-extension/publish-release
+rm ~/Desktop/hunter-extension/.amo-upload-uuid
+rm ~/Desktop/hunter-extension/publish-release
 echo "Removed git, jj, and amo files/dirs."
 
 # zip it
@@ -48,5 +48,10 @@ echo "Starting Github release"
 gh release create "v$1" --generate-notes -F ./CHANGELOG.md
 
 # Upload files
-gh release upload "v$1" "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.xpi#65a14653bc7c4e6ab617.xpi"
+cp "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.zip" ~/Desktop/65a14653bc7c4e6ab617.xpi
+gh release upload "v$1" ~/Desktop/65a14653bc7c4e6ab617.xpi
 gh release upload "v$1" ~/Desktop/hunter-extension.zip
+
+# Clean up
+rm ~/Desktop/65a14653bc7c4e6ab617.xpi
+rm ~/Desktop/hunter-extension.zip
