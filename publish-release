@@ -41,6 +41,11 @@ ditto -c -k --sequesterRsrc --keepParent . ~/Desktop/hunter-extension.zip
 rm -rf ~/Desktop/hunter-extension
 echo "Zipped into ~/Desktop/hunter-extension.zip"
 
+
 ### Github release ###
 echo "Starting Github release"
 gh release create "v$1" --generate-notes -F ./CHANGELOG.md
+
+# Upload files
+gh release upload "v$1" "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.xpi#65a14653bc7c4e6ab617.xpi"
+gh release upload "v$1" "~/Desktop/hunter-extension.zip"
