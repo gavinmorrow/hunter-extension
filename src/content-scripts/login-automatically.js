@@ -67,7 +67,7 @@ const googleEmail = featureFlag(
     const emailBtn = await waitForElem(hunterEmail);
     console.log("Found emailBtn!", emailBtn);
     // repeat until the page unloads (sometimes google's js doesn't load fast enough)
-    setInterval(() => emailBtn?.click(), 100);
+    setInterval(() => emailBtn?.click(), 500);
   }),
 );
 
