@@ -104,7 +104,7 @@ class TaskEditor extends HTMLElement {
 
   async #addClassesToSelect() {
     const classSelect = this.shadowRoot.getElementById("class-select");
-    const classes = await getClasses();
+    const classes = await api.getClasses();
     for (const [id, name] of classes.entries()) {
       const option = document.createElement("option");
       option.value = id;
@@ -155,7 +155,7 @@ class TaskEditor extends HTMLElement {
           AssignedDate: dueDate,
           DueDate: dueDate,
           ShortDescription: taskRaw.title,
-          TaskStatus: statusNumMap[this.#task?.status] ?? -1,
+          TaskStatus: api.statusNumMap[this.#task?.status] ?? -1,
           SectionId: taskRaw.class,
           UserId: await getStudentUserId(),
           UserTaskId: taskRaw.id === "" ? undefined : Number(taskRaw.id),

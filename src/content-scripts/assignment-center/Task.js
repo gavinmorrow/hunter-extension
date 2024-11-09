@@ -27,8 +27,8 @@ const Task = {
       title: t.ShortDescription,
       link: null,
       description: null,
-      status: Object.keys(statusNumMap).find(
-        (k) => statusNumMap[k] === t.TaskStatus,
+      status: Object.keys(api.statusNumMap).find(
+        (k) => api.statusNumMap[k] === t.TaskStatus,
       ),
       // duplicated to handle both bc I can't figure out which one blackbaud
       // uses. It might be both???
@@ -49,7 +49,7 @@ const Task = {
 
   // A seperate function so that `parse` can be non-async.
   async addColor(t) {
-    const colors = await getClassColors();
+    const colors = await api.getClassColors();
     return { ...t, color: colors.get(Number(t.class.id)) };
   },
 };

@@ -244,7 +244,7 @@ class AssignmentCenter extends HTMLElement {
   /** @param {BlackbaudTask} task */
   async #addTask(task) {
     if (task.UserTaskId == undefined || task.UserTaskId === "") {
-      const id = await createTask(task);
+      const id = await api.createTask(task);
 
       if (id == null) {
         console.error("Task could not be saved.");
@@ -257,7 +257,7 @@ class AssignmentCenter extends HTMLElement {
       this.#hydrateCalendar();
       return id;
     } else {
-      await updateTask(task);
+      await api.updateTask(task);
 
       // find diff in stored task and task
       const storedTask = this.assignments.find((a) => a.id == task.UserTaskId);
@@ -281,15 +281,15 @@ class AssignmentCenter extends HTMLElement {
     if (changes?.status != undefined) {
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
-      if (isTask) updateTaskStatus(this.assignments[index]);
-      else updateAssignmentStatus(id, changes.status, isTask);
+      if (isTask) api.updateTaskStatus(this.assignments[index]);
+      else api.updateAssignmentStatus(id, changes.status, isTask);
     }
 
     // check if task needs to be deleted
     if (isTask && changes === null) {
       // This ignores a promise. It's okay, because we're not depending on the
       // result.
-      deleteTask(id);
+      api.deleteTask(id);
 
       // remove the element corresponding to it
       this.#findAssignmentBoxFor(id).remove();

@@ -81,7 +81,7 @@ const Assignment = {
     }
 
     const studentUserId = await getStudentUserId();
-    return fetchAssignment(assignment.id, studentUserId);
+    return api.fetchAssignment(assignment.id, studentUserId);
   },
 
   /**
