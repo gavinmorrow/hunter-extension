@@ -66,7 +66,15 @@ class AssignmentCenter extends HTMLElement {
     grid.id = "main-calendar";
 
     // create top row
-    ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ]
       .map(this.#createCalendarHeader)
       .forEach((elem) => grid.appendChild(elem));
 
