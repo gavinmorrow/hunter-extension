@@ -146,9 +146,6 @@ class AssignmentCenter extends HTMLElement {
 
       // skip if the date isn't being shown in the calendar
       if (list == null) continue;
-      // otherwise make sure the date is shown. really applies to just weekends,
-      // but is a no-op for weekdays so it's always okay.
-      else this.#showDay(date.getDay());
 
       let box = this.#findAssignmentBoxFor(assignment.id);
       if (box != null) {
@@ -195,6 +192,7 @@ class AssignmentCenter extends HTMLElement {
     const nextBox = idealBoxes[index + 1];
     // this works bc when `nextBox` is null it's the same as `list.append`.
     list.insertBefore(newBox.parentElement, nextBox?.parentElement);
+    this.#showDay(assignment.dueDate.getDay());
   }
 
   /**
