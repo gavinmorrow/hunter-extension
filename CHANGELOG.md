@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.2.4
+
+_released 00 November 2024_
+
+- Bug Fixes:
+  - Fixes google autologin sometimes getting stuck in a loop.
+  - Fixes Saturday assignments not displaying correctly.
+  - Fixes weekends not displaying when a task is assigned to them.
+
 ## v0.2.3
 
 _released 07 November 2024_
