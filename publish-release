@@ -48,7 +48,7 @@ echo "Starting Github release"
 gh release create "v$1" --generate-notes -F ./CHANGELOG.md
 
 # Upload files
-cp "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.zip" ~/Desktop/65a14653bc7c4e6ab617.xpi
+cp "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.xpi" ~/Desktop/65a14653bc7c4e6ab617.xpi
 gh release upload "v$1" ~/Desktop/65a14653bc7c4e6ab617.xpi
 gh release upload "v$1" ~/Desktop/hunter-extension.zip
 
