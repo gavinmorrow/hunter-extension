@@ -1,6 +1,6 @@
 # Hunter Extension
 
-_v0.2.3_
+_v0.2.4_
 
 This project aims to fix as much of the Hunter website as possible. It does this
 through a browser extension. To report problems or request a feature, please
@@ -14,6 +14,8 @@ email gavinmorrow (at) hunterschools (dot) org.
 - Automatically deselect "Completed", so you don't need to manually do it (only
   activated when the custom ui is not active).
 - Other miscellaneous bug and styling fixes.
+
+[Full Changelog]
 
 ## Installation
 
@@ -59,6 +61,7 @@ To update, see the [Mozilla help page].
 
 The source code for [this project][github] is available on github!
 
+[Full changelog]: https://gavinmorrow.github.io/hunter-extension/CHANGELOG
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
 [firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.3/65a14653bc7c4e6ab617.xpi
 [Mozilla help page]: https://support.mozilla.org/en-US/kb/how-update-add-ons

@@ -2,7 +2,7 @@
 
 ## v0.2.4
 
-_released 00 November 2024_
+_released 11 November 2024_
 
 - Bug Fixes:
   - Fixes google autologin sometimes getting stuck in a loop.
