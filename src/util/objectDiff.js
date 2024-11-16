@@ -27,6 +27,7 @@ const findDiff = (a, b) => {
  */
 const applyDiff = (o, diff) => {
   const clone = structuredClone(o);
+  if (clone == null) return diff;
   if (diff == null) return clone;
 
   for (const key of Object.keys(diff)) {
