@@ -21,6 +21,14 @@
  * @property {String} type
  * @property {boolean} isTask
  * @property {SubmissionMethod?} submissionMethod
+ * @property {AssignmentAttachment[]} attachments
+ */
+
+/**
+ * @typedef {Object} AssignmentAttachment
+ * @property {string} url
+ * @property {boolean} expired
+ * @property {string} name The name to show to the user. *Not* a filename. Equivalent to `ShortDescription`.
  */
 
 const Assignment = {
@@ -93,6 +101,18 @@ const Assignment = {
       description: blackbaudRepr?.LongDescription,
       submissionMethod:
         blackbaudRepr && Assignment.getSubmissionMethod(blackbaudRepr),
+      attachments: blackbaudRepr?.DownloadItems.map(
+        Assignment.parseBlackbaudDownloadItem,
+      ),
+    };
+  },
+
+  /** @returns {AssignmentAttachment} */
+  parseBlackbaudDownloadItem(/** @type {BlackbaudDownloadItem} */ item) {
+    return {
+      url: item.DownloadUrl,
+      expired: item.Expired,
+      name: item.ShortDescription,
     };
   },
 
