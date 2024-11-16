@@ -42,6 +42,15 @@ class AssignmentPopup extends HTMLElement {
     descElem.id = "desc";
     root.appendChild(descElem);
 
+    // assignment attachments
+    const attachments = document.createElement("aside");
+    attachments.id = "attachments";
+    const attachmentsHeading = document.createElement("h3");
+    attachmentsHeading.textContent = "Attachments";
+    const attachmentsElem = document.createElement("ul");
+    attachments.append(attachmentsHeading, attachmentsElem);
+    root.appendChild(attachments);
+
     shadow.appendChild(root);
   }
 
@@ -99,6 +108,31 @@ class AssignmentPopup extends HTMLElement {
     descElem.innerHTML = this.#getDesc();
   }
 
+  #hydrateAttachments() {
+    const attachmentsElem = this.shadowRoot.getElementById("attachments");
+    const attachmentsList = attachmentsElem.querySelector("ul");
+    const lis = this.assignment.attachments?.map((attachment) => {
+      const existing = attachmentsList.querySelector(
+        `[data-attachment-url="${attachment.url}"]`,
+      );
+      if (existing != null) return existing;
+
+      const li = document.createElement("li");
+      li.className = "attachment";
+      li.setAttribute("data-attachment-url", attachment.url);
+
+      const a = document.createElement("a");
+      if (!attachment.expired) a.href = attachment.url;
+      a.textContent = attachment.name;
+      a.target = "_blank";
+
+      li.appendChild(a);
+      return li;
+    });
+    if (lis != null && lis.length > 0) attachmentsList.append(...lis);
+    else attachmentsElem.display = "none";
+  }
+
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.#hydrateStatus();
@@ -106,6 +140,7 @@ class AssignmentPopup extends HTMLElement {
     this.#hydrateDeleteBtn();
     this.#hydrateTitle();
     this.#hydrateDescription();
+    this.#hydrateAttachments();
   }
 
   /**
@@ -203,6 +238,18 @@ class AssignmentPopup extends HTMLElement {
   }
   & #desc > p:last-of-type {
     margin-bottom: 0;
+  }
+
+  & #attachments {
+    & > h3 {
+      margin-bottom: 0;
+      font-size: medium;
+    }
+    & > ul {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 1em;
+    }
   }
 }
 
