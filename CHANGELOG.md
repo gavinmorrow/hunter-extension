@@ -6,6 +6,10 @@ _released 00 November 2024_
 
 - Features:
   - Downloads/attachments are shown in the assignment popup.
+- Bug Fixes:
+  - Assignments now have a total sort order (ie when you create a new task, it
+    won't switch positions in the list after a reload. this is _very_ minor but
+    was bothering me.)
 
 ## v0.2.4
 
