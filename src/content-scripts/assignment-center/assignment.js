@@ -42,7 +42,11 @@ const Assignment = {
     // If statuses are equal, it will be 0 and || will select the other branch
     return (
       Assignment.sortStatuses(a.status, b.status) ||
-      Assignment.sortTypes(a.type, b.type)
+      Assignment.sortTypes(a.type, b.type) ||
+      sortForArray(a.class.name, b.class.name) ||
+      sortForArray(a.title, b.title) ||
+      // fallback to sorting by link, so that there is a total sort order
+      sortForArray(a.link, b.link)
     );
   },
 
