@@ -6,6 +6,7 @@ _released 00 November 2024_
 
 - Features:
   - Downloads/attachments are shown in the assignment popup.
+  - The name of the class is shown at the bottom of the assignment popup.
 - Bug Fixes:
   - Assignments now have a total sort order (ie when you create a new task, it
     won't switch positions in the list after a reload. this is _very_ minor but
