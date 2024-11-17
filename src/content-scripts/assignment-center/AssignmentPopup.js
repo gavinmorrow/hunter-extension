@@ -51,6 +51,11 @@ class AssignmentPopup extends HTMLElement {
     attachments.append(attachmentsHeading, attachmentsElem);
     root.appendChild(attachments);
 
+    // class name
+    const className = document.createElement("p");
+    className.id = "class-name";
+    root.appendChild(className);
+
     shadow.appendChild(root);
   }
 
@@ -135,6 +140,11 @@ class AssignmentPopup extends HTMLElement {
     } else attachmentsElem.style.display = "none";
   }
 
+  #hydrateClassName() {
+    this.shadowRoot.getElementById("class-name").textContent =
+      this.assignment.class.name;
+  }
+
   #updateAssignment(assignment) {
     this.assignment = assignment;
     this.#hydrateStatus();
@@ -143,6 +153,7 @@ class AssignmentPopup extends HTMLElement {
     this.#hydrateTitle();
     this.#hydrateDescription();
     this.#hydrateAttachments();
+    this.#hydrateClassName();
   }
 
   /**
@@ -254,6 +265,12 @@ class AssignmentPopup extends HTMLElement {
 
       list-style-type: "– "; /* en-dash bc hyphen is too short and em-dash too long */
     }
+  }
+
+  & #class-name {
+    font-size: small;
+    opacity: 0.75;
+    margin-bottom: 0;
   }
 }
 
