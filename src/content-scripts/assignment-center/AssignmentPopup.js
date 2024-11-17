@@ -129,8 +129,10 @@ class AssignmentPopup extends HTMLElement {
       li.appendChild(a);
       return li;
     });
-    if (lis != null && lis.length > 0) attachmentsList.append(...lis);
-    else attachmentsElem.display = "none";
+    if (lis != null && lis.length > 0) {
+      attachmentsList.append(...lis);
+      attachmentsElem.style.display = "block";
+    } else attachmentsElem.style.display = "none";
   }
 
   #updateAssignment(assignment) {
