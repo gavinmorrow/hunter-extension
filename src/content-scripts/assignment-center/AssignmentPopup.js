@@ -251,6 +251,8 @@ class AssignmentPopup extends HTMLElement {
       margin-top: 0;
       margin-bottom: 0;
       padding-left: 1em;
+
+      list-style-type: "– "; /* en-dash bc hyphen is too short and em-dash too long */
     }
   }
 }
