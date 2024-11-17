@@ -259,7 +259,12 @@ class AssignmentPopup extends HTMLElement {
 
 a {
   /* Prevent the color from being unreadable */
-  color: oklch(64% 0.2 262);
+  --l: 82%;
+  color: oklch(var(--l) 0.2 262);
+
+  &:hover, &:focus {
+    --l: 90%;
+  }
 }
 `;
 }
