@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.5
+
+_released 00 November 2024_
+
+- Features:
+  - Downloads/attachments are shown in the assignment popup.
+
 ## v0.2.4
 
 _released 11 November 2024_
