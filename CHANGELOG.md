@@ -2,7 +2,7 @@
 
 ## v0.2.5
 
-_released 00 November 2024_
+_released 17 November 2024_
 
 - Features:
   - Downloads/attachments are shown in the assignment popup.
