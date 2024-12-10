@@ -137,7 +137,7 @@ const api = {
     /** @returns {Promise<Map<number, string>>} */
     async () =>
       fetch(
-        "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet/",
+        "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet?displayByDueDate=true",
       )
         .then(
           /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
@@ -153,17 +153,16 @@ const api = {
         ),
   )[0],
 
+  getAllAssignmentData: () =>
+    fetch(
+      "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
+    ).then(r => r.json()),
+
   getClasses: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>
-      fetch(
-        "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
-      )
-        .then(
-          /** @returns {{ Sections: { LeadSectionId: number, GroupName: string }[] }} */
-          (r) => r.json(),
-        )
-        .then(({ Sections: sections }) =>
+      api.getAllAssignmentData()
+        .then((/** @type { { Sections: { LeadSectionId: number, GroupName: string }[] } */ { Sections: sections }) =>
           sections.reduce(
             (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
             new Map(),

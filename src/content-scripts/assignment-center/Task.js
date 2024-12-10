@@ -1,8 +1,6 @@
 const Task = {
   async populateAllIn(assignments) {
-    const allAssignmentData = await fetch(
-      "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet",
-    ).then((res) => res.json());
+    const allAssignmentData = await api.getAllAssignmentData();
     const tasks = await Promise.all(
       allAssignmentData.DueToday.concat(
         allAssignmentData.DueTomorrow,
