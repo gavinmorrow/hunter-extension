@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.6
+
+_released 10 December 2024_
+
+- Bug Fixes:
+  - Custom UI is now fixed after being completely broken by Blackbaud API
+    changes.
+
 ## v0.2.5
 
 _released 17 November 2024_

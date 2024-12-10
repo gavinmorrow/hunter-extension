@@ -1,8 +1,7 @@
 {
   "manifest_version": 3,
   "name": "hunter-extension",
-  "version": "0.2.5",
-
+  "version": "0.2.6",
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
     "https://app.blackbaud.com/signin/*",
@@ -10,15 +9,16 @@
     "https://accounts.google.com/v3/signin/challenge/pwd?*",
     "https://accounts.google.com/signin/oauth*"
   ],
-
-  "permissions": ["storage"],
-
+  "permissions": [
+    "storage"
+  ],
   "background": {
-    "scripts": ["src/background-scripts/background.js"],
+    "scripts": [
+      "src/background-scripts/background.js"
+    ],
     "service_worker": "src/background-scripts/service-worker.js",
     "type": "module"
   },
-
   "content_scripts": [
     {
       "matches": [
@@ -65,7 +65,6 @@
       ]
     }
   ],
-
   "browser_specific_settings": {
     "gecko": {
       "id": "{a58d637c-b5fb-4549-a2f6-ae76b6dd6672}",
