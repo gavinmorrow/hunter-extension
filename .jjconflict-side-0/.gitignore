@@ -1,0 +1,6 @@
+# mozilla web-ext stuff
+web-ext-artifacts/
+.amo-upload-uuid
+
+# macOS
+.DS_Store

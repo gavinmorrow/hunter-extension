@@ -1,0 +1,89 @@
+{
+  "addons": {
+    "{a58d637c-b5fb-4549-a2f6-ae76b6dd6672}": {
+      "updates": [
+        {
+          "version": "0.1.3",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.3/65a14653bc7c4e6ab617-0.1.3.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.1.4",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.4/65a14653bc7c4e6ab617-0.1.4.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.1.5",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.1.5/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.1",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.0/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.2",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.2/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.3",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.3/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.4",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.4/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.5",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.5/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        },
+        {
+          "version": "0.2.6",
+          "update_link": "https://github.com/gavinmorrow/hunter-extension/releases/download/v0.2.6/65a14653bc7c4e6ab617.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
