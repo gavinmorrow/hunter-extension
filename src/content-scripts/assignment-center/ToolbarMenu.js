@@ -49,9 +49,10 @@ class ToolbarMenu extends HTMLElement {
     const taskEditor = new TaskEditor(null);
     taskEditor.addEventListener(
       "create-task",
-      // FIXME: duplicate of code in AssignmentCenter.js
       (/** @type {CreateTaskEvent} */ e) => {
-        this.elems.assignmentCenter.addTask(e.task);
+        // Clone the task to prevent error:
+        // InvalidStateError: An attempt was made to use an object that is not, or is no longer, usable
+        this.elems.assignmentCenter.dispatchEvent(new CreateTaskEvent(e.task))
         e.stopPropagation();
       },
     );
@@ -64,7 +65,7 @@ class ToolbarMenu extends HTMLElement {
     return [newTaskBtn, taskEditor];
   }
 
-  connectedCallback() {}
+  connectedCallback() { }
 
   static #stylesheet = `\
 #root {

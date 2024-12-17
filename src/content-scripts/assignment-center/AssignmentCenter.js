@@ -29,7 +29,6 @@ class AssignmentCenter extends HTMLElement {
     this.settings = settings;
 
     this.addAssignments = this.#addAssignments.bind(this);
-    this.addTask = this.#addTask.bind(this);
 
     this.addEventListener("change-assignment", (e) => {
       this.#updateAssignment(e.id, e.isTask, e.changes);
