@@ -29,7 +29,6 @@ class AssignmentCenter extends HTMLElement {
     this.settings = settings;
 
     this.addAssignments = this.#addAssignments.bind(this);
-    this.addTask = this.#addTask.bind(this);
 
     this.addEventListener("change-assignment", (e) => {
       this.#updateAssignment(e.id, e.isTask, e.changes);
@@ -249,7 +248,20 @@ class AssignmentCenter extends HTMLElement {
   // TODO: refactor
   /** @param {BlackbaudTask} task */
   async #addTask(task) {
-    if (task.UserTaskId == undefined || task.UserTaskId === "") {
+    const taskExists = task.UserTaskId != undefined && task.UserTaskId != "";
+    if (taskExists) {
+      // FIXME: handle failure
+      await api.updateTask(task);
+
+      // find diff in stored task and task
+      const storedTask = this.assignments.find((a) => a.id == task.UserTaskId);
+      const parsedTask = await Task.addColor(Task.parse(task));
+      const diff = findDiff(storedTask, parsedTask);
+
+      // update stored task
+      console.log(`Updating UI for task ${parsedTask.id}`);
+      this.#updateAssignment(parsedTask.id, true, diff);
+    } else {
       // FIXME: handle failure
       const id = await api.createTask(task);
 
@@ -263,18 +275,6 @@ class AssignmentCenter extends HTMLElement {
       this.assignments = await Task.populateAllIn(this.assignments);
       this.#hydrateCalendar();
       return id;
-    } else {
-      // FIXME: handle failure
-      await api.updateTask(task);
-
-      // find diff in stored task and task
-      const storedTask = this.assignments.find((a) => a.id == task.UserTaskId);
-      const parsedTask = await Task.addColor(Task.parse(task));
-      const diff = findDiff(storedTask, parsedTask);
-
-      // update stored task
-      console.log(`Updating UI for task ${parsedTask.id}`);
-      this.#updateAssignment(parsedTask.id, true, diff);
     }
   }
 

@@ -104,6 +104,7 @@ class TaskEditor extends HTMLElement {
 
   async #addClassesToSelect() {
     const classSelect = this.shadowRoot.getElementById("class-select");
+    // FIXME: handle failure
     const classes = await api.getClasses();
     for (const [id, name] of classes.entries()) {
       const option = document.createElement("option");

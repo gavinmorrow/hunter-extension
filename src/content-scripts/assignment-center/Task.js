@@ -47,6 +47,7 @@ const Task = {
 
   // A seperate function so that `parse` can be non-async.
   async addColor(t) {
+    // FIXME: handle failure
     const colors = await api.getClassColors();
     return { ...t, color: colors.get(Number(t.class.id)) };
   },

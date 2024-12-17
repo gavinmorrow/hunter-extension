@@ -93,7 +93,9 @@ const Assignment = {
       return undefined;
     }
 
+    // FIXME: handle failure
     const studentUserId = await getStudentUserId();
+    // FIXME: handle failure
     return api.fetchAssignment(assignment.id, studentUserId);
   },
 
