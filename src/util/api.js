@@ -33,9 +33,9 @@ const api = {
    * @returns {Promise<BlackbaudAssignment>} Direct response from a Blackbaud API.
    */
   async fetchAssignment(assignmentIndexId, studentUserId) {
-    return fetch(
+    return ApiError.wrapFetch("fetchAssignment", fetch(
       `https://hunterschools.myschoolapp.com/api/assignment2/UserAssignmentDetailsGetAllStudentData?assignmentIndexId=${assignmentIndexId}&studentUserId=${studentUserId}&personaId=2`,
-    ).then((r) => r.json());
+    )).then((r) => r.json());
   },
 
   statusNumMap: {
@@ -64,7 +64,9 @@ const api = {
           assignmentStatus,
         }),
       },
-    );
+    ).catch(err => {
+      throw new ApiError("updateAssignmentStatus", err)
+    });
   },
 
   nullifyIfZeroTaskSectionId(task) {
@@ -94,6 +96,8 @@ const api = {
           UserTaskId: task.id,
         }),
       ),
+    }).catch(err => {
+      throw new ApiError("updateTaskStatus", err);
     });
   },
   async deleteTask(id) {
@@ -102,6 +106,8 @@ const api = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
+    }).catch(err => {
+      throw new ApiError("deleteTask", err);
     });
   },
   /** @param {BlackbaudTask} task */
@@ -114,13 +120,17 @@ const api = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
       },
-    ).then((r) => r.text());
+    ).then(
+      (r) => r.text(),
+      (err) => { throw new ApiError("createTask", err); },
+    );
+
     if (/\D/.test(id)) {
-      console.error(
+      throw new ApiError("createTaskInvalidResponse", new Error(
         `Invalid response to create task: "${id}". (Expected an id, ie number.)`,
-      );
-      return null;
+      ));
     }
+
     return id;
   },
   /** @param {BlackbaudTask} task */
@@ -130,6 +140,8 @@ const api = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
+    }).catch(err => {
+      throw new ApiError("updateTask", err);
     });
   },
 
@@ -142,6 +154,7 @@ const api = {
         .then(
           /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
           (r) => r.json(),
+          (err) => { throw new ApiError("getClassColors", err); },
         )
         .then((r) => r.SectionColors)
         .then((colors) =>
@@ -156,17 +169,48 @@ const api = {
   getAllAssignmentData: () =>
     fetch(
       "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
-    ).then(r => r.json()),
+    ).then(
+      r => r.json(),
+      (err) => { throw new ApiError("getAllAssignmentData", err); },
+    ),
 
   getClasses: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>
       api.getAllAssignmentData()
-        .then((/** @type { { Sections: { LeadSectionId: number, GroupName: string }[] } */ { Sections: sections }) =>
-          sections.reduce(
-            (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
-            new Map(),
-          ),
+        .then(
+          (/** @type { { Sections: { LeadSectionId: number, GroupName: string }[] } */ { Sections: sections }) =>
+            sections.reduce(
+              (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
+              new Map(),
+            ),
+          (err) => { throw new ApiError("getClasses", err); },
         ),
   )[0],
 };
+
+class ApiError extends Error {
+  static MESSAGES = {
+    fetchAssignment: "could not fetch assignment",
+    updateAssignmentStatus: "could not update assignment status",
+    updateTaskStatus: "could not update task status",
+    deleteTask: "could not delete task",
+    createTask: "could not create task",
+    createTaskInvalidResponse: "Blackbaud returned an invalid response when attempting to create a task",
+    updateTask: "could not update task",
+    getClassColors: "could not get class colors",
+    getAllAssignmentData: "could not get all assignment data",
+    getClasses: "could not get classes",
+  };
+
+  /**
+   * @param {keyof typeof ApiError.MESSAGES} action
+   * @param {Error} cause
+   */
+  constructor(action, cause) {
+    const msg = `${ApiError.MESSAGES[action] ?? action} (${action})`;
+    super(msg, { cause });
+
+    this.action = action;
+  }
+}

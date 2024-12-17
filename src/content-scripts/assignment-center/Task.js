@@ -1,19 +1,25 @@
 const Task = {
   async populateAllIn(assignments) {
-    const allAssignmentData = await api.getAllAssignmentData();
-    const tasks = await Promise.all(
-      allAssignmentData.DueToday.concat(
-        allAssignmentData.DueTomorrow,
-        allAssignmentData.DueThisWeek,
-        allAssignmentData.DueNextWeek,
-        allAssignmentData.DueAfterNextWeek,
-        allAssignmentData.PastThisWeek,
-        allAssignmentData.PastLastWeek,
-        allAssignmentData.PastBeforeLastWeek,
-      )
-        .filter((a) => a.UserTaskId !== 0)
-        .map(Task.parse)
-        .map(Task.addColor),
+    const tasks = await api.getAllAssignmentData().then(
+      assignments => Promise.all(
+        assignments.DueToday.concat(
+          assignments.DueTomorrow,
+          assignments.DueThisWeek,
+          assignments.DueNextWeek,
+          assignments.DueAfterNextWeek,
+          assignments.PastThisWeek,
+          assignments.PastLastWeek,
+          assignments.PastBeforeLastWeek,
+        )
+          .filter((a) => a.UserTaskId !== 0)
+          .map(Task.parse)
+          .map(Task.addColor),
+      ),
+      err => {
+        reportError(err);
+        // Allow the rest of the UI to work, just without tasks.
+        return [];
+      }
     );
     return assignments.filter((a) => !a.isTask).concat(tasks);
   },
@@ -47,8 +53,12 @@ const Task = {
 
   // A seperate function so that `parse` can be non-async.
   async addColor(t) {
-    // FIXME: handle failure
-    const colors = await api.getClassColors();
-    return { ...t, color: colors.get(Number(t.class.id)) };
+    try {
+      const colors = await api.getClassColors();
+      return { ...t, color: colors.get(Number(t.class.id)) };
+    } catch (err) {
+      reportError(err);
+      return { ...t, color: "#111" };
+    }
   },
 };

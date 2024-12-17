@@ -31,11 +31,11 @@ class AssignmentCenter extends HTMLElement {
     this.addAssignments = this.#addAssignments.bind(this);
 
     this.addEventListener("change-assignment", (e) => {
-      this.#updateAssignment(e.id, e.isTask, e.changes);
+      this.#updateAssignment(e.id, e.isTask, e.changes).catch(reportError);
       e.stopPropagation();
     });
     this.addEventListener("create-task", (e) => {
-      this.#addTask(e.task);
+      this.#addTask(e.task).catch(reportError);
       e.stopPropagation();
     });
 
@@ -212,7 +212,7 @@ class AssignmentCenter extends HTMLElement {
       .then(Assignment.parseBlackbaudRepr)
       .then(
         this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
-      );
+      ).catch(reportError);
   }
 
   #updateTodayElem() {
@@ -250,7 +250,6 @@ class AssignmentCenter extends HTMLElement {
   async #addTask(task) {
     const taskExists = task.UserTaskId != undefined && task.UserTaskId != "";
     if (taskExists) {
-      // FIXME: handle failure
       await api.updateTask(task);
 
       // find diff in stored task and task
@@ -260,16 +259,9 @@ class AssignmentCenter extends HTMLElement {
 
       // update stored task
       console.log(`Updating UI for task ${parsedTask.id}`);
-      this.#updateAssignment(parsedTask.id, true, diff);
+      await this.#updateAssignment(parsedTask.id, true, diff);
     } else {
-      // FIXME: handle failure
       const id = await api.createTask(task);
-
-      if (id == null) {
-        console.error("Task could not be saved.");
-        return;
-      }
-
       console.log(`Task ${id} saved.`);
 
       this.assignments = await Task.populateAllIn(this.assignments);
@@ -279,7 +271,7 @@ class AssignmentCenter extends HTMLElement {
   }
 
   /** @param {Number} id @param {boolean} isTask @param {Assignment?} changes */
-  #updateAssignment(id, isTask, changes) {
+  async #updateAssignment(id, isTask, changes) {
     // update internal object
     const index = this.assignments.findIndex((a) => a.id === id);
     if (index === -1) return;
@@ -287,20 +279,13 @@ class AssignmentCenter extends HTMLElement {
 
     // check for if the status in the backend needs to be updated
     if (changes?.status != undefined) {
-      // This ignores a promise. It's okay, because we're not depending on the
-      // result.
-      // FIXME: handle failure
-      if (isTask) api.updateTaskStatus(this.assignments[index]);
-      // FIXME: handle failure
-      else api.updateAssignmentStatus(id, changes.status, isTask);
+      if (isTask) await api.updateTaskStatus(this.assignments[index]);
+      else await api.updateAssignmentStatus(id, changes.status, isTask);
     }
 
     // check if task needs to be deleted
     if (isTask && changes === null) {
-      // This ignores a promise. It's okay, because we're not depending on the
-      // result.
-      // FIXME: handle failure
-      api.deleteTask(id);
+      await api.deleteTask(id);
 
       // remove the element corresponding to it
       this.#findAssignmentBoxFor(id).remove();

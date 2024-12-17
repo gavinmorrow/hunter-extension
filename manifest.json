@@ -33,6 +33,7 @@
         "src/util/objectDiff.js",
         "src/util/Calendar.util.js",
         "src/util/BlackbaudDate.js",
+        "src/util/report-error.js",
         "src/content-scripts/student-user-id.js",
         "src/content-scripts/notify-update.js",
         "src/content-scripts/settings-menu.js",
