@@ -52,7 +52,7 @@ const api = {
       `Setting status to ${assignmentStatus} for assignment ${assignmentIndexId}`,
     );
 
-    return fetch(
+    return ApiError.wrapFetch("updateAssignmentStatus", fetch(
       `https://hunterschools.myschoolapp.com/api/assignment2/assignmentstatusupdate`,
       {
         method: "POST",
@@ -64,9 +64,7 @@ const api = {
           assignmentStatus,
         }),
       },
-    ).catch(err => {
-      throw new ApiError("updateAssignmentStatus", err)
-    });
+    ));
   },
 
   nullifyIfZeroTaskSectionId(task) {
@@ -80,7 +78,7 @@ const api = {
     const statusNum = api.statusNumMap[task.status];
     console.log(`Setting status to ${statusNum} for task ${task.id}`);
 
-    return fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
+    return ApiError.wrapFetch("updateTaskStatus", fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -96,34 +94,27 @@ const api = {
           UserTaskId: task.id,
         }),
       ),
-    }).catch(err => {
-      throw new ApiError("updateTaskStatus", err);
-    });
+    }));
   },
   async deleteTask(id) {
     console.log(`Deleting task ${id}`);
-    return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+    return ApiError.wrapFetch("deleteTask", fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
-    }).catch(err => {
-      throw new ApiError("deleteTask", err);
-    });
+    }));
   },
   /** @param {BlackbaudTask} task */
   async createTask(task) {
     console.log(`Creating task ${task.ShortDescription}`);
-    const id = await fetch(
+    const id = await ApiError.wrapFetch("createTask", fetch(
       "https://hunterschools.myschoolapp.com/api/UserTask/Edit/",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
       },
-    ).then(
-      (r) => r.text(),
-      (err) => { throw new ApiError("createTask", err); },
-    );
+    )).then((r) => r.text());
 
     if (/\D/.test(id)) {
       throw new ApiError("createTaskInvalidResponse", new Error(
@@ -136,25 +127,22 @@ const api = {
   /** @param {BlackbaudTask} task */
   async updateTask(task) {
     console.log(`Updating task ${task.UserTaskId}`);
-    return fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+    return ApiError.wrapFetch("updateTask", fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
-    }).catch(err => {
-      throw new ApiError("updateTask", err);
-    });
+    }));
   },
 
   getClassColors: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>
-      fetch(
+      ApiError.wrapFetch("getClassColors", fetch(
         "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet?displayByDueDate=true",
-      )
+      ))
         .then(
           /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
           (r) => r.json(),
-          (err) => { throw new ApiError("getClassColors", err); },
         )
         .then((r) => r.SectionColors)
         .then((colors) =>
@@ -167,12 +155,9 @@ const api = {
   )[0],
 
   getAllAssignmentData: () =>
-    fetch(
+    ApiError.wrapFetch("getAllAssignmentData", fetch(
       "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
-    ).then(
-      r => r.json(),
-      (err) => { throw new ApiError("getAllAssignmentData", err); },
-    ),
+    )).then(r => r.json()),
 
   getClasses: memo(
     /** @returns {Promise<Map<number, string>>} */
@@ -184,7 +169,7 @@ const api = {
               (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
               new Map(),
             ),
-          (err) => { throw new ApiError("getClasses", err); },
+          (err) => { throw new ApiError("getClasses", err) }
         ),
   )[0],
 };
@@ -211,6 +196,25 @@ class ApiError extends Error {
     const msg = `${ApiError.MESSAGES[action] ?? action} (${action})`;
     super(msg, { cause });
 
+    this.name = "ApiError";
     this.action = action;
+  }
+
+  /**
+   * Wrap an api fetch call w/ an API error.
+   * @param {keyof typeof ApiError.MESSAGES} action
+   * @param {Promise<Response>} res
+   */
+  static async wrapFetch(action, res) {
+    // Don't use Promise methods to avoid `InternalError: Promise rejection
+    // value is a non-unwrappable cross-compartment wrapper.`
+    // (see <https://bugzilla.mozilla.org/show_bug.cgi?id=1871516>)
+    try {
+      res = await res;
+      if (res.ok) return res;
+      throw new Error(`api response not ok (${res.status})`);
+    } catch (err) {
+      throw new ApiError(action, err);
+    }
   }
 }
