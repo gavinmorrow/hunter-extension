@@ -1,5 +1,3 @@
-const VERSION = "0.2.7";
-
 /** @returns {Promise<number>} */
 const getLatestVersion = async () =>
   fetch("https://gavinmorrow.github.io/hunter-extension/versions.json", {

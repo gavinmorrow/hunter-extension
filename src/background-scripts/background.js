@@ -100,7 +100,6 @@ const meshObjects = (a = {}, b = {}) => {
       o[p] = meshObjects(o[p], b[p]);
     else o[p] = b[p];
   }
-  console.log({ a, b, o });
   return o;
 };
 
@@ -133,9 +132,29 @@ const settingsListener = async (msg, sender) => {
     case "settings.reset":
       await resetSettings();
       return getSettings();
+    default:
+      console.error(`Unknown message type ${msg.type}`);
   }
 };
 
+///=================///
+///=== WHATS NEW ===///
+///=================///
+const whatsNewListener = async (msg, sender) => {
+  switch (msg.type) {
+    case "whatsNew.setViewedVersion":
+      await browser.storage.local.set({ whatsNewViewed: msg.data });
+      break;
+    case "whatsNew.getViewedVersion":
+      return (await browser.storage.local.get()).whatsNewViewed;
+    default:
+      console.error(`Unknown message type ${msg.type}`);
+  }
+}
+
+///=================///
+///=== LISTENERS ===///
+///=================///
 browser.runtime.onMessage.addListener(async (msg, sender) => {
   const type = msg.type.split(".")[0];
   switch (type) {
@@ -143,6 +162,8 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       return tabStateListener(msg, sender);
     case "settings":
       return settingsListener(msg, sender);
+    case "whatsNew":
+      return whatsNewListener(msg, sender);
     default:
       console.error(`Unknown message type ${msg.type}`);
   }
