@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.8
+
+_released 00 December 2024_
+
+- Bug Fixes:
+  - Fix class name sometimes being the number of points.
+
 ## v0.2.7
 
 _released 18 December 2024_
