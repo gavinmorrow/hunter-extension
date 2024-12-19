@@ -1,4 +1,4 @@
-const VERSION = "0.2.6";
+const VERSION = "0.2.7";
 
 /** @returns {Promise<number>} */
 const getLatestVersion = async () =>

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.7
+
+_released 18 December 2024_
+
+- Features:
+  - Report Blackbaud API failures when they happen, and don't completely crash.
+
 ## v0.2.6
 
 _released 10 December 2024_
