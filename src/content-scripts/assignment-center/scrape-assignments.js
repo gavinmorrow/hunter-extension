@@ -51,9 +51,10 @@ const parseFullDetailsElem = (detailsElem) => {
     .map(BlackbaudDate.parse);
   const maxPoints = hasPoints ? parseInt(parts[2]) : null;
   // *maybe* the third element
+  const classIndex = hasPoints ? 3 : 2;
   const class_ = isTask
     ? null
-    : { name: parts[2], link: detailsElem.querySelector("button a").href };
+    : { name: parts[classIndex], link: detailsElem.querySelector("button a").href };
   if (class_?.link) class_.id = parseForSectionId(class_.link);
   // the last two elements (type is second-to-last).
   // _assignmentOrTask is the literal string "Assignment" or "My tasks",
@@ -176,7 +177,7 @@ const scrapeAssignments = (time) =>
         Array.from(assignments).map(parseAssignmentElem),
       ),
     ).toSorted(
-      /** @param {Assignment} a @param {Assignment} b */ (a, b) =>
+      /** @param {Assignment} a @param {Assignment} b */(a, b) =>
         a.dueDate - b.dueDate,
     );
   });
