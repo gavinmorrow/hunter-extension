@@ -200,6 +200,8 @@ class ApiError extends Error {
     this.action = action;
   }
 
+  // TODO: make this work via .then()
+  // ie `fetch("/whatever").then(ApiError.wrapFetch("doWhatever")).then(r => r.json())`
   /**
    * Wrap an api fetch call w/ an API error.
    * @param {keyof typeof ApiError.MESSAGES} action
