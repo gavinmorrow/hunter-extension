@@ -38,7 +38,7 @@ echo "Removed git, jj, and amo files/dirs."
 
 # zip it
 # See ditto man page (this is very similar to Finder compress function)
-ditto -c -k --sequesterRsrc --keepParent . ~/Desktop/hunter-extension.zip
+ditto -c -k --sequesterRsrc --keepParent ~/Desktop/hunter-extension ~/Desktop/hunter-extension.zip
 rm -rf ~/Desktop/hunter-extension
 echo "Zipped into ~/Desktop/hunter-extension.zip"
 

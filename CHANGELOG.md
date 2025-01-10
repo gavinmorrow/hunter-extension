@@ -7,6 +7,7 @@ _released 00 December 2024_
 - Bug Fixes:
   - Fix class name sometimes being the number of points.
   - Wrap long assignment titles (instead of overflow).
+  - Remove extra files (.git, etc) from being included in release zip.
 
 ## v0.2.7
 
