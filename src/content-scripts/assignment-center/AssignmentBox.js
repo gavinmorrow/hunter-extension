@@ -30,6 +30,7 @@ class AssignmentBox extends HTMLElement {
     shadow.appendChild(style);
 
     const wrapper = document.createElement("article");
+
     const root = document.createElement("div");
     root.id = "root";
 
@@ -176,6 +177,9 @@ article {
     position: relative;
     background-color: var(--color-status);
     box-sizing: border-box;
+
+    /* Wrap text */
+    overflow-wrap: break-word;
 
     padding: var(--base-padding);
     padding-left: calc(var(--base-padding) + var(--width-class-color));
