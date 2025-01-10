@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.2.9
+
+_released 09 January 2025_
+
+- Bug Fixes:
+  - Don't show the whats new beta.
+
 ## v0.2.8
 
 _released 09 January 2025_
