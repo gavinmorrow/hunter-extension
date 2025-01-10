@@ -2,12 +2,12 @@
 
 ## v0.2.8
 
-_released 00 December 2024_
+_released 09 January 2025_
 
 - Bug Fixes:
   - Fix class name sometimes being the number of points.
   - Wrap long assignment titles (instead of overflow).
-  - Remove extra files (.git, etc) from being included in release zip.
+  - Remove extra files (.git, etc) from being included in Chrome release zip.
 
 ## v0.2.7
 
