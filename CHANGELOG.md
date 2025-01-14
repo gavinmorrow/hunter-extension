@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.2.10
+
+_released 00 January 2025_
+
+- Improvements:
+  - Make action buttons (eg `Mark as Completed`) stretch horizontally to fill.
+  - Make buttons and input fields inside of the custom UI dark themed.
+
 ## v0.2.9
 
 _released 09 January 2025_
