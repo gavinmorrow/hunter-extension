@@ -19,18 +19,21 @@ class AssignmentPopup extends HTMLElement {
     root.id = "popup-root";
 
     // assignment status
+    const actionsMenu = document.createElement("div");
+    actionsMenu.id = "actions-menu";
+
     const statusBtn = document.createElement("button");
     statusBtn.id = "status-btn";
     statusBtn.addEventListener("click", this.#handleChangeStatus.bind(this));
-    root.appendChild(statusBtn);
     const submitBtn = document.createElement("button");
     submitBtn.id = "submit-btn";
     submitBtn.addEventListener("click", this.#handleSubmit.bind(this));
-    root.appendChild(submitBtn);
     const deleteBtn = document.createElement("button");
     deleteBtn.id = "delete-btn";
     deleteBtn.addEventListener("click", this.#handleDelete.bind(this));
-    root.appendChild(deleteBtn);
+
+    actionsMenu.append(statusBtn, submitBtn, deleteBtn);
+    root.appendChild(actionsMenu);
 
     // assignment title
     const titleElem = document.createElement("h2");
