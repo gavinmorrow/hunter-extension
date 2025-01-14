@@ -243,6 +243,15 @@ class AssignmentPopup extends HTMLElement {
   padding: var(--len-padding);
   border-radius: var(--len-padding);
 
+  & #actions-menu {
+    display: flex;
+    gap: 0.25em;
+
+    & > * {
+      flex-grow: 1;
+    }
+  }
+
   & #title {
     font-size: medium;
     margin: 0;
