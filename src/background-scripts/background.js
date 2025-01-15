@@ -6,6 +6,9 @@
  * @typedef {{[any]: any}} State
  */
 
+import meshObjects from "../util/meshObjects.js";
+import meshAssignmentsArray from "./mesh-assignments-array.js";
+
 /**
  * Get or set tab state.
  * @param {number} tabId The tab ID
@@ -92,17 +95,6 @@ const defaultSettings = {
   },
 };
 
-/** @param {Object} a @param {Object} b */
-const meshObjects = (a = {}, b = {}) => {
-  const o = structuredClone(a);
-  for (const p in b) {
-    if (Object.hasOwn(o, p) && typeof o[p] === "object")
-      o[p] = meshObjects(o[p], b[p]);
-    else o[p] = b[p];
-  }
-  return o;
-};
-
 const getSettings = async () =>
   meshObjects(defaultSettings, (await browser.storage.local.get()).settings);
 
@@ -152,6 +144,24 @@ const whatsNewListener = async (msg, sender) => {
   }
 }
 
+///=========================///
+///=== ASSIGNMENTS CACHE ===///
+///=========================///
+const assignmentsCache = async (msg, _sender) => {
+  const get = async () => (await browser.storage.local.get()).assignmentsCache ?? [];
+  switch (msg.type) {
+    case `assignmentsCache.set`:
+      const curr = await get();
+      const newValue = meshAssignmentsArray(curr, msg.data);
+      await browser.storage.local.set({ assignmentsCache: newValue });
+      break;
+    case `assignmentsCache.get`:
+      return get();
+    default:
+      console.error(`Unknown message type ${msg.type}`);
+  }
+};
+
 ///=================///
 ///=== LISTENERS ===///
 ///=================///
@@ -164,6 +174,8 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       return settingsListener(msg, sender);
     case "whatsNew":
       return whatsNewListener(msg, sender);
+    case "assignmentsCache":
+      return assignmentsCache(msg, sender);
     default:
       console.error(`Unknown message type ${msg.type}`);
   }

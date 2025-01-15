@@ -180,4 +180,7 @@ const scrapeAssignments = (time) =>
       /** @param {Assignment} a @param {Assignment} b */(a, b) =>
         a.dueDate - b.dueDate,
     );
+  }).then(assignments => {
+    setAssignmentsCache(assignments);
+    return assignments;
   });
