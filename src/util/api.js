@@ -9,6 +9,7 @@
  * @property {BlackbaudSubmissionResult[]} SubmissionResults The files that the user has submitted through Blackbaud Dropbox.
  *
  * @property {BlackbaudDownloadItem[]} DownloadItems
+ * @property {BlackbaudLinkItem[]} LinkItems
  */ // lots of other things too but i'm too lazy to list them, add more as needed
 /**
  * @typedef {Object} BlackbaudDownloadItem
@@ -17,6 +18,13 @@
  * @property {String} FileName The raw file name as stored on the server.
  * @property {String} FriendlyFileName A file name intended for viewing by a user. Unclear why both it and `ShortDescription` exist. Prefer `ShortDescription` in most cases.
  * @property {String} ShortDescription The title of the file to display to the user.
+ */ // lots of other things too but i'm too lazy to list them, add more as needed
+/**
+ * @typedef {Object} BlackbaudLinkItem
+ * @property {String} Url The URL of the link.
+ * @property {String} UrlDisplay Unclear why it exists. A prettier URL in some cases perhaps? It looks exactly the same.
+ * @property {boolean} Expired (Maybe) Whether or not the link has been marked as expired by someone??
+ * @property {String} ShortDescription The name to show to the user.
  */ // lots of other things too but i'm too lazy to list them, add more as needed
 /**
  * @typedef {Object} BlackbaudSubmissionResult

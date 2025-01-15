@@ -21,7 +21,7 @@
  * @property {String} type
  * @property {boolean} isTask
  * @property {SubmissionMethod?} submissionMethod
- * @property {AssignmentAttachment[]} attachments
+ * @property {AssignmentAttachment[]} attachments Both download and link items.
  */
 
 /**
@@ -106,16 +106,38 @@ const Assignment = {
       description: blackbaudRepr?.LongDescription,
       submissionMethod:
         blackbaudRepr && Assignment.getSubmissionMethod(blackbaudRepr),
-      attachments: blackbaudRepr?.DownloadItems.map(
-        Assignment.parseBlackbaudDownloadItem,
-      ),
+      attachments: Assignment.parseBlackbaudAttachments(blackbaudRepr),
     };
+  },
+
+  /**
+   * Parse into the `assignment.attachments`.
+   * @param {BlackbaudAssignment} blackbaudRepr
+   * @returns {AssignmentAttachment[]}
+   */
+  parseBlackbaudAttachments(blackbaudRepr) {
+    if (blackbaudRepr == null) return;
+
+    const downloadItems = blackbaudRepr.DownloadItems.map(
+      Assignment.parseBlackbaudDownloadItem,
+    );
+    const linkItems = blackbaudRepr.LinkItems.map(Assignment.parseBlackbaudLinkItem);
+    return downloadItems.concat(linkItems);
   },
 
   /** @returns {AssignmentAttachment} */
   parseBlackbaudDownloadItem(/** @type {BlackbaudDownloadItem} */ item) {
     return {
       url: item.DownloadUrl,
+      expired: item.Expired,
+      name: item.ShortDescription,
+    };
+  },
+
+  /** @returns {AssignmentAttachment} */
+  parseBlackbaudLinkItem(/** @type {BlackbaudLinkItem} */ item) {
+    return {
+      url: item.Url,
       expired: item.Expired,
       name: item.ShortDescription,
     };
