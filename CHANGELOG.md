@@ -7,6 +7,7 @@ _released 00 January 2025_
 - Improvements:
   - Make action buttons (eg `Mark as Completed`) stretch horizontally to fill.
   - Make buttons and input fields inside of the custom UI dark themed.
+  - Show attached links in the attachments section in the assignment popup.
 
 ## v0.2.9
 
