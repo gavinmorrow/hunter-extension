@@ -109,7 +109,9 @@ const createCustomUi = async () => {
     const wrapper = document.createElement("div");
     wrapper.style.colorScheme = "dark";
     // construct our own elements
-    const assignmentCenter = new AssignmentCenter([], await settings());
+    const cachedAssignments = await getAssignmentsCache();
+    console.log({ cachedAssignments });
+    const assignmentCenter = new AssignmentCenter(cachedAssignments, await settings());
     const toolbarMenu = new ToolbarMenu({ oldElem, assignmentCenter });
     wrapper.append(toolbarMenu, assignmentCenter);
     oldElem.parentElement.prepend(wrapper);

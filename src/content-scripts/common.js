@@ -166,6 +166,14 @@ const [settings, updateSettingsCache] = memo(
 const updateSettings = async (partial) =>
   browser.runtime.sendMessage({ type: "settings.update", data: partial });
 
+const getAssignmentsCache = async () => (await browser.runtime.sendMessage({
+  type: "assignmentsCache.get",
+})) ?? [];
+const setAssignmentsCache = async (newAssignments) => browser.runtime.sendMessage({
+  type: "assignmentsCache.set",
+  data: newAssignments,
+});
+
 /**
  * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.
  * @template T The return value of `fn()`
