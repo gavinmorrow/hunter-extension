@@ -33,6 +33,59 @@
 
 const Assignment = {
   /**
+   * Parse an assignment from its BB API representation.
+   * @param {BlackbaudAssignmentPreview} blackbaudRepr
+   * @returns {Assignment}
+   */
+  parse(blackbaudRepr) {
+    if (blackbaudRepr == null) return null;
+
+    return {
+      // I'm not sure when the AssignmentId is used, but I'm also not sure if the AssignmentIndexId always exists.
+      id: blackbaudRepr.AssignmentIndexId ?? blackbaudRepr.AssignmentId,
+      color: api.getClassColors()[blackbaudRepr.SectionId],
+      title: blackbaudRepr.ShortDescription,
+      link: blackbaudRepr.AssignmentIndexId != null ? `https://hunterschools.myschoolapp.com/lms-assignment/assignment/assignment-student-view/${blackbaudRepr.AssignmentIndexId}` : ``,
+      description: null,
+      status: Assignment.getStatusText(blackbaudRepr),
+      dueDate: BlackbaudDate.parse(blackbaudRepr.DateDue),
+      assignedDate: BlackbaudDate.parse(blackbaudRepr.DateAssigned),
+      maxPoints: blackbaudRepr.MaxPoints,
+      isExtraCredit: blackbaudRepr.ExtraCredit,
+      class: { id: blackbaudRepr.SectionId, },
+      type: blackbaudRepr.AssignmentType,
+      // tasks are parsed elsewhere
+      isTask: false,
+      submissionMethod: null,
+      attachments: [],
+    };
+  },
+
+  getStatusText(/** @type {BlackbaudAssignmentPreview} */ blackbaudRepr) {
+    switch (blackbaudRepr.AssignmentStatus) {
+      case -1: return "To do";
+      case 0: return "In progress";
+      case 1: return "Completed";
+      // FIXME: coule also be missing.
+      case 2: return "Overdue";
+      default:
+        console.error("Unkonwn status", blackbaudRepr.AssignmentStatus);
+        return "To do";
+    }
+  },
+
+  // A seperate function so that `parse` can be non-async.
+  async addColor(a) {
+    try {
+      const colors = await api.getClassColors();
+      return { ...a, color: colors.get(Number(a.class.id)) };
+    } catch (err) {
+      reportError(err);
+      return { ...a, color: "#111" };
+    }
+  },
+
+  /**
    * Sort two assignments by status (ascending) and then by type (descending).
    * @param {Assignment} a
    * @param {Assignment} b

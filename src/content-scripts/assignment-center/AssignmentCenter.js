@@ -29,6 +29,7 @@ class AssignmentCenter extends HTMLElement {
     this.settings = settings;
 
     this.addAssignments = this.#addAssignments.bind(this);
+    this.meshAssignmentsArray = this.#meshAssignments.bind(this);
 
     this.addEventListener("change-assignment", (e) => {
       this.#updateAssignment(e.id, e.isTask, e.changes).catch(reportError);
@@ -242,6 +243,12 @@ class AssignmentCenter extends HTMLElement {
   /** @param {Assignment[]} newAssignments */
   #addAssignments(newAssignments) {
     this.assignments = this.assignments.concat(newAssignments);
+    this.#hydrateCalendar();
+  }
+
+  /** @param {Assignment[]} assignments */
+  #meshAssignments(assignments) {
+    this.assignments = meshAssignmentsArray(this.assignments, assignments);
     this.#hydrateCalendar();
   }
 

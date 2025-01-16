@@ -183,6 +183,28 @@ const api = {
       "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
     )).then(r => r.json()),
 
+  parseAssignments: (assignments) =>
+    Promise.all(
+      assignments.Missing.concat(
+        assignments.Overdue,
+        assignments.DueToday,
+        assignments.DueTomorrow,
+        assignments.DueThisWeek,
+        assignments.DueNextWeek,
+        assignments.DueAfterNextWeek,
+        assignments.PastThisWeek,
+        assignments.PastLastWeek,
+        assignments.PastBeforeLastWeek,
+      )
+        .map((/** @type {BlackbaudAssignmentPreview} */ assignment) => {
+          if (assignment.UserTaskId !== 0) {
+            return Task.addColor(Task.parse(assignment));
+          } else {
+            return Assignment.addColor(Assignment.parse(assignment));
+          }
+        }),
+    ).then(assignments => (setAssignmentsCache(assignments), assignments)),
+
   getClasses: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>

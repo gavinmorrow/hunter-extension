@@ -51,14 +51,7 @@ const Task = {
     };
   },
 
-  // A seperate function so that `parse` can be non-async.
   async addColor(t) {
-    try {
-      const colors = await api.getClassColors();
-      return { ...t, color: colors.get(Number(t.class.id)) };
-    } catch (err) {
-      reportError(err);
-      return { ...t, color: "#111" };
-    }
-  },
+    return Assignment.addColor(t);
+  }
 };
