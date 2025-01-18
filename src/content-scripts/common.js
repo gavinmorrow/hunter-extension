@@ -24,9 +24,10 @@ const memo = (fn) => {
   const updateCache = (c) => (cache = c);
   return [
     async () => {
-      if (cache != null) return cache;
-      cache = await fn();
-      return cache;
+      // `await` only when *reading* the cache otherwise there could be a race
+      // condition where the cache is being set by several in-progress promises
+      if (cache === null) cache = fn();
+      return await cache;
     },
     updateCache,
   ];
