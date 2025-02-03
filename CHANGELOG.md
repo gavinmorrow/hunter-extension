@@ -2,8 +2,11 @@
 
 ## v0.2.10
 
-_released 00 January 2025_
+_released 03 February 2025_
 
+- **IMPORTANT:**
+  - Performance of Blackbaud has gotten really bad, and the solution isn't done
+    yet. In the meantime, **_past assignments will not be displayed._**
 - Improvements:
   - Make action buttons (eg `Mark as Completed`) stretch horizontally to fill.
   - Make buttons and input fields inside of the custom UI dark themed.
