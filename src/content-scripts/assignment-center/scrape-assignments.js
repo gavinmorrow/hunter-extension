@@ -140,7 +140,7 @@ const filterBy = async (time) => filterElem(time).then((e) => e.click());
 const withFilter = async (time, fn) => {
   await filterBy(time);
   const res = await fn();
-  await filterBy("Active");
+  // await filterBy("Active");
   return res;
 };
 
