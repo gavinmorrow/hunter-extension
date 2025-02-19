@@ -39,9 +39,6 @@ class ToolbarMenu extends HTMLElement {
     });
     root.appendChild(closeBtn);
 
-    // task editor
-    root.append(...this.#createTaskEditor());
-
     // Assignments cache button
     // When this is reliable enough, remove
     const clearAssignmentsCacheBtn = document.createElement("button");
@@ -54,6 +51,10 @@ class ToolbarMenu extends HTMLElement {
         .then(() => location.reload()),
     );
     root.appendChild(clearAssignmentsCacheBtn);
+
+    // task editor
+    // append last otherwise there's an empty flex item, adding extra padding
+    root.append(...this.#createTaskEditor());
 
     shadow.appendChild(root);
   }
