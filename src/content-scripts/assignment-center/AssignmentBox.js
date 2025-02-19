@@ -100,7 +100,7 @@ class AssignmentBox extends HTMLElement {
   #hydrateTitleElem() {
     const titleElem = this.shadowRoot.querySelector("#title a");
 
-    titleElem.textContent = this.assignment.title;
+    titleElem.innerHTML = this.assignment.title;
     if (this.#shouldCollapse()) titleElem.title = this.assignment.title;
 
     // tasks don't have links

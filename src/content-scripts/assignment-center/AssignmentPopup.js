@@ -105,7 +105,7 @@ class AssignmentPopup extends HTMLElement {
 
   #hydrateTitle() {
     const titleElem = this.shadowRoot.getElementById("title");
-    titleElem.textContent = this.assignment.title;
+    titleElem.innerHTML = this.assignment.title;
   }
 
   #hydrateDescription() {
