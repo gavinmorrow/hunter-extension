@@ -424,7 +424,7 @@ main {
     bottom: 0;
     right: 0;
     background-color: oklch(from var(--color-bg-box) calc(l*75%) c h / 50%);
-    backdrop-filter: blur(0.1em);
+    /* backdrop-filter: blur(0.1em); */
 
     pointer-events: none;
     z-index: 1;
