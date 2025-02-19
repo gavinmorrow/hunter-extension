@@ -42,6 +42,19 @@ class ToolbarMenu extends HTMLElement {
     // task editor
     root.append(...this.#createTaskEditor());
 
+    // Assignments cache button
+    // When this is reliable enough, remove
+    const clearAssignmentsCacheBtn = document.createElement("button");
+    clearAssignmentsCacheBtn.textContent = "Clear assignments cache";
+    // clearAssignmentsCacheBtn.slot = "show-modal";
+    clearAssignmentsCacheBtn.addEventListener(
+      "click",
+      () => clearAssignmentsCache()
+        .catch((e) => reportError(`Could not clear assignments cache: ${e}`))
+        .then(() => location.reload()),
+    );
+    root.appendChild(clearAssignmentsCacheBtn);
+
     shadow.appendChild(root);
   }
 

@@ -157,6 +157,9 @@ const assignmentsCache = async (msg, _sender) => {
       break;
     case `assignmentsCache.get`:
       return get();
+    case `assignmentsCache.clear`:
+      await browser.storage.local.set({ assignmentsCache: [] });
+      break;
     default:
       console.error(`Unknown message type ${msg.type}`);
   }

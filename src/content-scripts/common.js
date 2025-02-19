@@ -174,6 +174,9 @@ const setAssignmentsCache = async (newAssignments) => browser.runtime.sendMessag
   type: "assignmentsCache.set",
   data: newAssignments,
 });
+const clearAssignmentsCache = async () => browser.runtime.sendMessage({
+  type: "assignmentsCache.clear",
+});
 
 /**
  * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.
