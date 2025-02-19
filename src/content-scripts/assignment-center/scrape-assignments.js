@@ -101,6 +101,7 @@ const parseAssignmentElem = (elem) => {
   const assignmentIndexId = parseForAssignmentIndexId(link);
   elem
     .querySelector("div.middle-block div.assignment-details")
+    // FIXME: uh wtf. huh???
     .append("| Extra credit");
   const details = parseFullDetailsElem(
     elem.querySelector("div.middle-block div.assignment-details"),
