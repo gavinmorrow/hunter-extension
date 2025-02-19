@@ -167,9 +167,13 @@ const [settings, updateSettingsCache] = memo(
 const updateSettings = async (partial) =>
   browser.runtime.sendMessage({ type: "settings.update", data: partial });
 
-const getAssignmentsCache = async () => (await browser.runtime.sendMessage({
-  type: "assignmentsCache.get",
-})) ?? [];
+// FIXME: actually make the cache work.
+// This is a temporary workaround to get the better performance of the API
+// fetch version without blocking on the cache.
+const getAssignmentsCache = async () => [];
+// const getAssignmentsCache = async () => (await browser.runtime.sendMessage({
+//   type: "assignmentsCache.get",
+// })) ?? [];
 const setAssignmentsCache = async (newAssignments) => browser.runtime.sendMessage({
   type: "assignmentsCache.set",
   data: newAssignments,
