@@ -1,4 +1,20 @@
 /**
+ * @typedef {Object} BlackbaudAssignmentPreview
+ * @property {number|0} AssignmentId The ID if it is an assignment. You probably want the AssignmentIndexId. Idk when this is used.
+ * @property {number} AssignmentIndexId The ID of the assignment for use in links (eg in the new https://hunterschools.myschoolapp.com/lms-assignment/assignment/assignment-student-view/<ID>). Might be used for other things too idk.
+ * @property {number|0} UserTaskId The ID if it is a task.
+ * @property {string} ShortDescription The title of the assignment
+ * @property {string} GroupName	The name of the class.
+ * @property {number} SectionId The ID of the class.
+ * @property {string} AssignmentType eg "Homework (Minor)"
+ * @property {string} DateAssigned
+ * @property {string} DateDue
+ * @property {-1|0|1|2} AssignmentStatus As far as I can tell: -1 -> Todo, 0 -> In progress, 1 -> Compeleted/Graded, 2 -> Missing/Overdue.
+ * @property {number} MaxPoints
+ * @property {boolean} ExtraCredit
+ */
+
+/**
  * @typedef {Object} BlackbaudAssignment
  * @property {String} LongDescription
  *
