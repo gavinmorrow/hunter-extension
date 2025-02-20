@@ -52,7 +52,7 @@ const Assignment = {
       assignedDate: BlackbaudDate.parse(blackbaudRepr.DateAssigned),
       maxPoints: blackbaudRepr.MaxPoints,
       isExtraCredit: blackbaudRepr.ExtraCredit,
-      class: { id: blackbaudRepr.SectionId, },
+      class: { id: blackbaudRepr.SectionId, name: blackbaudRepr.GroupName },
       type: blackbaudRepr.AssignmentType,
       // tasks are parsed elsewhere
       isTask: false,
