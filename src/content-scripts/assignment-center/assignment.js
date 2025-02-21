@@ -62,17 +62,21 @@ const Assignment = {
   },
 
   getStatusText(/** @type {BlackbaudAssignmentPreview} */ blackbaudRepr) {
-    switch (blackbaudRepr.AssignmentStatus) {
-      // Make both todo b/c at one point -1 was todo and 0 was in progress,
-      // but that seems to have changed???? I can't figure it out.
-      // The extension doesn't differentiate btw them anyways.
-      case -1:// return "To do";
-      case 0: return "To do";
+    switch (blackbaudRepr.AssignmentStatusType) {
+      // These are all just best guesses. They could totally all be wrong.
+      case -1: return "To do";
+      case 0: return "In progress";
       case 1: return "Completed";
-      // FIXME: coule also be missing.
+      // FIXME: could also be missing.
       case 2: return "Overdue";
+      case 4: return "Graded";
       default:
-        console.error("Unkonwn status", blackbaudRepr.AssignmentStatus);
+        console.error(
+          "Unkonwn status",
+          blackbaudRepr.AssignmentStatusType,
+          `for assignment ${blackbaudRepr.ShortDescription}`,
+          `in class ${blackbaudRepr.GroupName}`,
+        );
         return "To do";
     }
   },

@@ -9,7 +9,7 @@
  * @property {string} AssignmentType eg "Homework (Minor)"
  * @property {string} DateAssigned
  * @property {string} DateDue
- * @property {-1|0|1|2} AssignmentStatus As far as I can tell: -1 -> Todo, 0 -> In progress, 1 -> Compeleted/Graded, 2 -> Missing/Overdue.
+ * @property {-1|0|1|2|4} AssignmentStatusType As far as I can tell: -1 -> Todo, 0 -> In progress, 1 -> Compeleted/Graded, 2 -> Missing/Overdue, 4 -> Graded.
  * @property {number} MaxPoints
  * @property {boolean} ExtraCredit
  */
