@@ -27,6 +27,7 @@
       "js": [
         "polyfill/browser-polyfill/browser-polyfill.min.js",
         "polyfill/custom-elements/custom-elements.min.js",
+        "src/util/getHeaderHeight.js",
         "src/util/sort.js",
         "src/util/mesh.js",
         "src/content-scripts/common.js",

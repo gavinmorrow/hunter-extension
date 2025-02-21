@@ -80,8 +80,7 @@ const hideLowerNavbar = featureFlag(
     // the spacer determines the amount of space the full header takes up
     const spacerElem = await waitForElem("#site-top-spacer");
     if (spacerElem == null) return;
-    // FIXME: sometimes --sky-viewport-top is 0px
-    spacerElem.style.height = "var(--sky-viewport-top)";
+    spacerElem.style.height = `${getHeaderHeight()}px`;
   },
 );
 
