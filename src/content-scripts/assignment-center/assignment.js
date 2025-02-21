@@ -43,7 +43,7 @@ const Assignment = {
     return {
       // I'm not sure when the AssignmentId is used, but I'm also not sure if the AssignmentIndexId always exists.
       id: blackbaudRepr.AssignmentIndexId ?? blackbaudRepr.AssignmentId,
-      color: api.getClassColors()[blackbaudRepr.SectionId],
+      // color: api.getClassColors()[blackbaudRepr.SectionId],
       title: blackbaudRepr.ShortDescription,
       link: blackbaudRepr.AssignmentIndexId != null ? `https://hunterschools.myschoolapp.com/lms-assignment/assignment/assignment-student-view/${blackbaudRepr.AssignmentIndexId}` : ``,
       description: null,
@@ -81,7 +81,15 @@ const Assignment = {
   async addColor(a) {
     try {
       const colors = await api.getClassColors();
-      return { ...a, color: colors.get(Number(a.class.id)) };
+      let color = colors.get(Number(a.class.id));
+
+      if (color == undefined) {
+        // Don't throw error because it's not serious enough to alert user.
+        console.error(`Color for class ${a.class.id} (${a.class.name}) not found.`);
+        color = "#111";
+      }
+
+      return { ...a, color };
     } catch (err) {
       reportError(err);
       return { ...a, color: "#111" };
