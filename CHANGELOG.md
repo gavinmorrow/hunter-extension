@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.3.0
+
+_released 20 February 2025_
+
+(I decided to bump to v0.3 b/c I did a lot of work on the assignments loading
+and it felt like it deserved a minor release and not a patch release.)
+
+- Bug Fixes/Improvements:
+  - Fix performance of loading assignments. This required a complete overhaul
+    of the assignment loading system, so if there are any bugs please tell me!
+  - Prevent the window from jittering up and down rapidly.
+  - Adjust the header spacer on window resize so it always remains correct.
+  - Increase the timeout for google autologin, so it hopefully won't get stuck
+    in a loop.
+
 ## v0.2.10
 
 _released 03 February 2025_
