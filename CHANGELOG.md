@@ -2,7 +2,7 @@
 
 ## v0.3.0
 
-_released 20 February 2025_
+_released 23 February 2025_
 
 (I decided to bump to v0.3 b/c I did a lot of work on the assignments loading
 and it felt like it deserved a minor release and not a patch release.)
@@ -14,6 +14,10 @@ and it felt like it deserved a minor release and not a patch release.)
   - Adjust the header spacer on window resize so it always remains correct.
   - Increase the timeout for google autologin, so it hopefully won't get stuck
     in a loop.
+- Known problems:
+  - The colors of some classes are missing. This is because for some reason
+    they're not included in the API response. I have a plan to fix it, I just
+    don't want to delay this release any further.
 
 ## v0.2.10
 
