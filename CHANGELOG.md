@@ -10,10 +10,12 @@ and it felt like it deserved a minor release and not a patch release.)
 - Bug Fixes/Improvements:
   - Fix performance of loading assignments. This required a complete overhaul
     of the assignment loading system, so if there are any bugs please tell me!
+  - Past assignments show up again!
   - Prevent the window from jittering up and down rapidly.
+  - Calculate the header size from a different source so it is always correct.
   - Adjust the header spacer on window resize so it always remains correct.
   - Increase the timeout for google autologin, so it hopefully won't get stuck
-    in a loop.
+    in a loop. (From 0.5sec -> 1sec. It shouldn't be very noticeable.)
 - Known problems:
   - The colors of some classes are missing. This is because for some reason
     they're not included in the API response. I have a plan to fix it, I just
