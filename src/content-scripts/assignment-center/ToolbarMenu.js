@@ -50,7 +50,7 @@ class ToolbarMenu extends HTMLElement {
         .catch((e) => reportError(`Could not clear assignments cache: ${e}`))
         .then(() => location.reload()),
     );
-    root.appendChild(clearAssignmentsCacheBtn);
+    // root.appendChild(clearAssignmentsCacheBtn);
 
     // task editor
     // append last otherwise there's an empty flex item, adding extra padding
