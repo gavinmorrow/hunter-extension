@@ -52,6 +52,13 @@ class ToolbarMenu extends HTMLElement {
     );
     // root.appendChild(clearAssignmentsCacheBtn);
 
+    // Open changelog button
+    const openChangelogBtn = document.createElement("a");
+    openChangelogBtn.href = "https://gavinmorrow.github.io/hunter-extension/CHANGELOG";
+    openChangelogBtn.target = "_blank";
+    openChangelogBtn.text = "Open changelog";
+    root.appendChild(openChangelogBtn);
+
     // task editor
     // append last otherwise there's an empty flex item, adding extra padding
     root.append(...this.#createTaskEditor());
