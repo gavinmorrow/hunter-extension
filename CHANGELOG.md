@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.2
+
+_released 00 February 2025_
+
+- Features:
+  - Add version text in toolbar.
+
 ## v0.3.1
 
 _released 28 February 2025_
