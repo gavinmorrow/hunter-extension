@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.1
+
+_released 28 February 2025_
+
+- Features:
+  - Add a button to open the changelog (this document) to the toolbar.
+- Bug Fixes:
+  - Fix the colors of some classes not displaying.
+
 ## v0.3.0
 
 _released 23 February 2025_
