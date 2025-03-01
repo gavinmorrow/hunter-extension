@@ -63,6 +63,11 @@ class ToolbarMenu extends HTMLElement {
     // append last otherwise there's an empty flex item, adding extra padding
     root.append(...this.#createTaskEditor());
 
+    const versionTxt = document.createElement("span");
+    versionTxt.id = "version";
+    versionTxt.textContent = `Hunter Extension v${VERSION}`;
+    root.appendChild(versionTxt);
+
     shadow.appendChild(root);
   }
 
@@ -122,6 +127,18 @@ class ToolbarMenu extends HTMLElement {
     &:hover, &:focus-visible {
       background-color: oklch(from var(--color-bg-btn) calc(l*200%) c h);
     }
+  }
+
+  & #version {
+    /* Center vertically and push to right edge. */
+    margin: auto;
+    margin-right: 0;
+
+    /* Italics */
+    font-style: italic;
+
+    /* Dim text a bit to make it stand out less */
+    color: #aaa;
   }
 }
 `;
