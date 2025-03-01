@@ -114,6 +114,9 @@ class ToolbarMenu extends HTMLElement {
     border: 1px solid var(--color-border);
     color: var(--color-text);
 
+    font-size: small; /* normal button size */
+    text-decoration: none; /* remove underline on links */
+
     padding: 0.25em;
 
     &:hover, &:focus-visible {
