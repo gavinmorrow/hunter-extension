@@ -43,6 +43,7 @@
         "src/content-scripts/assignment-center/events/CreateTaskEvent.js",
         "src/content-scripts/assignment-center/TaskEditor.js",
         "src/content-scripts/assignment-center/ToolbarMenu.js",
+        "src/content-scripts/assignment-center/scrape-colors.js",
         "src/content-scripts/assignment-center/assignment.js",
         "src/content-scripts/assignment-center/AssignmentPopup.js",
         "src/content-scripts/assignment-center/AssignmentBox.js",

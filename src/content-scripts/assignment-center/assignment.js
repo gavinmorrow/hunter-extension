@@ -84,8 +84,13 @@ const Assignment = {
   // A seperate function so that `parse` can be non-async.
   async addColor(a) {
     try {
-      const colors = await api.getClassColors();
-      let color = colors.get(Number(a.class.id));
+      const apiColors = await api.getClassColors();
+      let color = apiColors.get(Number(a.class.id));
+
+      if (color == undefined) {
+        const htmlColors = await scrapeClassColors();
+        color = htmlColors.get(a.class.name);
+      }
 
       if (color == undefined) {
         // Don't throw error because it's not serious enough to alert user.
