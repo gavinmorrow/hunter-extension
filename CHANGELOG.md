@@ -6,6 +6,8 @@ _released 00 February 2025_
 
 - Features:
   - Add version text in toolbar.
+  - Make tasks due on the next weekday. (ie if you create a task on Friday or
+    over the weekend, it will \[by default] be due the following Monday.)
 
 ## v0.3.1
 
