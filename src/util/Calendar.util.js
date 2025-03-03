@@ -110,6 +110,34 @@ const Calendar = {
   },
 
   /**
+   * Find the next day that is a weekday.
+   * @param {Date=} a Defaults to the current date.
+   */
+  nextWeekday(a = new Date()) {
+    const tomorrow = Calendar.offsetFromDay(a, 1);
+
+    // Continually add one day until the day is a weekday.
+    let day = tomorrow;
+    while (!Calendar.dateIsWeekday(day)) {
+      day = Calendar.offsetFromDay(day, 1);
+    }
+
+    return day;
+  },
+
+  /**
+   * Checks if a date falls on Monday-Friday.
+   * @param {Date} a
+   */
+  dateIsWeekday(a) {
+    const monday = 1, friday = 5;
+
+    // Returns 0-6, where 0 is Sunday.
+    const day = a.getDay();
+    return day >= monday && day <= friday;
+  },
+
+  /**
    * Convert a time from 12-hour time to 24-hour time.
    * @param {Number} hour The 12-hour hour.
    * @param {"AM"|"PM"} amPm
@@ -275,6 +303,32 @@ const _calendarUnitTests = [
       { eq: [nextDay.getDate(), 1] },
       { eq: [nextDay.getMonth(), 2] },
     );
+  },
+
+  function nextWeekday() {
+    // Monday, 03 March 2025
+    const base = new Date(2025, 3, 3);
+
+    const dates = [...Array(10)].map((_, i) => {
+      const date = Calendar.offsetFromDay(base, i);
+      const nextWeekday = Calendar.nextWeekday(date);
+      return nextWeekday.getDate();
+    });
+    const correctDateMap = [
+      4,
+      5,
+      6,
+      7,
+      10,
+      10,
+      10,
+      11,
+    ];
+
+    const assertions = dates.map((date, i) => (
+      { eq: [date, correctDateMap[i]] }
+    ));
+    return _assert(...assertions, { eq: [dates.length, correctDateMap.length] });
   },
 
   function asInputValue() {

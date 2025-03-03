@@ -17,8 +17,6 @@ const PLACEHOLDERS = [
 const randomPlaceholder = () =>
   PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
 
-const tomorrow = Calendar.offsetFromDay(new Date(), 1);
-
 /**
  * @typedef {Object} BlackbaudTask
  * @property {string} AssignedDate
@@ -128,7 +126,7 @@ class TaskEditor extends HTMLElement {
 
   #refreshDueDate() {
     this.shadowRoot.getElementById("dueDate").value = Calendar.asInputValue(
-      this.#task?.dueDate ?? tomorrow,
+      this.#task?.dueDate ?? Calendar.nextWeekday(),
     );
   }
 
