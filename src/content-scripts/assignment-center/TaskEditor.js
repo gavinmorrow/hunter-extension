@@ -216,9 +216,9 @@ button {
   flex-grow: 1;
 }
 
-#save       { background-color: oklch(80% 0.1 283); }
-#save:hover { background-color: oklch(75% 0.1 283); }
-#save:focus { background-color: oklch(70% 0.1 283); }
+#save       { background-color: oklch(35% 0.1 283); }
+#save:hover { background-color: oklch(45% 0.1 283); }
+#save:focus { background-color: oklch(50% 0.1 283); }
 `;
 }
 

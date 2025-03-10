@@ -11,6 +11,8 @@ _released 00 February 2025_
 - Bug fixes:
   - Fully collapse assignments to one line when marking as done. (There was a
     problem with line breaks not collapsing before.)
+  - Fix the Dark Reader extension overriding the colors in the task editor save
+    button and making them look really bad.
 
 ## v0.3.1
 
