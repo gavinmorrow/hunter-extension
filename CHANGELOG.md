@@ -8,6 +8,9 @@ _released 00 February 2025_
   - Add version text in toolbar.
   - Make tasks due on the next weekday. (ie if you create a task on Friday or
     over the weekend, it will \[by default] be due the following Monday.)
+- Bug fixes:
+  - Fully collapse assignments to one line when marking as done. (There was a
+    problem with line breaks not collapsing before.)
 
 ## v0.3.1
 
