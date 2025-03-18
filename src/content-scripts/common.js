@@ -1,4 +1,4 @@
-const VERSION = "0.3.1";
+const VERSION = "0.3.2";
 
 const DEFAULT_TIMEOUT = 10000;
 const DEFAULT_INTERVAL = 16;
