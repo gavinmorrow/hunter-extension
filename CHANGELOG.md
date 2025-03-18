@@ -13,6 +13,9 @@ _released 00 February 2025_
     problem with line breaks not collapsing before.)
   - Fix the Dark Reader extension overriding the colors in the task editor save
     button and making them look really bad.
+    - btw, I highly recommend it! it forces sites into dark mode.
+      <https://darkreader.org/>
+  - Make toolbar wrap when the screen is too narrow rather than squish.
 
 ## v0.3.1
 
