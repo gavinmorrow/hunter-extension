@@ -104,7 +104,7 @@ class ToolbarMenu extends HTMLElement {
   background-color: var(--color-bg-root);
 
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: 0.25em;
 
   /* FIXME: if both assignment-center and this use margin, then it will
