@@ -101,7 +101,11 @@ class AssignmentBox extends HTMLElement {
     const titleElem = this.shadowRoot.querySelector("#title a");
 
     titleElem.innerHTML = this.assignment.title;
-    if (this.#shouldCollapse()) titleElem.title = this.assignment.title;
+    if (this.#shouldCollapse()) {
+      // Force no line breaks
+      titleElem.textContent = titleElem.textContent.replaceAll("\n", "");
+      titleElem.title = this.assignment.title;
+    }
 
     // tasks don't have links
     if (!this.assignment.isTask) titleElem.href = this.assignment.link;
