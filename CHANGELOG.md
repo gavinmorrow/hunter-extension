@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.3
+
+_released 18 March 2025_
+
+- Bug Fixes:
+  - Fully fix the assignment collapsing issue.
+
 ## v0.3.2
 
 _released 18 March 2025_
