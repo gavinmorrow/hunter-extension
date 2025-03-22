@@ -226,7 +226,7 @@ article {
     background-color: oklch(from var(--color-status) calc(l + 0.07) c h);
   }
 
-  &:not(:hover, :focus-within) assignment-popup {
+  &:not(:hover, :focus-within) assignment-popup:not(.contains-selection) {
     display: none;
   }
 

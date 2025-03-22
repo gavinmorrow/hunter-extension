@@ -18,6 +18,24 @@ class AssignmentPopup extends HTMLElement {
     const root = document.createElement("article");
     root.id = "popup-root";
 
+    // prevent the card from closing when text inside it is selected
+    document.addEventListener("selectionchange", () => {
+      const selection = document.getSelection();
+
+      // Don't use selection.containsNode() b/c it doesn't work w/ shadow roots
+      let selected =
+        root.contains(selection.anchorNode) ||
+        root.contains(selection.focusNode) ||
+        selection.anchorNode.contains(root) ||
+        selection.focusNode.contains(root);
+
+      const selectionHasText = selection.toString() != "";
+
+      if (selected && selectionHasText)
+        this.classList.add("contains-selection");
+      else this.classList.remove("contains-selection");
+    });
+
     // assignment status
     const actionsMenu = document.createElement("div");
     actionsMenu.id = "actions-menu";
