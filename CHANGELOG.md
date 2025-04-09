@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.4
+
+_released 09 April 2025_
+
+- Features:
+  - Prevent assignment popup from closing when text is selected inside of it.
+- Bug Fixes:
+  - Fix issue where Blackbaud changed a URL format for the student user id.
+
 ## v0.3.3
 
 _released 18 March 2025_
