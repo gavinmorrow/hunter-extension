@@ -31,8 +31,13 @@ const findProfileHref = async (profileNav) => {
 
 /** @param {String?} href */
 const parseProfileLinkHref = (href) => {
-  const regexp = /\/app\/student#profile\/(?<id>\d+)\//;
+  const regexp = /#profile\/(?<id>\d+)/;
   const userId = href.match(regexp)?.groups.id;
+
+  if (userId == undefined) {
+    reportError(new ApiError("getStudentUserId"));
+  }
+
   return userId;
 };
 

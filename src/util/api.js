@@ -232,6 +232,7 @@ class ApiError extends Error {
     getClassColors: "could not get class colors",
     getAllAssignmentData: "could not get all assignment data",
     getClasses: "could not get classes",
+    getStudentUserId: "could not get student user id",
   };
 
   /**
