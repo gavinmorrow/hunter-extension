@@ -109,7 +109,10 @@ const createCustomUi = async () => {
     // construct our own elements
     const cachedAssignments = await getAssignmentsCache();
     console.log({ cachedAssignments });
-    const assignmentCenter = new AssignmentCenter(cachedAssignments, await settings());
+    const assignmentCenter = new AssignmentCenter(
+      cachedAssignments,
+      await settings(),
+    );
     const toolbarMenu = new ToolbarMenu({ oldElem, assignmentCenter });
     wrapper.append(toolbarMenu, assignmentCenter);
     oldElem.parentElement.prepend(wrapper);
@@ -117,7 +120,8 @@ const createCustomUi = async () => {
     // hide theirs
     oldElem.hidden = true;
 
-    const assignments = await api.getAllAssignmentData()
+    const assignments = await api
+      .getAllAssignmentData()
       .then(api.parseAssignments);
     assignmentCenter.meshAssignmentsArray(assignments);
     // Scrape active assignments first so it goes faster

@@ -142,13 +142,14 @@ const whatsNewListener = async (msg, sender) => {
     default:
       console.error(`Unknown message type ${msg.type}`);
   }
-}
+};
 
 ///=========================///
 ///=== ASSIGNMENTS CACHE ===///
 ///=========================///
 const assignmentsCache = async (msg, _sender) => {
-  const get = async () => (await browser.storage.local.get()).assignmentsCache ?? [];
+  const get = async () =>
+    (await browser.storage.local.get()).assignmentsCache ?? [];
   switch (msg.type) {
     case `assignmentsCache.set`:
       const curr = await get();

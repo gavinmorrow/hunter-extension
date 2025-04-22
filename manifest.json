@@ -9,13 +9,9 @@
     "https://accounts.google.com/v3/signin/challenge/pwd?*",
     "https://accounts.google.com/signin/oauth*"
   ],
-  "permissions": [
-    "storage"
-  ],
+  "permissions": ["storage"],
   "background": {
-    "scripts": [
-      "src/background-scripts/background.js"
-    ],
+    "scripts": ["src/background-scripts/background.js"],
     "service_worker": "src/background-scripts/service-worker.js",
     "type": "module"
   },

@@ -44,9 +44,8 @@ class ToolbarMenu extends HTMLElement {
     const clearAssignmentsCacheBtn = document.createElement("button");
     clearAssignmentsCacheBtn.textContent = "Clear assignments cache";
     // clearAssignmentsCacheBtn.slot = "show-modal";
-    clearAssignmentsCacheBtn.addEventListener(
-      "click",
-      () => clearAssignmentsCache()
+    clearAssignmentsCacheBtn.addEventListener("click", () =>
+      clearAssignmentsCache()
         .catch((e) => reportError(`Could not clear assignments cache: ${e}`))
         .then(() => location.reload()),
     );
@@ -54,7 +53,8 @@ class ToolbarMenu extends HTMLElement {
 
     // Open changelog button
     const openChangelogBtn = document.createElement("a");
-    openChangelogBtn.href = "https://gavinmorrow.github.io/hunter-extension/CHANGELOG";
+    openChangelogBtn.href =
+      "https://gavinmorrow.github.io/hunter-extension/CHANGELOG";
     openChangelogBtn.target = "_blank";
     openChangelogBtn.text = "Open changelog";
     root.appendChild(openChangelogBtn);
@@ -78,7 +78,7 @@ class ToolbarMenu extends HTMLElement {
       (/** @type {CreateTaskEvent} */ e) => {
         // Clone the task to prevent error:
         // InvalidStateError: An attempt was made to use an object that is not, or is no longer, usable
-        this.elems.assignmentCenter.dispatchEvent(new CreateTaskEvent(e.task))
+        this.elems.assignmentCenter.dispatchEvent(new CreateTaskEvent(e.task));
         e.stopPropagation();
       },
     );
@@ -91,7 +91,7 @@ class ToolbarMenu extends HTMLElement {
     return [newTaskBtn, taskEditor];
   }
 
-  connectedCallback() { }
+  connectedCallback() {}
 
   static #stylesheet = `\
 #root {
