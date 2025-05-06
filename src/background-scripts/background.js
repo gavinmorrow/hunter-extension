@@ -132,13 +132,24 @@ const settingsListener = async (msg, sender) => {
 ///=================///
 ///=== WHATS NEW ===///
 ///=================///
+/** @returns {Promise<Set<string>>} */
+const getViewedVersions = async () =>
+  new Set((await browser.storage.local.get()).whatsNewViewed);
 const whatsNewListener = async (msg, sender) => {
   switch (msg.type) {
-    case "whatsNew.setViewedVersion":
-      await browser.storage.local.set({ whatsNewViewed: msg.data });
+    case "whatsNew.setVersionViewed": {
+      const viewedVersions = await getViewedVersions();
+      viewedVersions.add(msg.data);
+
+      // It is unsafe to store `Set`s in the storage
+      // <https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageArea/set#keys>
+      await browser.storage.local.set({
+        whatsNewViewed: Array.from(viewedVersions),
+      });
       break;
-    case "whatsNew.getViewedVersion":
-      return (await browser.storage.local.get()).whatsNewViewed;
+    }
+    case "whatsNew.getViewedVersions":
+      return await getViewedVersions();
     default:
       console.error(`Unknown message type ${msg.type}`);
   }
