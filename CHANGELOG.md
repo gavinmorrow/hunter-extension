@@ -12,6 +12,9 @@ and why not. It's been a while since I've actually added a new feature.
   - A banner will show after the extension updates.
   - Use banners for error reporting instead of popups.
     - Add option to email me the details of the error.
+- Bug Fixes:
+  - Remove the title text when hovering over an assignment link, as it is
+    completely redundant and displayed raw HTML.
 
 ## v0.3.4
 
