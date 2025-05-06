@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0
+
+_released 00 May 2025_
+
+This release doesn't have too many new features, but I decided to bump it
+anyways because I finally got the what's new stuff (incl. banners!) out the door
+and why not. It's been a while since I've actually added a new feature.
+
+- Features
+  - A banner will show after the extension updates.
+
 ## v0.3.4
 
 _released 09 April 2025_
