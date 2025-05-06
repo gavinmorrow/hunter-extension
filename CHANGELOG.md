@@ -10,6 +10,8 @@ and why not. It's been a while since I've actually added a new feature.
 
 - Features
   - A banner will show after the extension updates.
+  - Use banners for error reporting instead of popups.
+    - Add option to email me the details of the error.
 
 ## v0.3.4
 
