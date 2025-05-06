@@ -104,7 +104,6 @@ class AssignmentBox extends HTMLElement {
     if (this.#shouldCollapse()) {
       // Force no line breaks
       titleElem.textContent = titleElem.textContent.replaceAll("\n", "");
-      titleElem.title = this.assignment.title;
     }
 
     // tasks don't have links
