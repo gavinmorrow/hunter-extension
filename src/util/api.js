@@ -57,9 +57,12 @@ const api = {
    * @returns {Promise<BlackbaudAssignment>} Direct response from a Blackbaud API.
    */
   async fetchAssignment(assignmentIndexId, studentUserId) {
-    return ApiError.wrapFetch("fetchAssignment", fetch(
-      `https://hunterschools.myschoolapp.com/api/assignment2/UserAssignmentDetailsGetAllStudentData?assignmentIndexId=${assignmentIndexId}&studentUserId=${studentUserId}&personaId=2`,
-    )).then((r) => r.json());
+    return ApiError.wrapFetch(
+      "fetchAssignment",
+      fetch(
+        `https://hunterschools.myschoolapp.com/api/assignment2/UserAssignmentDetailsGetAllStudentData?assignmentIndexId=${assignmentIndexId}&studentUserId=${studentUserId}&personaId=2`,
+      ),
+    ).then((r) => r.json());
   },
 
   statusNumMap: {
@@ -76,19 +79,22 @@ const api = {
       `Setting status to ${assignmentStatus} for assignment ${assignmentIndexId}`,
     );
 
-    return ApiError.wrapFetch("updateAssignmentStatus", fetch(
-      `https://hunterschools.myschoolapp.com/api/assignment2/assignmentstatusupdate`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    return ApiError.wrapFetch(
+      "updateAssignmentStatus",
+      fetch(
+        `https://hunterschools.myschoolapp.com/api/assignment2/assignmentstatusupdate`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            assignmentIndexId,
+            assignmentStatus,
+          }),
         },
-        body: JSON.stringify({
-          assignmentIndexId,
-          assignmentStatus,
-        }),
-      },
-    ));
+      ),
+    );
   },
 
   nullifyIfZeroTaskSectionId(task) {
@@ -102,48 +108,57 @@ const api = {
     const statusNum = api.statusNumMap[task.status];
     console.log(`Setting status to ${statusNum} for task ${task.id}`);
 
-    return ApiError.wrapFetch("updateTaskStatus", fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(
-        api.nullifyIfZeroTaskSectionId({
-          AssignedDate: BlackbaudDate.from(task.assignedDate),
-          DueDate: BlackbaudDate.from(task.dueDate),
-          SectionId: task.class.id,
-          ShortDescription: task.title,
-          TaskStatus: statusNum,
-          UserId: await getStudentUserId(),
-          UserTaskId: task.id,
-        }),
-      ),
-    }));
+    return ApiError.wrapFetch(
+      "updateTaskStatus",
+      fetch(`https://hunterschools.myschoolapp.com/api/UserTask/Edit/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          api.nullifyIfZeroTaskSectionId({
+            AssignedDate: BlackbaudDate.from(task.assignedDate),
+            DueDate: BlackbaudDate.from(task.dueDate),
+            SectionId: task.class.id,
+            ShortDescription: task.title,
+            TaskStatus: statusNum,
+            UserId: await getStudentUserId(),
+            UserTaskId: task.id,
+          }),
+        ),
+      }),
+    );
   },
   async deleteTask(id) {
     console.log(`Deleting task ${id}`);
-    return ApiError.wrapFetch("deleteTask", fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    }));
+    return ApiError.wrapFetch(
+      "deleteTask",
+      fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      }),
+    );
   },
   /** @param {BlackbaudTask} task */
   async createTask(task) {
     console.log(`Creating task ${task.ShortDescription}`);
-    const id = await ApiError.wrapFetch("createTask", fetch(
-      "https://hunterschools.myschoolapp.com/api/UserTask/Edit/",
-      {
+    const id = await ApiError.wrapFetch(
+      "createTask",
+      fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
-      },
-    )).then((r) => r.text());
+      }),
+    ).then((r) => r.text());
 
     if (/\D/.test(id)) {
-      throw new ApiError("createTaskInvalidResponse", new Error(
-        `Invalid response to create task: "${id}". (Expected an id, ie number.)`,
-      ));
+      throw new ApiError(
+        "createTaskInvalidResponse",
+        new Error(
+          `Invalid response to create task: "${id}". (Expected an id, ie number.)`,
+        ),
+      );
     }
 
     return id;
@@ -151,19 +166,25 @@ const api = {
   /** @param {BlackbaudTask} task */
   async updateTask(task) {
     console.log(`Updating task ${task.UserTaskId}`);
-    return ApiError.wrapFetch("updateTask", fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
-    }));
+    return ApiError.wrapFetch(
+      "updateTask",
+      fetch("https://hunterschools.myschoolapp.com/api/UserTask/Edit/", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(api.nullifyIfZeroTaskSectionId(task)),
+      }),
+    );
   },
 
   getClassColors: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>
-      ApiError.wrapFetch("getClassColors", fetch(
-        "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet?displayByDueDate=true",
-      ))
+      ApiError.wrapFetch(
+        "getClassColors",
+        fetch(
+          "https://hunterschools.myschoolapp.com/api/AssignmentCenter/StudentAssignmentCenterSettingsGet?displayByDueDate=true",
+        ),
+      )
         .then(
           /** @returns { { SectionColors: { LeadSectionId: number, HexColor: string }[] } }*/
           (r) => r.json(),
@@ -179,9 +200,12 @@ const api = {
   )[0],
 
   getAllAssignmentData: () =>
-    ApiError.wrapFetch("getAllAssignmentData", fetch(
-      "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
-    )).then(r => r.json()),
+    ApiError.wrapFetch(
+      "getAllAssignmentData",
+      fetch(
+        "https://hunterschools.myschoolapp.com/api/assignment2/StudentAssignmentCenterGet?displayByDueDate=true",
+      ),
+    ).then((r) => r.json()),
 
   parseAssignments: (assignments) =>
     Promise.all(
@@ -195,28 +219,32 @@ const api = {
         assignments.PastThisWeek,
         assignments.PastLastWeek,
         assignments.PastBeforeLastWeek,
-      )
-        .map((/** @type {BlackbaudAssignmentPreview} */ assignment) => {
-          if (assignment.UserTaskId !== 0) {
-            return Task.addColor(Task.parse(assignment));
-          } else {
-            return Assignment.addColor(Assignment.parse(assignment));
-          }
-        }),
-    ).then(assignments => (setAssignmentsCache(assignments), assignments)),
+      ).map((/** @type {BlackbaudAssignmentPreview} */ assignment) => {
+        if (assignment.UserTaskId !== 0) {
+          return Task.addColor(Task.parse(assignment));
+        } else {
+          return Assignment.addColor(Assignment.parse(assignment));
+        }
+      }),
+    ).then((assignments) => (setAssignmentsCache(assignments), assignments)),
 
   getClasses: memo(
     /** @returns {Promise<Map<number, string>>} */
     async () =>
-      api.getAllAssignmentData()
-        .then(
-          (/** @type { { Sections: { LeadSectionId: number, GroupName: string }[] } */ { Sections: sections }) =>
-            sections.reduce(
-              (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
-              new Map(),
-            ),
-          (err) => { throw new ApiError("getClasses", err) }
-        ),
+      api.getAllAssignmentData().then(
+        (
+          /** @type { { Sections: { LeadSectionId: number, GroupName: string }[] } */ {
+            Sections: sections,
+          },
+        ) =>
+          sections.reduce(
+            (map, { LeadSectionId: id, GroupName: name }) => map.set(id, name),
+            new Map(),
+          ),
+        (err) => {
+          throw new ApiError("getClasses", err);
+        },
+      ),
   )[0],
 };
 
@@ -227,7 +255,8 @@ class ApiError extends Error {
     updateTaskStatus: "could not update task status",
     deleteTask: "could not delete task",
     createTask: "could not create task",
-    createTaskInvalidResponse: "Blackbaud returned an invalid response when attempting to create a task",
+    createTaskInvalidResponse:
+      "Blackbaud returned an invalid response when attempting to create a task",
     updateTask: "could not update task",
     getClassColors: "could not get class colors",
     getAllAssignmentData: "could not get all assignment data",
