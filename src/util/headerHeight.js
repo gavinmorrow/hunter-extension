@@ -15,4 +15,8 @@ const resizeHeaderSpacer = async () => {
   const spacerElem = await waitForElem("#site-top-spacer");
   if (spacerElem == null) return;
   spacerElem.style.height = `${getHeaderHeight()}px`;
+
+  // The line height is set to be too big, extending the element too far down and blocking clicks
+  const logo = await waitForElem("#site-logo");
+  logo.style.lineHeight = "initial";
 };
