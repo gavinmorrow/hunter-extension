@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.4
+
+_released 07 May 2025_
+
+- Features:
+  - There's a cute little icon now!
+
 ## v0.4.3
 
 _released 07 May 2025_
