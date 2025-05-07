@@ -10,7 +10,7 @@ const PLACEHOLDERS = [
   "Be held 5min late after 9th period",
   "Cram before 3rd period Spanish",
   "Ignore the term paper due tomorrow",
-  "Give Gavin feedback on the extension",
+  "Give Gavin feedback on Orion",
   "Do transgender operations on illegal aliens in prison",
   "Create concepts of a plan",
 ];

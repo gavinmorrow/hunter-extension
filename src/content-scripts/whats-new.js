@@ -15,7 +15,7 @@ promiseError(async () => {
   document.body.appendChild(wrapper);
 
   const banner = BannerAlert.createBanner(
-    `Your extension was updated to version ${VERSION}.`,
+    `Orion was updated to version ${VERSION}.`,
     "info",
     [
       { name: "open-changelog", displayText: "Open changelog" },

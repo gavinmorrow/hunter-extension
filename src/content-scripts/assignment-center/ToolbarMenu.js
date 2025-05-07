@@ -65,7 +65,7 @@ class ToolbarMenu extends HTMLElement {
 
     const versionTxt = document.createElement("span");
     versionTxt.id = "version";
-    versionTxt.textContent = `Hunter Extension v${VERSION}`;
+    versionTxt.textContent = `Orion v${VERSION}`;
     root.appendChild(versionTxt);
 
     shadow.appendChild(root);

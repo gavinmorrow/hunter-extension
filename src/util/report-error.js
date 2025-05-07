@@ -20,7 +20,7 @@ const reportError = (err) => {
     });
     banner.addEventListener("banner-alert-action-email", () => {
       const a = document.createElement("a");
-      a.href = `mailto:gavinmorrow${"@"}hunterschools${"."}org?subject=${encodeURI("Error in Hunter Extension")}&body=${encodeURI(fullMessage)}`;
+      a.href = `mailto:gavinmorrow${"@"}hunterschools${"."}org?subject=${encodeURI("Error in Orion")}&body=${encodeURI(fullMessage)}`;
       a.target = "_blank";
       a.click();
     });

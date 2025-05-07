@@ -26,7 +26,7 @@ style.innerHTML = `
 
 promiseError(async () => {
   // Keep it on top of the assignment center
-  const root = await waitForElem("#extension-main");
+  const root = await waitForElem("#orion-main");
   root.prepend(bannersWrapper);
 })();
 

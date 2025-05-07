@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "hunter-extension",
+  "name": "Orion",
   "version": "0.4.0",
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",

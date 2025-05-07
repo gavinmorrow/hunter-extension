@@ -4,7 +4,7 @@
 # See <https://stackoverflow.com/a/821419/15920018>
 set -Eeuo pipefail
 
-echo "Releasing hunter-extension v$1..."
+echo "Releasing Orion v$1..."
 
 
 # Move jj bookmarks
@@ -24,23 +24,23 @@ web-ext sign --api-key=$MDN_AMO_API_KEY --api-secret=$MDN_AMO_API_SECRET --chann
 echo "Starting Chrome release..."
 
 # Copy everything to temp dir
-rm -rf ~/Desktop/hunter-extension
-cp -r ./ ~/Desktop/hunter-extension
-echo "Copied files to ~/Desktop/hunter-extension"
+rm -rf ~/Desktop/orion
+cp -r ./ ~/Desktop/orion
+echo "Copied files to ~/Desktop/orion"
 
 # Remove unwanted files/dirs
-rm -rf ~/Desktop/hunter-extension/.git
-rm -rf ~/Desktop/hunter-extension/.jj
-rm -rf ~/Desktop/hunter-extension/web-ext-artifacts
-rm ~/Desktop/hunter-extension/.amo-upload-uuid
-rm ~/Desktop/hunter-extension/publish-release
+rm -rf ~/Desktop/orion/.git
+rm -rf ~/Desktop/orion/.jj
+rm -rf ~/Desktop/orion/web-ext-artifacts
+rm ~/Desktop/orion/.amo-upload-uuid
+rm ~/Desktop/orion/publish-release
 echo "Removed git, jj, and amo files/dirs."
 
 # zip it
 # See ditto man page (this is very similar to Finder compress function)
-ditto -c -k --sequesterRsrc --keepParent ~/Desktop/hunter-extension ~/Desktop/hunter-extension.zip
-rm -rf ~/Desktop/hunter-extension
-echo "Zipped into ~/Desktop/hunter-extension.zip"
+ditto -c -k --sequesterRsrc --keepParent ~/Desktop/orion ~/Desktop/orion.zip
+rm -rf ~/Desktop/orion
+echo "Zipped into ~/Desktop/orion.zip"
 
 
 ### Github release ###
@@ -50,8 +50,8 @@ gh release create "v$1" --generate-notes -F ./CHANGELOG.md
 # Upload files
 cp "./web-ext-artifacts/65a14653bc7c4e6ab617-$1.xpi" ~/Desktop/65a14653bc7c4e6ab617.xpi
 gh release upload "v$1" ~/Desktop/65a14653bc7c4e6ab617.xpi
-gh release upload "v$1" ~/Desktop/hunter-extension.zip
+gh release upload "v$1" ~/Desktop/orion.zip
 
 # Clean up
 rm ~/Desktop/65a14653bc7c4e6ab617.xpi
-rm ~/Desktop/hunter-extension.zip
+rm ~/Desktop/orion.zip

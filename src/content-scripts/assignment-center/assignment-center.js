@@ -105,7 +105,7 @@ const createCustomUi = async () => {
 
   try {
     const wrapper = document.createElement("div");
-    wrapper.id = "extension-main";
+    wrapper.id = "orion-main";
     wrapper.style.colorScheme = "dark";
     // construct our own elements
     const cachedAssignments = await getAssignmentsCache();
