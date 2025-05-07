@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.1
+
+_released 07 May 2025_
+
+I finally came up with a somewhat-halfway-decent name: Orion. Also, I'm finally
+putting this thing on the chrome web store.
+
 ## v0.4.0
 
 _released 06 May 2025_
@@ -8,7 +15,7 @@ This release doesn't have too many new features, but I decided to bump it
 anyways because I finally got the what's new stuff (incl. banners!) out the door
 and why not. It's been a while since I've actually added a new feature.
 
-- Features
+- Features:
   - A banner will show after the extension updates.
   - Use banners for error reporting instead of popups.
     - Add option to email me the details of the error.
