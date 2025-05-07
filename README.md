@@ -1,10 +1,10 @@
-# Hunter Extension
+# Orion
 
-_v0.4.0_
+_v0.4.1_
 
 This project aims to fix as much of the Hunter website as possible. It does this
 through a browser extension. To report problems or request a feature, please
-email gavinmorrow (at) hunterschools (dot) org.
+email gavinmorrow (at) hunterschools (dot) org or gavinmorrow.dev@gmail.com.
 
 ## Features
 
@@ -26,6 +26,12 @@ available for desktop (not mobile).
 Safari is also not supported at the moment, although I'm working on it. If you
 use Safari (like me), send me an email and I'll prioritize it!
 
+### Firefox
+
+Click [here][firefox] to install. (You should use firefox!!)
+
+To update, see the [Mozilla help page].
+
 ### Chrome
 
 1. Go to the page for the [latest release][latest].
@@ -40,12 +46,6 @@ use Safari (like me), send me an email and I'll prioritize it!
 9. Then, if you are on Windows, single-click `hunter-extension-<version>`.
 10. Click `Select` (bottom right corner).
 11. Go to the hunter website!
-
-### Firefox
-
-Click [here][firefox] to install. (You should use firefox!!)
-
-To update, see the [Mozilla help page].
 
 ## Updating
 
