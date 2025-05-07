@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.3
+
+_released 07 May 2025_
+
+- Bug Fixes:
+  - Prevent what's new and notify update from failing on Chrome.
+
 ## v0.4.2
 
 _released 07 May 2025_

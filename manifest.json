@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Orion",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
     "https://app.blackbaud.com/signin/*",
