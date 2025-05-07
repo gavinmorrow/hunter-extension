@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.2
+
+_released 07 May 2025_
+
+- Bug Fixes:
+  - Make the page automatically reload when Orion is updated, instead of
+    erroring.
+  - Fix some links that still pointed to the old github repo.
+
 ## v0.4.1
 
 _released 07 May 2025_

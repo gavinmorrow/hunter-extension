@@ -1,4 +1,4 @@
-const VERSION = "0.4.1";
+const VERSION = "0.4.2";
 
 // Check for old version already installed.
 let meta = document.getElementById("orion-version");
