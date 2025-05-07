@@ -1,5 +1,7 @@
 const getViewedVersions = async () =>
-  browser.runtime.sendMessage({ type: "whatsNew.getViewedVersions" });
+  new Set(
+    await browser.runtime.sendMessage({ type: "whatsNew.getViewedVersions" }),
+  );
 const setVersionViewed = async (data) =>
   browser.runtime.sendMessage({ type: "whatsNew.setVersionViewed", data });
 

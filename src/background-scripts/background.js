@@ -134,11 +134,11 @@ const settingsListener = async (msg, sender) => {
 ///=================///
 /** @returns {Promise<Set<string>>} */
 const getViewedVersions = async () =>
-  new Set((await browser.storage.local.get()).whatsNewViewed);
+  (await browser.storage.local.get()).whatsNewViewed;
 const whatsNewListener = async (msg, sender) => {
   switch (msg.type) {
     case "whatsNew.setVersionViewed": {
-      const viewedVersions = await getViewedVersions();
+      const viewedVersions = new Set(await getViewedVersions());
       viewedVersions.add(msg.data);
 
       // It is unsafe to store `Set`s in the storage
@@ -161,11 +161,11 @@ const whatsNewListener = async (msg, sender) => {
 // TODO: this is almost identical to the whats new stuff, try to consolidate?
 /** @returns {Promise<Set<string>>} */
 const getIgnoredUpdates = async () =>
-  new Set((await browser.storage.local.get()).ignoredUpdates);
+  (await browser.storage.local.get()).ignoredUpdates;
 const updateRemindersListener = async (msg, sender) => {
   switch (msg.type) {
     case "updateReminders.ignoreUpdate": {
-      const ignoredUpdates = await getIgnoredUpdates();
+      const ignoredUpdates = new Set(await getIgnoredUpdates());
       ignoredUpdates.add(msg.data);
 
       // It is unsafe to store `Set`s in the storage

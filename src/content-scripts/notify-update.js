@@ -38,7 +38,11 @@ const compareVersions = (a, b) => {
 
 /** @returns {Promise<Set<string>>} */
 const getIgnoredUpdates = async () =>
-  browser.runtime.sendMessage({ type: "updateReminders.getIgnoredUpdates" });
+  new Set(
+    await browser.runtime.sendMessage({
+      type: "updateReminders.getIgnoredUpdates",
+    }),
+  );
 const setIngoredUpdate = async (data) =>
   browser.runtime.sendMessage({ type: "updateReminders.ignoreUpdate", data });
 
