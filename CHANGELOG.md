@@ -2,7 +2,7 @@
 
 ## v0.4.0
 
-_released 00 May 2025_
+_released 06 May 2025_
 
 This release doesn't have too many new features, but I decided to bump it
 anyways because I finally got the what's new stuff (incl. banners!) out the door
