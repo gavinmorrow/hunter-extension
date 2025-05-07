@@ -36,6 +36,12 @@ echo "Removed git, jj, and amo files/dirs."
 ditto -c -k --sequesterRsrc --keepParent ~/Desktop/orion ~/Desktop/orion.zip
 rm -rf ~/Desktop/orion
 echo "Zipped into ~/Desktop/orion.zip"
+open ~/Desktop
+
+
+### MDN release ###
+echo "Starting MDN release..."
+web-ext sign --api-key=$MDN_AMO_API_KEY --api-secret=$MDN_AMO_API_SECRET --channel=unlisted
 
 
 ### Github release ###
@@ -49,11 +55,4 @@ gh release upload "v$1" ~/Desktop/orion.zip
 
 # Clean up
 rm ~/Desktop/65a14653bc7c4e6ab617.xpi
-# Don't remove, because it needs to be uploaded manually.
-# rm ~/Desktop/orion.zip
-open ~/Desktop
-
-
-### MDN release ###
-echo "Starting MDN release..."
-web-ext sign --api-key=$MDN_AMO_API_KEY --api-secret=$MDN_AMO_API_SECRET --channel=unlisted
+rm ~/Desktop/orion.zip
