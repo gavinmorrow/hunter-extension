@@ -1,14 +1,23 @@
 /** @returns {Promise<number>} */
-const getLatestVersion = async () =>
-  fetch("https://gavinmorrow.github.io/hunter-extension/versions.json", {
-    cache: "no-cache",
-  })
-    .then((r) => r.json())
-    .then((versions) => versions.latest)
-    .catch((err) => {
-      console.error("Error checking for update.", err);
-      return "0.0.0";
-    });
+const getLatestVersion = async () => {
+  // Don't use Promise methods to avoid `InternalError: Promise rejection
+  // value is a non-unwrappable cross-compartment wrapper.`
+  // (see <https://bugzilla.mozilla.org/show_bug.cgi?id=1871516>)
+  try {
+    const res = await fetch(
+      "https://gavinmorrow.github.io/hunter-extension/updates.json",
+      {
+        cache: "no-cache",
+      },
+    );
+    const json = await res.json();
+    const versions =
+      json.addons["{a58d637c-b5fb-4549-a2f6-ae76b6dd6672}"].updates;
+    return versions[versions.length - 1].version;
+  } catch (err) {
+    throw new ApiError("checkForUpdates", err);
+  }
+};
 
 /** @param {String} a @param {String} b */
 const compareVersions = (a, b) => {
@@ -28,8 +37,20 @@ const compareVersions = (a, b) => {
 };
 
 promiseError(async () => {
-  const latest = await getLatestVersion();
-  const newVersionAvailable = compareVersions(VERSION, latest) === 1;
-  if (newVersionAvailable)
-    alert(`New version available!\nCurrent: ${VERSION}\nLatest: ${latest}`);
+  // Don't use Promise methods to avoid `InternalError: Promise rejection
+  // value is a non-unwrappable cross-compartment wrapper.`
+  // (see <https://bugzilla.mozilla.org/show_bug.cgi?id=1871516>)
+  try {
+    const latest = await getLatestVersion();
+    const newVersionAvailable = compareVersions(VERSION, latest) === 1;
+    if (newVersionAvailable) {
+      BannerAlert.createBanner(
+        `New version available! Current: ${VERSION}, Latest: ${latest}`,
+        "info",
+        // TODO: include info on how to update
+      );
+    }
+  } catch (err) {
+    reportError(err);
+  }
 })();

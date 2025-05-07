@@ -262,6 +262,7 @@ class ApiError extends Error {
     getAllAssignmentData: "could not get all assignment data",
     getClasses: "could not get classes",
     getStudentUserId: "could not get student user id",
+    checkForUpdates: "could not check for updates",
   };
 
   /**
