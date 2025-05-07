@@ -27,7 +27,7 @@ promiseError(async () => {
     banner.close();
 
     const a = document.createElement("a");
-    a.href = "https://gavinmorrow.github.io/hunter-extension/CHANGELOG";
+    a.href = "https://gavinmorrow.github.io/orion/CHANGELOG";
     a.target = "_blank";
     a.click();
   });

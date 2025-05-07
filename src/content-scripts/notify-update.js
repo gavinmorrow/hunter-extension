@@ -5,7 +5,7 @@ const getLatestVersion = async () => {
   // (see <https://bugzilla.mozilla.org/show_bug.cgi?id=1871516>)
   try {
     const res = await fetch(
-      "https://gavinmorrow.github.io/hunter-extension/updates.json",
+      "https://gavinmorrow.github.io/orion/updates.json",
       {
         cache: "no-cache",
       },
@@ -68,7 +68,7 @@ promiseError(async () => {
         banner.close();
 
         const a = document.createElement("a");
-        a.href = "https://gavinmorrow.github.io/hunter-extension/#Updating";
+        a.href = "https://gavinmorrow.github.io/orion/#updating";
         // *Not* target=_blank, b/c updating works best when the extension isn't open.
         a.click();
       });
