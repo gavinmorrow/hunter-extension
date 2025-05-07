@@ -1,4 +1,4 @@
-/** @returns {Promise<number>} */
+/** @returns {Promise<string>} */
 const getLatestVersion = async () => {
   // Don't use Promise methods to avoid `InternalError: Promise rejection
   // value is a non-unwrappable cross-compartment wrapper.`
@@ -36,6 +36,12 @@ const compareVersions = (a, b) => {
   }
 };
 
+/** @returns {Promise<Set<string>>} */
+const getIgnoredUpdates = async () =>
+  browser.runtime.sendMessage({ type: "updateReminders.getIgnoredUpdates" });
+const setIngoredUpdate = async (data) =>
+  browser.runtime.sendMessage({ type: "updateReminders.ignoreUpdate", data });
+
 promiseError(async () => {
   // Don't use Promise methods to avoid `InternalError: Promise rejection
   // value is a non-unwrappable cross-compartment wrapper.`
@@ -43,12 +49,36 @@ promiseError(async () => {
   try {
     const latest = await getLatestVersion();
     const newVersionAvailable = compareVersions(VERSION, latest) === 1;
-    if (newVersionAvailable) {
-      BannerAlert.createBanner(
+    const updateIgnored = (await getIgnoredUpdates()).has(latest);
+
+    if (newVersionAvailable && !updateIgnored) {
+      const banner = BannerAlert.createBanner(
         `New version available! Current: ${VERSION}, Latest: ${latest}`,
         "info",
+        [
+          { name: "show-update", displayText: "How to update" },
+          { name: "remind-later", displayText: "Remind me later" },
+        ],
         // TODO: include info on how to update
       );
+
+      let ignoreUpdate = true;
+      banner.addEventListener("banner-alert-action-show-update", async () => {
+        ignoreUpdate = false;
+        banner.close();
+
+        const a = document.createElement("a");
+        a.href = "https://gavinmorrow.github.io/hunter-extension/#Updating";
+        // *Not* target=_blank, b/c updating works best when the extension isn't open.
+        a.click();
+      });
+      banner.addEventListener("banner-alert-action-remind-later", () => {
+        ignoreUpdate = false;
+        banner.close();
+      });
+      banner.addEventListener("banner-alert-close", () => {
+        if (ignoreUpdate) setIngoredUpdate(latest);
+      });
     }
   } catch (err) {
     reportError(err);

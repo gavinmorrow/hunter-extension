@@ -155,6 +155,33 @@ const whatsNewListener = async (msg, sender) => {
   }
 };
 
+///=======================///
+///=== UPDATE REMINDER ===///
+///=======================///
+// TODO: this is almost identical to the whats new stuff, try to consolidate?
+/** @returns {Promise<Set<string>>} */
+const getIgnoredUpdates = async () =>
+  new Set((await browser.storage.local.get()).ignoredUpdates);
+const updateRemindersListener = async (msg, sender) => {
+  switch (msg.type) {
+    case "updateReminders.ignoreUpdate": {
+      const ignoredUpdates = await getIgnoredUpdates();
+      ignoredUpdates.add(msg.data);
+
+      // It is unsafe to store `Set`s in the storage
+      // <https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/StorageArea/set#keys>
+      await browser.storage.local.set({
+        ignoredUpdates: Array.from(ignoredUpdates),
+      });
+      break;
+    }
+    case "updateReminders.getIgnoredUpdates":
+      return await getIgnoredUpdates();
+    default:
+      console.error(`Unknown message type ${msg.type}`);
+  }
+};
+
 ///=========================///
 ///=== ASSIGNMENTS CACHE ===///
 ///=========================///
@@ -189,6 +216,8 @@ browser.runtime.onMessage.addListener(async (msg, sender) => {
       return settingsListener(msg, sender);
     case "whatsNew":
       return whatsNewListener(msg, sender);
+    case "updateReminders":
+      return updateRemindersListener(msg, sender);
     case "assignmentsCache":
       return assignmentsCache(msg, sender);
     default:
