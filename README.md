@@ -47,6 +47,17 @@ Click [here][firefox] to install. (You should use firefox!!)
 
 To update, see the [Mozilla help page].
 
+## Updating
+
+### Firefox
+
+See the [Mozilla help page for updating addons].
+
+### Chrome
+
+Uninstall and reinstall with the latest version. You will lose all modified
+settings. Switch to Firefox, it's exactly the same as Chrome except better.
+
 ## Permissions
 
 - It will ask for permissions on `hunterschools.myschoolapp.com`,
@@ -65,4 +76,5 @@ The source code for [this project][github] is available on github!
 [latest]: https://github.com/gavinmorrow/hunter-extension/releases/latest
 [firefox]: https://github.com/gavinmorrow/hunter-extension/releases/download/v0.3.4/65a14653bc7c4e6ab617.xpi
 [Mozilla help page]: https://support.mozilla.org/en-US/kb/how-update-add-ons
+[Mozilla help page for updating addons]: https://support.mozilla.org/en-US/kb/how-update-add-ons
 [github]: https://github.com/gavinmorrow/hunter-extension/
