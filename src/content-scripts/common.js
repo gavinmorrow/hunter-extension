@@ -1,5 +1,21 @@
 const VERSION = "0.4.1";
 
+// Check for old version already installed.
+let meta = document.getElementById("orion-version");
+if (meta != null) {
+  // It shouldn't matter what version is already running, because this file
+  // should only be run once anyways.
+  location.reload();
+  throw new Error(
+    `Orion version ${meta.getAttribute("x-orion-version")} already running.`,
+  );
+} else {
+  meta = document.createElement("meta");
+  meta.id = "orion-version";
+  meta.setAttribute("x-orion-version", VERSION);
+  document.head.appendChild(meta);
+}
+
 const DEFAULT_TIMEOUT = 10000;
 const DEFAULT_INTERVAL = 16;
 
