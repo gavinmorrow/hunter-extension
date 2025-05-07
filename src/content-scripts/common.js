@@ -174,13 +174,15 @@ const getAssignmentsCache = async () => [];
 // const getAssignmentsCache = async () => (await browser.runtime.sendMessage({
 //   type: "assignmentsCache.get",
 // })) ?? [];
-const setAssignmentsCache = async (newAssignments) => browser.runtime.sendMessage({
-  type: "assignmentsCache.set",
-  data: newAssignments,
-});
-const clearAssignmentsCache = async () => browser.runtime.sendMessage({
-  type: "assignmentsCache.clear",
-});
+const setAssignmentsCache = async (newAssignments) =>
+  browser.runtime.sendMessage({
+    type: "assignmentsCache.set",
+    data: newAssignments,
+  });
+const clearAssignmentsCache = async () =>
+  browser.runtime.sendMessage({
+    type: "assignmentsCache.clear",
+  });
 
 /**
  * Run a function only when a predicate is true. Useful for locking functions behind a feature flag.
