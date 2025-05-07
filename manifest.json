@@ -2,6 +2,11 @@
   "manifest_version": 3,
   "name": "Orion",
   "version": "0.4.3",
+  "icons": {
+    "32": "icon.png",
+    "64": "icon@2x.png",
+    "128": "icon@4x.png"
+  },
   "host_permissions": [
     "https://hunterschools.myschoolapp.com/*",
     "https://app.blackbaud.com/signin/*",
