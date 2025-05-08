@@ -26,8 +26,8 @@ class AssignmentPopup extends HTMLElement {
       let selected =
         root.contains(selection.anchorNode) ||
         root.contains(selection.focusNode) ||
-        selection.anchorNode.contains(root) ||
-        selection.focusNode.contains(root);
+        selection.anchorNode?.contains(root) ||
+        selection.focusNode?.contains(root);
 
       const selectionHasText = selection.toString() != "";
 
