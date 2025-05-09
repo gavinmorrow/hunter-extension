@@ -30,33 +30,21 @@ use Safari (like me), send me an email and I'll prioritize it!
 
 Click [here][firefox] to install. (You should use firefox!!)
 
-To update, see the [Mozilla help page].
-
 ### Chrome
 
-1. Go to the page for the [latest release][latest].
-2. Under `Assets`, download the `hunter-extension-<version>.zip` file.
-3. Open that file in File Explorer/Finder/etc and extract/open it.
-4. In Chrome, go to `chrome://extensions`.
-5. If updating, remove the old version of the extension.
-6. Click the toggle that says `Developer mode` in the top right corner.
-7. Click the `Load unpacked` button.
-8. For both Windows and macOS: In the file picker, go to `Downloads`, then
-   double-click on `hunter-extension-<version>`.
-9. Then, if you are on Windows, single-click `hunter-extension-<version>`.
-10. Click `Select` (bottom right corner).
-11. Go to the hunter website!
+Go to the [Chrome Web Store listing] and click "Add to Chrome".
 
 ## Updating
 
 ### Firefox
 
-See the [Mozilla help page].
+Firefox will usually automatically update for you.
+To update manually, see the [Mozilla help page].
 
 ### Chrome
 
-Uninstall and reinstall with the latest version. You will lose all modified
-settings. Switch to Firefox, it's exactly the same as Chrome except better.
+Chrome will usually automatically update for you.
+To update manually, you will have to [enable developer mode][ChromeUpdateHelp].
 
 ## Permissions
 
@@ -77,3 +65,4 @@ The source code for [this project][github] is available on github!
 [firefox]: https://github.com/gavinmorrow/orion/releases/download/v0.4.4/65a14653bc7c4e6ab617.xpi
 [Mozilla help page]: https://support.mozilla.org/en-US/kb/how-update-add-ons
 [github]: https://github.com/gavinmorrow/orion/
+[ChromeUpdateHelp]: https://support.cloudhq.net/how-to-manually-update-chrome-extensions/
