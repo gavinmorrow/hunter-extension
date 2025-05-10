@@ -7,14 +7,6 @@ set -Eeuo pipefail
 echo "Releasing Orion v$1..."
 
 
-# Move jj bookmarks
-jj bookmark set dev main -r @-
-
-# Push to git
-git switch dev && git push
-git switch main && git push
-
-
 ### Chrome release ###
 echo "Starting Chrome release..."
 
@@ -46,6 +38,14 @@ web-ext sign --api-key=$MDN_AMO_API_KEY --api-secret=$MDN_AMO_API_SECRET --chann
 
 ### Github release ###
 echo "Starting Github release"
+
+# Move jj bookmarks
+jj bookmark set dev main -r @-
+
+# Push to git
+git switch dev && git push
+git switch main && git push
+
 gh release create "v$1" --generate-notes -F ./CHANGELOG.md
 
 # Upload files
