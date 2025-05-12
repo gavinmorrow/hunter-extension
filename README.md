@@ -32,7 +32,7 @@ Click [here][firefox] to install. (You should use firefox!!)
 
 ### Chrome
 
-Go to the [Chrome Web Store listing] and click "Add to Chrome".
+Go to the [Chrome Web Store listing][chrome] and click "Add to Chrome".
 
 ## Updating
 
