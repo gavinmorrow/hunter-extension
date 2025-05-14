@@ -268,13 +268,15 @@ class ApiError extends Error {
   /**
    * @param {keyof typeof ApiError.MESSAGES} action
    * @param {Error} cause
+   * @param {boolean=} suggestReload Defaults to false
    */
-  constructor(action, cause) {
-    const msg = `${ApiError.MESSAGES[action] ?? action} (${action})`;
+  constructor(action, cause, suggestReload = false) {
+    const msg = `${ApiError.MESSAGES[action] ?? action}${suggestReload ? ", try reloading the page" : ""} (${action})`;
     super(msg, { cause });
 
     this.name = "ApiError";
     this.action = action;
+    this.suggestReload = suggestReload;
   }
 
   // TODO: make this work via .then()
@@ -288,12 +290,18 @@ class ApiError extends Error {
     // Don't use Promise methods to avoid `InternalError: Promise rejection
     // value is a non-unwrappable cross-compartment wrapper.`
     // (see <https://bugzilla.mozilla.org/show_bug.cgi?id=1871516>)
+
+    /** @type {number} */
+    let status;
+
     try {
       res = await res;
+      status = res.status;
+
       if (res.ok) return res;
       throw new Error(`api response not ok (${res.status})`);
     } catch (err) {
-      throw new ApiError(action, err);
+      throw new ApiError(action, err, status === 403);
     }
   }
 }

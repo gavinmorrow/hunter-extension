@@ -13,12 +13,18 @@ const reportError = (err) => {
         "warning",
         [
           { name: "full-error", displayText: "Show full error" },
+          ...(err.suggestReload
+            ? [{ name: "reload", displayText: "Reload page" }]
+            : []),
           { name: "email", displayText: "Email Gavin" },
         ],
       );
       const fullMessage = `${err}\n\nCause:\n${err.cause}\n\nStack:\n${err.stack}`;
       banner.addEventListener("banner-alert-action-full-error", () => {
         alert(fullMessage);
+      });
+      banner.addEventListener("banner-alert-action-reload", () => {
+        location.reload();
       });
       banner.addEventListener("banner-alert-action-email", () => {
         const a = document.createElement("a");
