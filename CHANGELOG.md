@@ -7,6 +7,7 @@ _released 00 May 2025_
 - Features:
   - More errors (the vast majority) will now appear as banners instead of as
     alerts.
+  - Suggest reloading the page when attempting actions while logged out.
 
 ## v0.4.5
 
