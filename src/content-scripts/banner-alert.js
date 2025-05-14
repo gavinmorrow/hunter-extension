@@ -27,7 +27,7 @@ style.innerHTML = `
 promiseError(async () => {
   // Keep it on top of the assignment center
   const root = await waitForElem("#orion-main");
-  root.prepend(bannersWrapper);
+  root?.prepend(bannersWrapper);
 })();
 
 class BannerAlert extends HTMLElement {
