@@ -40,4 +40,4 @@ promiseError(async () => {
   banner.addEventListener("banner-alert-close", () => {
     if (!remindLater) setVersionViewed(VERSION);
   });
-})();
+}, reportError)();
