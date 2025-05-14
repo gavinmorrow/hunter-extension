@@ -278,46 +278,50 @@ class AssignmentCenter extends HTMLElement {
 
   /** @param {Number} id @param {boolean} isTask @param {Assignment?} changes */
   async #updateAssignment(id, isTask, changes) {
-    // update internal object
-    const index = this.assignments.findIndex((a) => a.id === id);
-    if (index === -1) return;
-    this.assignments[index] = applyDiff(this.assignments[index], changes);
+    try {
+      // update internal object
+      const index = this.assignments.findIndex((a) => a.id === id);
+      if (index === -1) return;
+      this.assignments[index] = applyDiff(this.assignments[index], changes);
 
-    // check for if the status in the backend needs to be updated
-    if (changes?.status != undefined) {
-      if (isTask) await api.updateTaskStatus(this.assignments[index]);
-      else await api.updateAssignmentStatus(id, changes.status, isTask);
-    }
-
-    // check if task needs to be deleted
-    if (isTask && changes === null) {
-      await api.deleteTask(id);
-
-      // remove the element corresponding to it
-      this.#findAssignmentBoxFor(id).remove();
-    } else {
-      // otherwise, update the element corresponding to it
-
-      // handle the due date changing (ie w/ tasks)
-      if (Object.hasOwn(changes, "dueDate")) {
-        const list = this.shadowRoot.getElementById(
-          AssignmentCenter.#idForAssignmentList(
-            Calendar.resetDate(changes.dueDate),
-          ),
-        );
-
-        // just remove the old element
-        this.#findAssignmentBoxFor(id).remove();
-        // reparent, if the day is being shown
-        if (list != null) {
-          this.#insertAssignmentBox(list, this.assignments[index]);
-        }
+      // check for if the status in the backend needs to be updated
+      if (changes?.status != undefined) {
+        if (isTask) await api.updateTaskStatus(this.assignments[index]);
+        else await api.updateAssignmentStatus(id, changes.status, isTask);
       }
 
-      // update the element
-      /** @type {AssignmentBox} */
-      const assignmentBox = this.#findAssignmentBoxFor(id);
-      assignmentBox.updateAssignment(this.assignments[index]);
+      // check if task needs to be deleted
+      if (isTask && changes === null) {
+        await api.deleteTask(id);
+
+        // remove the element corresponding to it
+        this.#findAssignmentBoxFor(id).remove();
+      } else {
+        // otherwise, update the element corresponding to it
+
+        // handle the due date changing (ie w/ tasks)
+        if (Object.hasOwn(changes, "dueDate")) {
+          const list = this.shadowRoot.getElementById(
+            AssignmentCenter.#idForAssignmentList(
+              Calendar.resetDate(changes.dueDate),
+            ),
+          );
+
+          // just remove the old element
+          this.#findAssignmentBoxFor(id).remove();
+          // reparent, if the day is being shown
+          if (list != null) {
+            this.#insertAssignmentBox(list, this.assignments[index]);
+          }
+        }
+
+        // update the element
+        /** @type {AssignmentBox} */
+        const assignmentBox = this.#findAssignmentBoxFor(id);
+        assignmentBox.updateAssignment(this.assignments[index]);
+      }
+    } catch (err) {
+      reportError(err);
     }
   }
 
