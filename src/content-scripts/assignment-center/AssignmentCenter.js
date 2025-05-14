@@ -211,9 +211,8 @@ class AssignmentCenter extends HTMLElement {
     // Intentionally not await-ing the Promise.
     Assignment.getBlackbaudReprFor(assignment)
       .then(Assignment.parseBlackbaudRepr)
-      .then(
-        this.#updateAssignment.bind(this, assignment.id, assignment.isTask),
-      ).catch(reportError);
+      .then(this.#updateAssignment.bind(this, assignment.id, assignment.isTask))
+      .catch(reportError);
   }
 
   #updateTodayElem() {
