@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.4.6
+
+_released 00 May 2025_
+
+- Features:
+  - More errors (the vast majority) will now appear as banners instead of as
+    alerts.
+
 ## v0.4.5
 
 _released 10 May 2025_
