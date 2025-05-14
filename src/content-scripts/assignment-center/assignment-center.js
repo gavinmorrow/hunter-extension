@@ -203,4 +203,5 @@ promiseError(
       }
     },
   ),
+  reportError,
 )();
