@@ -12,20 +12,23 @@ const reportError = (err) => {
         `Error: ${err.message}. If this persists, please contact Gavin.`,
         "warning",
         [
-          { name: "full-error", displayText: "Show full error" },
           ...(err.suggestReload
             ? [{ name: "reload", displayText: "Reload page" }]
             : []),
+          { name: "full-error", displayText: "Show full error" },
           { name: "email", displayText: "Email Gavin" },
         ],
       );
+
+      banner.addEventListener("banner-alert-action-reload", () => {
+        location.reload();
+      });
+
       const fullMessage = `${err}\n\nCause:\n${err.cause}\n\nStack:\n${err.stack}`;
       banner.addEventListener("banner-alert-action-full-error", () => {
         alert(fullMessage);
       });
-      banner.addEventListener("banner-alert-action-reload", () => {
-        location.reload();
-      });
+
       banner.addEventListener("banner-alert-action-email", () => {
         const a = document.createElement("a");
         a.href = `mailto:gavinmorrow${"@"}hunterschools${"."}org?subject=${encodeURI("Error in Orion")}&body=${encodeURI(fullMessage)}`;
