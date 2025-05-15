@@ -18,10 +18,6 @@ const hunterLogin = featureFlag(
     if (nextBtn == null) return;
 
     await waitFor(usernameEntered);
-    await browser.runtime.sendMessage({
-      type: "state.set",
-      data: { isLoggingIn: true },
-    });
     nextBtn.click();
   },
 );
@@ -41,14 +37,16 @@ const blackbaudLogin = featureFlag(
  * @param {() => Promise<any>} fn The function to run.
  * @returns {() => Promise<any>} A function that will check if the user is currently logging in before calling the provided function.
  */
-const requireLoggingIn = (fn) => async () => {
+const requireRedirectToBlackbaud = (fn) => async () => {
   console.log("Checking if logged in......");
 
-  const state = await tabState();
-  const isLoggingIn = state.isLoggingIn ?? false;
-  const alreadyLoggedIn = state.alreadyLoggedIn ?? false;
+  const searchParams = new URLSearchParams(location.search);
+  const redirectUri = searchParams.get("redirect_uri");
+  const isLoggingIn =
+    redirectUri?.includes("blackbaud.com") ||
+    redirectUri?.includes("hunterschools.myschoolapp.com");
 
-  if (!isLoggingIn || alreadyLoggedIn) {
+  if (!isLoggingIn) {
     console.log("Not currently logging in, skipping autologin.");
     return;
   }
@@ -57,7 +55,7 @@ const requireLoggingIn = (fn) => async () => {
 
 const googleEmail = featureFlag(
   (s) => s.loginAutomatically.google.email,
-  requireLoggingIn(async () => {
+  requireRedirectToBlackbaud(async () => {
     console.log("Trying to find Google email...");
 
     // google login page
@@ -73,7 +71,7 @@ const googleEmail = featureFlag(
 
 const googlePassword = featureFlag(
   (s) => s.loginAutomatically.google.password,
-  requireLoggingIn(async () => {
+  requireRedirectToBlackbaud(async () => {
     console.log("Trying to enter Google password...");
 
     // google password page

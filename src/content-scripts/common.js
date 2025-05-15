@@ -112,28 +112,6 @@ const waitForElems = async (
 };
 
 /**
- * Set or get tab state.
- * @param {(any|null)?} data If provided, the value to set. If null, delete the state.
- */
-const tabState = async (data) => {
-  switch (data) {
-    case undefined:
-      return browser.runtime.sendMessage({
-        type: "state.get",
-      });
-    case null:
-      return browser.runtime.sendMessage({
-        type: "state.delete",
-      });
-    default:
-      return browser.runtime.sendMessage({
-        type: "state.set",
-        data,
-      });
-  }
-};
-
-/**
  * @typedef {Object} Settings
  *
  *
