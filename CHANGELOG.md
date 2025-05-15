@@ -19,7 +19,7 @@ _released 00 May 2025_
 _released 10 May 2025_
 
 - Bug Fixes:
-  - When using Chrome, Prevent assignment popup from closing when text is
+  - When using Chrome, prevent assignment popup from closing when text is
     selected inside of it.
 
 ## v0.4.4
