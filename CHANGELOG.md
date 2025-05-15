@@ -7,7 +7,10 @@ _released 00 May 2025_
 - Features:
   - More errors (the vast majority) will now appear as banners instead of as
     alerts.
-  - Suggest reloading the page when attempting actions while logged out.
+  - Suggest reloading the page when attempting actions while logged out. (This
+    usually happens when first opening your computer.)
+  - Automatically click the "Keep working" button. (btw this is like. *so*
+    annoying to test. if there are any bugs please please please tell me.)
 
 ## v0.4.5
 
