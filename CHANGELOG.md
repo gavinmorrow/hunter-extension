@@ -11,6 +11,8 @@ _released 00 May 2025_
     usually happens when first opening your computer.)
   - Automatically click the "Keep working" button. (btw this is like. *so*
     annoying to test. if there are any bugs please please please tell me.)
+- Bug Fixes/Improvements:
+  - Detect when to autologin more reliably, and remove all host permissions.
 
 ## v0.4.5
 
