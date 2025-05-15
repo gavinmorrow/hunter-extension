@@ -56,6 +56,15 @@ const settingsOptions = {
       },
     },
   },
+  keepWorking: {
+    desc: "",
+    type: {
+      clickAutomatically:
+        'Automatically click the "Keep Working" button when it pops up.',
+      showBanner:
+        "Show a banner to notify you when the button is clicked automatically.",
+    },
+  },
 };
 
 class SettingsMenu extends HTMLElement {

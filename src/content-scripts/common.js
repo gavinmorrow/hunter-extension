@@ -168,6 +168,11 @@ const tabState = async (data) => {
  * @property {Object} assignmentCenter.filter
  * @property {boolean} assignmentCenter.filter.enabled
  * @property {boolean} assignmentCenter.filter.autoNotCompleted
+ *
+ *
+ * @property {Object} keepWorking
+ * @property {boolean} keepWorking.clickAutomatically
+ * @property {boolean} keepWorking.showBanner
  */
 
 /** Get user settings. */
