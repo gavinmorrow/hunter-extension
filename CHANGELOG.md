@@ -1,8 +1,11 @@
 # Changelog
 
-## v0.4.6
+## v0.5.0
 
-_released 00 May 2025_
+_released 14 May 2025_
+
+Bumped version b/c I'm feeling festive 🎉 and there's still so many numbers left
+so really why not. This is my project, if I want to bump the version I can >:]
 
 - Features:
   - More errors (the vast majority) will now appear as banners instead of as
