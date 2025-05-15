@@ -93,6 +93,10 @@ const defaultSettings = {
       completed: "green",
     },
   },
+  keepWorking: {
+    clickAutomatically: true,
+    showBanner: false,
+  },
 };
 
 const getSettings = async () =>
