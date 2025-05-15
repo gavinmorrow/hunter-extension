@@ -7,13 +7,6 @@
     "64": "icon@2x.png",
     "128": "icon@4x.png"
   },
-  "host_permissions": [
-    "https://hunterschools.myschoolapp.com/*",
-    "https://app.blackbaud.com/signin/*",
-    "https://accounts.google.com/o/oauth2/*",
-    "https://accounts.google.com/v3/signin/challenge/pwd?*",
-    "https://accounts.google.com/signin/oauth*"
-  ],
   "permissions": ["storage"],
   "background": {
     "scripts": ["src/background-scripts/background.js"],
