@@ -138,6 +138,9 @@ class AssignmentCenter extends HTMLElement {
         this.#visibleDateRange[1] = date;
       }
     }
+
+    // TODO: only rehydrate by date
+    this.#hydrateCalendar();
   }
 
   #createCalendarHeader(
