@@ -121,16 +121,36 @@ const createCustomUi = async () => {
     // hide theirs
     oldElem.hidden = true;
 
-    const assignments = await api
-      .getAllAssignmentData()
-      .then(api.parseAssignments);
-    assignmentCenter.meshAssignmentsArray(assignments);
+    const updateAssignments = async () => {
+      try {
+        const assignments = await api
+          .getAllAssignmentData()
+          .then(api.parseAssignments);
+        assignmentCenter.meshAssignmentsArray(assignments);
+      } catch (err) {
+        reportErr(err);
+      }
+    };
+    if (navigator.onLine) await updateAssignments();
+    else {
+      const banner = BannerAlert.createBanner(
+        "Waiting for internet connection...",
+        "info",
+        [{ name: "reload", displayText: "Reload page" }],
+      );
+      banner.addEventListener("banner-alert-action-reload", () =>
+        location.reload(),
+      );
+      window.addEventListener("online", updateAssignments);
+    }
+
     // Scrape active assignments first so it goes faster
     // await scrapeAssignments("Active").then(assignmentCenter.addAssignments);
     // await scrapeAssignments("Past").then(assignmentCenter.addAssignments);
   } catch (err) {
-    alert(`There was an error creating the custom UI: ${err}`);
+    console.error(`There was an error creating the custom UI: ${err}`);
     console.error(err);
+    reportError(err);
   }
 };
 
