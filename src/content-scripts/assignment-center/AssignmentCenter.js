@@ -5,6 +5,12 @@ class AssignmentCenter extends HTMLElement {
   /** @type {Settings} */
   settings;
 
+  /** @type {HTMLElement} */
+  #grid;
+
+  /** @type {[Date, Date]} */
+  #visibleDateRange;
+
   /**
    * Show a day of the week in the calendar (ie a column in the grid).
    * @param {HTMLElement} calendar The `#main-calendar` element.
@@ -53,7 +59,24 @@ class AssignmentCenter extends HTMLElement {
     shadow.appendChild(style);
 
     const root = document.createElement("main");
+
+    // FIXME: reduce duplication
+    const prependBtn = document.createElement("button");
+    prependBtn.textContent = "Prepend by 1 week";
+    prependBtn.addEventListener("click", () => {
+      this.#extendCalendarGrid(-1);
+    });
+    root.appendChild(prependBtn);
+
     root.appendChild(this.#createCalendarGrid());
+
+    const extendBtn = document.createElement("button");
+    extendBtn.textContent = "Extend by 1 week";
+    extendBtn.addEventListener("click", () => {
+      this.#extendCalendarGrid(1);
+    });
+    root.appendChild(extendBtn);
+
     shadow.appendChild(root);
   }
 
@@ -62,8 +85,8 @@ class AssignmentCenter extends HTMLElement {
   }
 
   #createCalendarGrid() {
-    const grid = document.createElement("div");
-    grid.id = "main-calendar";
+    this.#grid = document.createElement("div");
+    this.#grid.id = "main-calendar";
 
     // create top row
     [
@@ -76,16 +99,45 @@ class AssignmentCenter extends HTMLElement {
       "Saturday",
     ]
       .map(this.#createCalendarHeader)
-      .forEach((elem) => grid.appendChild(elem));
+      .forEach((elem) => this.#grid.appendChild(elem));
 
     // create 4 weeks starting from this week
     // MAKE SURE TO HANDLE DATES CORRECTLY!!
     // **Be careful when doing custom date manipulation.**
-    AssignmentCenter.#allCalendarDates()
+    const dates = AssignmentCenter.#allCalendarDates();
+    this.#visibleDateRange = [dates[0], dates[dates.length - 1]];
+    dates
       .map(this.#createCalendarBox.bind(this))
-      .forEach((list) => grid.appendChild(list));
+      .forEach((list) => this.#grid.appendChild(list));
 
-    return grid;
+    return this.#grid;
+  }
+
+  /** @param {number} weeks If positive, weeks will be appended. If negative, prepended. */
+  #extendCalendarGrid(weeks) {
+    // FIXME: reduce duplication
+    if (weeks == 0) return;
+    else if (weeks < 0) {
+      const originalFirstDay = this.#visibleDateRange[0];
+      let firstBox = this.#grid.querySelector(".calendar-box");
+      for (let offset = -1; offset >= weeks * 7; offset--) {
+        // TODO: does this always work? not using getSundayOfWeek
+        const date = Calendar.offsetFromDay(originalFirstDay, offset);
+        const list = this.#createCalendarBox(date);
+        this.#grid.insertBefore(list, firstBox);
+        this.#visibleDateRange[0] = date;
+        firstBox = list;
+      }
+    } else if (weeks > 0) {
+      const originalLastDay = this.#visibleDateRange[1];
+      for (let offset = 1; offset <= weeks * 7; offset++) {
+        // TODO: does this always work? not using getSundayOfWeek
+        const date = Calendar.offsetFromDay(originalLastDay, offset);
+        const list = this.#createCalendarBox(date);
+        this.#grid.appendChild(list);
+        this.#visibleDateRange[1] = date;
+      }
+    }
   }
 
   #createCalendarHeader(
@@ -227,6 +279,7 @@ class AssignmentCenter extends HTMLElement {
     todayList?.parentElement.classList.add("today");
   }
 
+  /** @type {Date[]} */
   static #allCalendarDates() {
     const today = Calendar.resetDate(new Date());
     const dateOfSunday = Calendar.dateForSundayOfWeek(today);
