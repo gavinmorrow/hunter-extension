@@ -117,26 +117,31 @@ class AssignmentCenter extends HTMLElement {
   #extendCalendarGrid(weeks) {
     // FIXME: reduce duplication
     if (weeks == 0) return;
-    else if (weeks < 0) {
+
+    const boxes = [];
+    if (weeks < 0) {
       const originalFirstDay = this.#visibleDateRange[0];
-      let firstBox = this.#grid.querySelector(".calendar-box");
       for (let offset = -1; offset >= weeks * 7; offset--) {
         // TODO: does this always work? not using getSundayOfWeek
         const date = Calendar.offsetFromDay(originalFirstDay, offset);
         const list = this.#createCalendarBox(date);
-        this.#grid.insertBefore(list, firstBox);
+        boxes.unshift(list);
         this.#visibleDateRange[0] = date;
-        firstBox = list;
       }
+
+      const firstBox = this.#grid.querySelector(".calendar-box");
+      firstBox.before(...boxes);
     } else if (weeks > 0) {
       const originalLastDay = this.#visibleDateRange[1];
       for (let offset = 1; offset <= weeks * 7; offset++) {
         // TODO: does this always work? not using getSundayOfWeek
         const date = Calendar.offsetFromDay(originalLastDay, offset);
         const list = this.#createCalendarBox(date);
-        this.#grid.appendChild(list);
+        boxes.push(list);
         this.#visibleDateRange[1] = date;
       }
+
+      this.#grid.append(...boxes);
     }
 
     // TODO: only rehydrate by date
