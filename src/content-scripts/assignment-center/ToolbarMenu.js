@@ -97,7 +97,6 @@ class ToolbarMenu extends HTMLElement {
   --color-text: #eee;
   --color-border: #333;
   --color-bg-root: #111;
-  --color-bg-btn: oklch(from var(--color-bg-root) calc(l*120%) c h);
 
   color: var(--color-text);
   background-color: var(--color-bg-root);
@@ -113,20 +112,7 @@ class ToolbarMenu extends HTMLElement {
   padding: 1em;
   padding-bottom: 0;
 
-  & button, & a {
-    background-color: var(--color-bg-btn);
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-
-    font-size: small; /* normal button size */
-    text-decoration: none; /* remove underline on links */
-
-    padding: 0.25em;
-
-    &:hover, &:focus-visible {
-      background-color: oklch(from var(--color-bg-btn) calc(l*200%) c h);
-    }
-  }
+  & button, & a { ${buttonStylesInner} }
 
   & #version {
     /* Center vertically and push to right edge. */

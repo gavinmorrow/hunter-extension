@@ -502,6 +502,8 @@ main {
     display: none
   }
 }
+
+button { ${buttonStylesInner} }
 `;
 }
 

@@ -248,6 +248,8 @@ label {
     margin-left: 1em;
   }
 }
+
+button { ${buttonStylesInner} }
 `;
   }
 }
