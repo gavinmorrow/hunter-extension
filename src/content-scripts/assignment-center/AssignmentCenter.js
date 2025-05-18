@@ -426,6 +426,9 @@ main {
   background-color: var(--color-bg-root);
 
   padding: 1em;
+
+  /* Prevent light-colored background from appearing underneath the calendar */
+  min-height: 100vh;
 }
 
 #main-calendar {
@@ -441,8 +444,6 @@ main {
   grid-template-columns: repeat(var(--num-grid-columns), minmax(0, 1fr));
   grid-template-rows: auto;
   grid-auto-rows: minmax(7em, auto);
-
-  margin-bottom: 7em;
 
   border: 0.5px solid var(--color-border);
   & > * {
