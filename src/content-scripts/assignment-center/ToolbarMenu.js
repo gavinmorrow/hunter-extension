@@ -67,8 +67,7 @@ class ToolbarMenu extends HTMLElement {
     root.appendChild(openChangelogBtn);
 
     // task editor
-    // append last otherwise there's an empty flex item, adding extra padding
-    root.append(...this.#createTaskEditor());
+    root.append(this.#createTaskEditor());
 
     const versionTxt = document.createElement("span");
     versionTxt.id = "version";
@@ -95,7 +94,10 @@ class ToolbarMenu extends HTMLElement {
     newTaskBtn.slot = "show-modal";
     newTaskBtn.addEventListener("click", (_) => taskEditor.showModal());
 
-    return [newTaskBtn, taskEditor];
+    const div = document.createElement("div");
+    div.append(newTaskBtn, taskEditor);
+
+    return div;
   }
 
   connectedCallback() {}
