@@ -36,6 +36,7 @@ class AssignmentCenter extends HTMLElement {
 
     this.addAssignments = this.#addAssignments.bind(this);
     this.meshAssignmentsArray = this.#meshAssignments.bind(this);
+    this.extendCalendarGrid = this.#extendCalendarGrid.bind(this);
 
     this.addEventListener("change-assignment", (e) => {
       this.#updateAssignment(e.id, e.isTask, e.changes).catch(reportError);
@@ -59,15 +60,6 @@ class AssignmentCenter extends HTMLElement {
     shadow.appendChild(style);
 
     const root = document.createElement("main");
-
-    // FIXME: reduce duplication
-    const prependBtn = document.createElement("button");
-    prependBtn.textContent = "Prepend by 1 week";
-    prependBtn.addEventListener("click", () => {
-      this.#extendCalendarGrid(-1);
-    });
-    root.appendChild(prependBtn);
-
     root.appendChild(this.#createCalendarGrid());
 
     const extendBtn = document.createElement("button");
@@ -503,7 +495,11 @@ main {
   }
 }
 
-button { ${buttonStylesInner} }
+button {
+  ${buttonStylesInner};
+  width: 100%;
+  text-align: left;
+}
 `;
 }
 

@@ -21,6 +21,14 @@ class ToolbarMenu extends HTMLElement {
     const root = document.createElement("nav");
     root.id = "root";
 
+    const prependBtn = document.createElement("button");
+    prependBtn.id = "prepend";
+    prependBtn.textContent = "Prepend by 1 week";
+    prependBtn.addEventListener("click", () => {
+      this.elems.assignmentCenter.extendCalendarGrid(-1);
+    });
+    root.appendChild(prependBtn);
+
     const settings = new SettingsMenu();
 
     // Use a slot so that it gets the styling
