@@ -497,8 +497,8 @@ main {
 
 button {
   ${buttonStylesInner};
-  width: 100%;
-  text-align: left;
+
+  margin-top: 1em;
 }
 `;
 }
