@@ -34,8 +34,10 @@ class AssignmentBox extends HTMLElement {
     const root = document.createElement("div");
     root.id = "root";
 
-    this.#taskEditor = new TaskEditor(this.assignment);
-    wrapper.appendChild(this.#taskEditor);
+    if (this.assignment.isTask) {
+      this.#taskEditor = new TaskEditor(this.assignment);
+      wrapper.appendChild(this.#taskEditor);
+    }
 
     // make entire card clickable to open link
     // see <https://inclusive-components.design/cards/> and
@@ -69,7 +71,7 @@ class AssignmentBox extends HTMLElement {
 
   #updateAssignment(assignment) {
     this.assignment = assignment;
-    this.#taskEditor.updateAssignment(assignment);
+    this.#taskEditor?.updateAssignment(assignment);
     this.#hydrateStyles();
     this.#hydrateTitleElem();
     this.#popup.updateAssignment(assignment);
