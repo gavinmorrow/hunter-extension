@@ -204,7 +204,7 @@ const featureFlag = (predicate, fn) => async () => {
  * @returns {() => Promise<Promise<any>} A function that will log any thrown errors in the provided function. This will rethrow errors.
  */
 const promiseError =
-  (fn, handler = alert) =>
+  (fn, handler = reportError ?? alert) =>
   async () => {
     // Don't use Promise methods to avoid `InternalError: Promise rejection
     // value is a non-unwrappable cross-compartment wrapper.`

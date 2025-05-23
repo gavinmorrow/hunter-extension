@@ -27,6 +27,13 @@ style.innerHTML = `
 promiseError(async () => {
   // Keep it on top of the assignment center
   const root = await waitForElem("#orion-main");
+
+  if (root == null) {
+    alert(
+      "Root element #orion-main not found. Banners cannot be displayed. Check console for other errors.",
+    );
+  }
+
   root?.prepend(bannersWrapper);
 })();
 

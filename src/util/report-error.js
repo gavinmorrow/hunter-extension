@@ -2,7 +2,7 @@
  * Display an error to the user.
  * @param {ApiError} err
  */
-const reportError = (err) => {
+function reportError(err) {
   console.error(err);
 
   try {
@@ -50,7 +50,7 @@ Stack: ${err.stack}`;
     console.error(msg);
     alert(msg);
   }
-};
+}
 
 ///-/// Prevent spam errors from being reported too much ///-///
 /** @type {Map<keyof typeof ApiError.MESSAGES, number> } */
