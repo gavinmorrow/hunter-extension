@@ -26,6 +26,7 @@ const defaultSettings = {
         missing: "oklch(42% 0.17 0)" /* red */,
         overdue: "oklch(42% 0.17 0)" /* red */,
       },
+      saturation: 1,
     },
     calendar: {
       enabled: true,

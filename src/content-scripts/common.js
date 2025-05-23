@@ -136,6 +136,7 @@ const waitForElems = async (
  * @property {Object} assignmentCenter.customUi
  * @property {boolean} assignmentCenter.customUi.enabled
  * @property {{ [String]: String }} assignmentCenter.customUi.statusColors
+ * @property {number} assignmentCenter.customUi.saturation
  *
  * @property {Object} assignmentCenter.calendar
  * @property {boolean} assignmentCenter.calendar.fixCalendarHeaderOverflow

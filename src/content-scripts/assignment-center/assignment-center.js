@@ -107,6 +107,7 @@ const createCustomUi = async () => {
     const wrapper = document.createElement("div");
     wrapper.id = "orion-main";
     wrapper.style.colorScheme = "dark";
+    wrapper.style.filter = `saturate(${(await settings()).assignmentCenter.customUi.saturation})`;
     // construct our own elements
     const cachedAssignments = await getAssignmentsCache();
     console.log({ cachedAssignments });

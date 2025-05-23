@@ -38,6 +38,10 @@ const settingsOptions = {
               graded: { type: "text", desc: "" },
             },
           },
+          saturation: {
+            desc: "Change the saturation of all the colors. Type: A number in the range [0, 1] where 0 is B&W and 1 is full color.",
+            type: "number",
+          },
         },
       },
       calendar: {
