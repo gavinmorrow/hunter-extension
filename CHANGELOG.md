@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.x.y
+
+_released 00 May 2025_
+
+- Features:
+  - Allow extending the calendar into the past/future.
+  - Add a setting to modify the saturation of all colors.
+- Bug Fixes:
+  - Attempt to make errors display better after opening computer (this may not
+    work. I am still testing it.)
+
 ## v0.5.0
 
 _released 14 May 2025_
