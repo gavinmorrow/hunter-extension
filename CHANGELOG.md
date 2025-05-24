@@ -7,6 +7,8 @@ _released 23 May 2025_
 - Features:
   - Allow extending the calendar into the past/future.
   - Add a setting to modify the saturation of all colors.
+  - Modify the tab title to reflect what the page actually is. (wtf blackbaud
+    this isn't that hard how did you mess it up???)
 - Bug Fixes:
   - Hide weekends after deleting the last task for it.
   - Attempt to make errors display better after opening computer (this may not
