@@ -11,17 +11,37 @@ class AssignmentCenter extends HTMLElement {
   /** @type {[Date, Date]} */
   #visibleDateRange;
 
+  /** @type {[number, number, number, number, number, number]} */
+  #assignmentsOnDay = [0, 0, 0, 0, 0, 0];
+
   /**
    * Show a day of the week in the calendar (ie a column in the grid).
    * @param {HTMLElement} calendar The `#main-calendar` element.
    * @param {0|1|2|3|4|5|6} day The day (of the week, 0-indexed) to show. Only `0` and `6` have any effect, the rest are no-ops.
    */
   #showDay(day) {
-    const calendar = this.shadowRoot.getElementById("main-calendar");
+    this.#assignmentsOnDay[day] += 1;
+
     if (day === 0 || day === 6) {
+      const calendar = this.shadowRoot.getElementById("main-calendar");
+
       const dayName = day === 0 ? "sunday" : "saturday";
       const className = `show-${dayName}`;
+
       calendar.classList.add(className);
+    }
+  }
+
+  #hideDay(day) {
+    this.#assignmentsOnDay[day] -= 1;
+
+    if (this.#assignmentsOnDay[day] <= 0 && (day === 0 || day === 6)) {
+      const calendar = this.shadowRoot.getElementById("main-calendar");
+
+      const dayName = day === 0 ? "sunday" : "saturday";
+      const className = `show-${dayName}`;
+
+      calendar.classList.remove(className);
     }
   }
 
@@ -349,6 +369,9 @@ class AssignmentCenter extends HTMLElement {
 
         // remove the element corresponding to it
         this.#findAssignmentBoxFor(id).remove();
+
+        const removed = this.assignments.splice(index, 1)[0];
+        this.#hideDay(removed.dueDate.getDay());
       } else {
         // otherwise, update the element corresponding to it
 
