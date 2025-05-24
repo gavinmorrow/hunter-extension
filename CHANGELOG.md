@@ -8,6 +8,7 @@ _released 00 May 2025_
   - Allow extending the calendar into the past/future.
   - Add a setting to modify the saturation of all colors.
 - Bug Fixes:
+  - Hide weekends after deleting the last task for it.
   - Attempt to make errors display better after opening computer (this may not
     work. I am still testing it.)
 
