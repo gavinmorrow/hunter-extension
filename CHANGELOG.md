@@ -1,8 +1,8 @@
 # Changelog
 
-## v0.x.y
+## v0.6.0
 
-_released 00 May 2025_
+_released 23 May 2025_
 
 - Features:
   - Allow extending the calendar into the past/future.
