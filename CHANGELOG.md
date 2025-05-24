@@ -12,7 +12,7 @@ _released 23 May 2025_
 - Bug Fixes:
   - Hide weekends after deleting the last task for it.
   - Attempt to make errors display better after opening computer (this may not
-    work. I am still testing it.)
+    work. I am still testing it. Please tell me whether or not it fixes things.)
 
 ## v0.5.0
 
