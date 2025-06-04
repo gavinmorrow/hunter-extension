@@ -104,10 +104,7 @@ const createCustomUi = async () => {
   const oldElem = await waitForElem("app-student-assignment-center");
 
   try {
-    const wrapper = document.createElement("div");
-    wrapper.id = "orion-main";
-    wrapper.style.colorScheme = "dark";
-    wrapper.style.filter = `saturate(${(await settings()).assignmentCenter.customUi.saturation})`;
+    const wrapper = await createOrionMain(oldElem);
     // construct our own elements
     const cachedAssignments = await getAssignmentsCache();
     console.log({ cachedAssignments });
@@ -117,7 +114,6 @@ const createCustomUi = async () => {
     );
     const toolbarMenu = new ToolbarMenu({ oldElem, assignmentCenter });
     wrapper.append(toolbarMenu, assignmentCenter);
-    oldElem.parentElement.prepend(wrapper);
 
     // hide theirs
     oldElem.hidden = true;

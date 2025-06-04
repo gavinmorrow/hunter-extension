@@ -25,6 +25,7 @@
         "src/util/sort.js",
         "src/util/mesh.js",
         "src/content-scripts/common.js",
+        "src/content-scripts/assignment-center/create-orion-main.js",
         "src/content-scripts/banner-alert.js",
         "src/util/report-error.js",
         "src/util/api.js",
