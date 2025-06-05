@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.6.1
+
+_released 05 June 2025_
+
+- Bug Fixes:
+  - Hopefully prevents the stupid "#orion-main not found" message from
+    appearing so often / at all.
+
 ## v0.6.0
 
 _released 23 May 2025_
